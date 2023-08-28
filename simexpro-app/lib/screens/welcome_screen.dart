@@ -30,7 +30,7 @@ class WelcomeScreen extends StatelessWidget {
                 child: Text(
                   "SKIP",
                   style: TextStyle(
-                    color: Color(0xFF7165D6),
+                    color: Color.fromRGBO(87, 69, 223, 1),
                     fontSize: 20,
                   ),
                 ),
@@ -47,7 +47,7 @@ class WelcomeScreen extends StatelessWidget {
             Text(
               "Doctors Appointment",
               style: TextStyle(
-                color: Color(0xFF7165D6),
+                color: Color.fromRGBO(87, 69, 223, 1),
                 fontSize: 35,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1,
@@ -68,7 +68,7 @@ class WelcomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Material(
-                  color: Color(0xFF7165D6),
+                  color: Color.fromRGBO(87, 69, 223, 1),
                   borderRadius: BorderRadius.circular(10),
                   child: InkWell(
                     onTap: () {
@@ -93,7 +93,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 Material(
-                  color: Color(0xFF7165D6),
+                  color: Color.fromRGBO(87, 69, 223, 1),
                   borderRadius: BorderRadius.circular(10),
                   child: InkWell(
                     onTap: () {

@@ -21,8 +21,8 @@ class _loginScreenState extends State<loginScreen> {
               SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: Image.asset(
-                  "images/doctors.png",
+                child: Image.network(
+                  "https://i.ibb.co/s2Zmg1j/logo.png",
                 ),
               ),
               SizedBox(height: 10),
@@ -75,7 +75,7 @@ class _loginScreenState extends State<loginScreen> {
                     padding: EdgeInsets.symmetric(vertical: 15),
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Color(0xFF7165D6),
+                      color: Color.fromRGBO(87, 69, 223, 1),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
@@ -87,7 +87,7 @@ class _loginScreenState extends State<loginScreen> {
                     ),
                     child: Center(
                       child: Text(
-                        "Log In",
+                        "Iniciar sesión",
                         style: TextStyle(
                           fontSize: 23,
                           fontWeight: FontWeight.bold,
@@ -102,14 +102,6 @@ class _loginScreenState extends State<loginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "¿Olvidaste tu contraseña?",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black54,
-                    ),
-                  ),
                   TextButton(
                     onPressed: () {
                       Navigator.push(
@@ -119,14 +111,14 @@ class _loginScreenState extends State<loginScreen> {
                           ));
                     },
                     child: Text(
-                      "Create Account",
+                      "Recuperar contraseña",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF7165D6),
+                        color: Color.fromRGBO(87, 69, 223, 1),
                       ),
                     ),
-                  ),
+                  ),2
                 ],
               ),
             ],

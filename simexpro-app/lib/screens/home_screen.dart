@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Color(0xFF7165D6),
+                        color: Color.fromRGBO(87, 69, 223, 1),
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             child: Icon(
                               Icons.add,
-                              color: Color(0xFF7165D6),
+                              color: Color.fromRGBO(87, 69, 223, 1),
                               size: 35,
                             ),
                           ),
@@ -125,7 +125,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             child: Icon(
                               Icons.home_filled,
-                              color: Color(0xFF7165D6),
+                              color: Color.fromRGBO(87, 69, 223, 1),
                               size: 35,
                             ),
                           ),

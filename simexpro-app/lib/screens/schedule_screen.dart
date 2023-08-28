@@ -53,7 +53,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     padding: EdgeInsets.symmetric(vertical: 12, horizontal: 25),
                     decoration: BoxDecoration(
                       color: _buttonIndex == 0
-                          ? Color(0xFF7165D6)
+                          ? Color.fromRGBO(87, 69, 223, 1)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -78,7 +78,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     padding: EdgeInsets.symmetric(vertical: 12, horizontal: 25),
                     decoration: BoxDecoration(
                       color: _buttonIndex == 1
-                          ? Color(0xFF7165D6)
+                          ? Color.fromRGBO(87, 69, 223, 1)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -103,7 +103,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     padding: EdgeInsets.symmetric(vertical: 12, horizontal: 25),
                     decoration: BoxDecoration(
                       color: _buttonIndex == 2
-                          ? Color(0xFF7165D6)
+                          ? Color.fromRGBO(87, 69, 223, 1)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(10),
                     ),

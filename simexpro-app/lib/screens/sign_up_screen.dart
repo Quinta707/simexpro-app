@@ -87,7 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.symmetric(vertical: 15),
                   width: 350,
                   decoration: BoxDecoration(
-                    color: Color(0xFF7165D6),
+                    color: Color.fromRGBO(87, 69, 223, 1),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -133,7 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF7165D6),
+                        color: Color.fromRGBO(87, 69, 223, 1),
                       ),
                     ),
                   ),

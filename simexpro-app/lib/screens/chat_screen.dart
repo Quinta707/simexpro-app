@@ -8,7 +8,7 @@ class ChatScreen extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
         child: AppBar(
-          backgroundColor: Color(0xFF7165D6),
+          backgroundColor: Color.fromRGBO(87, 69, 223, 1),
           leadingWidth: 30,
           title: Row(
             children: [
@@ -114,7 +114,7 @@ class ChatScreen extends StatelessWidget {
               child: Icon(
                 Icons.send,
                 size: 30,
-                color: Color(0xFF7165D6),
+                color: Color.fromRGBO(87, 69, 223, 1),
               ),
             ),
           ],

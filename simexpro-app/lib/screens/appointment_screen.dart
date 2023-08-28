@@ -12,7 +12,7 @@ class AppointmentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF7165D6),
+      backgroundColor: Color.fromRGBO(87, 69, 223, 1),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -160,7 +160,7 @@ class AppointmentScreen extends StatelessWidget {
                         child: Text(
                           "See all",
                           style: TextStyle(
-                            color: Color(0xFF7165D6),
+                            color: Color.fromRGBO(87, 69, 223, 1),
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
                           ),
@@ -260,7 +260,7 @@ class AppointmentScreen extends StatelessWidget {
                       ),
                       child: Icon(
                         Icons.location_on,
-                        color: Color(0xFF7165D6),
+                        color: Color.fromRGBO(87, 69, 223, 1),
                         size: 30,
                       ),
                     ),
@@ -319,7 +319,7 @@ class AppointmentScreen extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 18),
                 decoration: BoxDecoration(
-                  color: Color(0xFF7165D6),
+                  color: Color.fromRGBO(87, 69, 223, 1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
