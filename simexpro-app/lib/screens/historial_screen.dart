@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:simexpro/widgets/upcoming_schedule.dart';
+import 'package:simexpro/widgets/upcoming_historial.dart';
 
-class ScheduleScreen extends StatefulWidget {
+class historialScreen extends StatefulWidget {
   @override
-  State<ScheduleScreen> createState() => _ScheduleScreenState();
+  State<historialScreen> createState() => _historialScreenState();
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen> {
+class _historialScreenState extends State<historialScreen> {
   int _buttonIndex = 0;
 
-  final _scheduleWidgets = [
-    UpcomingSchedule(),
+  final _historialWidgets = [
+    Upcominghistorial(),
     Container(),
     Container(),
   ];
@@ -25,7 +25,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Text(
-              "Schedule",
+              "historial",
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w500,
@@ -123,7 +123,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           ),
           SizedBox(height: 30),
           // Widgets According to buttons
-          _scheduleWidgets[_buttonIndex]
+          _historialWidgets[_buttonIndex]
         ],
       ),
     ));

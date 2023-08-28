@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class UpcomingSchedule extends StatelessWidget {
+class Upcominghistorial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -140,7 +140,7 @@ class UpcomingSchedule extends StatelessWidget {
                           ),
                           child: Center(
                             child: Text(
-                              "Reschedule",
+                              "Rehistorial",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -290,7 +290,7 @@ class UpcomingSchedule extends StatelessWidget {
                           ),
                           child: Center(
                             child: Text(
-                              "Reschedule",
+                              "Rehistorial",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -440,7 +440,7 @@ class UpcomingSchedule extends StatelessWidget {
                           ),
                           child: Center(
                             child: Text(
-                              "Reschedule",
+                              "Rehistorial",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,

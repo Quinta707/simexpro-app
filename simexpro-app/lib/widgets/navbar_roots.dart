@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/messages_screen.dart';
-import 'package:simexpro/screens/schedule_screen.dart';
+import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/settings_screen.dart';
 
 class NavBarRoots extends StatefulWidget {
@@ -15,7 +15,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
   final _screens = [
     HomeScreen(),
     MessagesScreen(),
-    ScheduleScreen(),
+    historialScreen(),
     SettingScreen(),
   ];
 
@@ -43,16 +43,16 @@ class _NavBarRootsState extends State<NavBarRoots> {
           },
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.home_filled), label: "Home"),
+                icon: Icon(Icons.home_filled), label: "Inicio"),
             BottomNavigationBarItem(
                 icon: Icon(
                   CupertinoIcons.chat_bubble_text_fill,
                 ),
-                label: "Messages"),
+                label: "Mensajes"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_month_outlined), label: "Schedule"),
+                icon: Icon(Icons.calendar_month_outlined), label: "Historial"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.settings), label: "Settings"),
+                icon: Icon(Icons.settings), label: "Configuración"),
           ],
         ),
       ),

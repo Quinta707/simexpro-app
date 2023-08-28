@@ -22,7 +22,7 @@ class _loginScreenState extends State<loginScreen> {
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Image.network(
-                  "https://i.ibb.co/s2Zmg1j/logo.png",
+                  "https://i.ibb.co/vk2tjx1/SIMEXPRO-V3-PNG.png",
                 ),
               ),
               SizedBox(height: 10),
@@ -118,7 +118,7 @@ class _loginScreenState extends State<loginScreen> {
                         color: Color.fromRGBO(87, 69, 223, 1),
                       ),
                     ),
-                  ),2
+                  ),
                 ],
               ),
             ],
