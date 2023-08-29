@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simexpro/screens/home_screen.dart';
-import 'package:simexpro/screens/messages_screen.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/settings_screen.dart';
 
@@ -14,7 +13,6 @@ class _NavBarRootsState extends State<NavBarRoots> {
   int _selectedIndex = 0;
   final _screens = [
     HomeScreen(),
-    MessagesScreen(),
     historialScreen(),
     SettingScreen(),
   ];
@@ -43,16 +41,16 @@ class _NavBarRootsState extends State<NavBarRoots> {
           },
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.home_filled), label: "Inicio"),
+                icon: Icon(Icons.home_filled), 
+                label: "Inicio"),
+            
             BottomNavigationBarItem(
-                icon: Icon(
-                  CupertinoIcons.chat_bubble_text_fill,
-                ),
-                label: "Mensajes"),
+                icon: Icon(Icons.calendar_month_outlined), 
+                label: "Historial"),
+            
             BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_month_outlined), label: "Historial"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.settings), label: "Configuración"),
+                icon: Icon(Icons.settings), 
+                label: "Configuración"),
           ],
         ),
       ),

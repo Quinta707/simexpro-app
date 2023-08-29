@@ -17,7 +17,7 @@ class _historialScreenState extends State<historialScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Padding(
+      child: Padding(
       padding: const EdgeInsets.only(top: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,7 +25,7 @@ class _historialScreenState extends State<historialScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Text(
-              "historial",
+              "Historial",
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w500,
@@ -58,7 +58,7 @@ class _historialScreenState extends State<historialScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
-                      "Upcoming",
+                      "Mis órdenes",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -83,37 +83,12 @@ class _historialScreenState extends State<historialScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
-                      "Completed",
+                      "En proceso",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color:
                             _buttonIndex == 1 ? Colors.white : Colors.black38,
-                      ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _buttonIndex = 2;
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 25),
-                    decoration: BoxDecoration(
-                      color: _buttonIndex == 2
-                          ? Color.fromRGBO(87, 69, 223, 1)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      "Completed",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color:
-                            _buttonIndex == 2 ? Colors.white : Colors.black38,
                       ),
                     ),
                   ),

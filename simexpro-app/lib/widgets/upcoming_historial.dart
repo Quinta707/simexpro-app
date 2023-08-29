@@ -8,10 +8,6 @@ class Upcominghistorial extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "About Doctor",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-          ),
           SizedBox(height: 15),
           Container(
             padding: EdgeInsets.symmetric(vertical: 5),
@@ -32,15 +28,15 @@ class Upcominghistorial extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text(
-                      "Dr. Doctor Name",
+                      "Orden #9823",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    subtitle: Text("Therapist"),
+                    subtitle: Text("Terminada"),
                     trailing: CircleAvatar(
                       radius: 25,
-                      backgroundImage: AssetImage("images/doctor1.jpg"),
+                      backgroundImage: NetworkImage("https://i.ibb.co/BnHMGJn/TERMINADO.png"),
                     ),
                   ),
                   Padding(
@@ -56,38 +52,9 @@ class Upcominghistorial extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(
-                            Icons.calendar_month,
-                            color: Colors.black54,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            "12/01/2023",
-                            style: TextStyle(
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.access_time_filled,
-                            color: Colors.black54,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            "10:30 AM",
-                            style: TextStyle(
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
                           Container(
                             padding: EdgeInsets.all(5),
+                            alignment: Alignment.topRight,
                             decoration: BoxDecoration(
                               color: Colors.green,
                               shape: BoxShape.circle,
@@ -95,7 +62,7 @@ class Upcominghistorial extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "Confirmed",
+                            "Completado",
                             style: TextStyle(
                               color: Colors.black54,
                             ),
@@ -112,35 +79,15 @@ class Upcominghistorial extends StatelessWidget {
                         onTap: () {},
                         child: Container(
                           width: 150,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFF4F6FA),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: 150,
+                          alignment: Alignment.topRight,
                           padding: EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: Color.fromRGBO(87, 69, 223, 1),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Center(
+                          child: Center( 
                             child: Text(
-                              "Rehistorial",
+                              "Ver detalles",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -157,11 +104,6 @@ class Upcominghistorial extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 20),
-          Text(
-            "About Doctor",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-          ),
           SizedBox(height: 15),
           Container(
             padding: EdgeInsets.symmetric(vertical: 5),
@@ -182,15 +124,15 @@ class Upcominghistorial extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text(
-                      "Dr. Doctor Name",
+                      "Orden #8732",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    subtitle: Text("Therapist"),
+                    subtitle: Text("En ensamblaje"),
                     trailing: CircleAvatar(
                       radius: 25,
-                      backgroundImage: AssetImage("images/doctor2.jpg"),
+                      backgroundImage: NetworkImage("https://i.ibb.co/6DytYZx/ENSAMBLADO.png"),
                     ),
                   ),
                   Padding(
@@ -239,13 +181,13 @@ class Upcominghistorial extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              color: Colors.green,
+                              color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "Confirmed",
+                            "En proceso",
                             style: TextStyle(
                               color: Colors.black54,
                             ),
@@ -264,33 +206,12 @@ class Upcominghistorial extends StatelessWidget {
                           width: 150,
                           padding: EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
-                            color: Color(0xFFF4F6FA),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: 150,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
                             color: Color.fromRGBO(87, 69, 223, 1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Center(
                             child: Text(
-                              "Rehistorial",
+                              "Ver detalles",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -307,11 +228,6 @@ class Upcominghistorial extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 20),
-          Text(
-            "About Doctor",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-          ),
           SizedBox(height: 15),
           Container(
             padding: EdgeInsets.symmetric(vertical: 5),
@@ -332,15 +248,15 @@ class Upcominghistorial extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text(
-                      "Dr. Doctor Name",
+                      "Orden #8293",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    subtitle: Text("Therapist"),
+                    subtitle: Text("En corte"),
                     trailing: CircleAvatar(
                       radius: 25,
-                      backgroundImage: AssetImage("images/doctor2.jpg"),
+                      backgroundImage: NetworkImage("https://i.ibb.co/QHgCx80/CORTE-DE-TELA.png"),
                     ),
                   ),
                   Padding(
@@ -389,13 +305,13 @@ class Upcominghistorial extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              color: Colors.green,
+                              color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "Confirmed",
+                            "En proceso",
                             style: TextStyle(
                               color: Colors.black54,
                             ),
@@ -414,33 +330,12 @@ class Upcominghistorial extends StatelessWidget {
                           width: 150,
                           padding: EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
-                            color: Color(0xFFF4F6FA),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: 150,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
                             color: Color.fromRGBO(87, 69, 223, 1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Center(
                             child: Text(
-                              "Rehistorial",
+                              "Ver detalles",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
