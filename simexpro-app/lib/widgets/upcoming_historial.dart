@@ -54,7 +54,7 @@ class Upcominghistorial extends StatelessWidget {
                         children: [
                           Container(
                             padding: EdgeInsets.all(5),
-                            alignment: Alignment.topRight,
+                            alignment: Alignment.bottomRight,
                             decoration: BoxDecoration(
                               color: Colors.green,
                               shape: BoxShape.circle,
@@ -79,7 +79,7 @@ class Upcominghistorial extends StatelessWidget {
                         onTap: () {},
                         child: Container(
                           width: 150,
-                          alignment: Alignment.topRight,
+                          alignment: Alignment.bottomRight,
                           padding: EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: Color.fromRGBO(87, 69, 223, 1),
