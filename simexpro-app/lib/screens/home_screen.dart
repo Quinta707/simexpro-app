@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:simexpro/screens/appointment_screen.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:simexpro/widgets/chart_homescreen.dart';
+import 'package:simexpro/widgets/pie1_chart.dart';
+import 'package:simexpro/widgets/listadoPruebaApi.dart';
 
 class HomeScreen extends StatelessWidget {
 
@@ -37,7 +35,7 @@ class HomeScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 15),
                 child: Text(
-                  "Inicio",
+                  "Prendas en órdenes de compra",
                   style: TextStyle(
                     fontSize: 23,
                     fontWeight: FontWeight.w500,
@@ -45,8 +43,9 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              PieChart1(),
               SizedBox(height: 25,),
-              ChartHomeScreen(),
+              PruebaApi(),
             ],
           ),
         ),
