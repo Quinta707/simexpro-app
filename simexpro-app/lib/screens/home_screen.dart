@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simexpro/screens/appointment_screen.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:simexpro/widgets/chart_homescreen.dart';
 
 class HomeScreen extends StatelessWidget {
 
@@ -43,6 +45,8 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 25,),
+              ChartHomeScreen(),
             ],
           ),
         ),
