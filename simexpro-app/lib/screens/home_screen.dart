@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     CircleAvatar(
                       radius: 25,
-                      backgroundImage: AssetImage("images/doctor1.jpg"),
+                      backgroundImage: NetworkImage("https://i.ibb.co/f2jLjwm/dc0ca1840498.jpg"),
                     ),
                   ],
                 ),

@@ -23,7 +23,7 @@ class SettingScreen extends StatelessWidget {
           ListTile(
             leading: CircleAvatar(
               radius: 30,
-              backgroundImage: AssetImage("images/doctor1.jpg"),
+              backgroundImage: NetworkImage("https://i.ibb.co/f2jLjwm/dc0ca1840498.jpg"),
             ),
             title: Text(
               "jumAngie",
