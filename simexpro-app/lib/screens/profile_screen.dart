@@ -8,12 +8,12 @@ import 'package:simexpro/widgets/button_widget.dart';
 class ProfileScreen extends StatelessWidget{
   @override
   Widget build (BuildContext context){
-    final user = UserPreferences.myUser;
+    const user = UserPreferences.myUser;
 
     return Scaffold(
       appBar: buildAppBar(context),
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
           ProfileWidget(
             imagePath: user.imagePath,
@@ -32,7 +32,7 @@ class ProfileScreen extends StatelessWidget{
         children: [
           Text(
             user.username,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
           ),
         ],
       );
@@ -40,7 +40,7 @@ class ProfileScreen extends StatelessWidget{
  
 
   Widget buildAbout(User user) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
+        padding: const EdgeInsets.symmetric(horizontal: 48),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
