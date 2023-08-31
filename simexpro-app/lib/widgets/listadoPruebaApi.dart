@@ -7,7 +7,7 @@ import 'package:simexpro/api.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> fetchData() async {
-    final response = await http.get(Uri.parse('${apiUrl}api/Categoria/Listar?key=$apiKey'));
+    final respuesta = await http.get(Uri.parse('${apiUrl}api/Categoria/Listar?key=$apiKey'));
 
 //   if (response.statusCode == 200) {
 //     print('Listado de datos: ${response.body}');
@@ -32,33 +32,31 @@ Future<void> fetchData() async {
 //       'XApiKey': apiKey,
 //     },
 //     );
-//   if(respuesta.statusCode == 200)
-//   {
-//     final json  = respuesta.body;
-//     final decodedJson = jsonDecode(json);
-//     final data = decodedJson["data"];
+  if(respuesta.statusCode == 200)
+  {
+    final json  = respuesta.body;
+    final decodedJson = jsonDecode(json);
+    final data = decodedJson["data"];
 
-//     print(data);
-//     return [];
-//   }
-//   else
-//   {
-//     print("Error en la respuesta");
-//     return [];
-//   }
-// }
+    print(data);
+  }
+  else
+  {
+    print("Error en la respuesta");
+  }
+}
   
     //final response = await http.get(Uri.parse('$apiUrl?key=$apiKey'));
 
-    if (response.statusCode == 200) {
-      // Si la solicitud es exitosa (código 200), puedes manejar la respuesta aquí
-      debugPrint('Respuesta: ${response.body}');
+  //   if (response.statusCode == 200) {
+  //     // Si la solicitud es exitosa (código 200), puedes manejar la respuesta aquí
+  //     debugPrint('Respuesta: ${response.body}');
       
-    } else {
-      // Si la solicitud no es exitosa, puedes manejar el error aquí
-      debugPrint('Error en la solicitud: ${response.statusCode}');
-    }
-  }
+  //   } else {
+  //     // Si la solicitud no es exitosa, puedes manejar el error aquí
+  //     debugPrint('Error en la solicitud: ${response.statusCode}');
+  //   }
+  // }
 
 class PruebaApi extends StatefulWidget {
   const PruebaApi({super.key});

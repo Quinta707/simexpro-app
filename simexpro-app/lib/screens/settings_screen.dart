@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simexpro/screens/login_screen.dart';
+import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -39,7 +40,7 @@ class SettingScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NavBarRoots(),
+                  builder: (context) => ProfileScreen(),
                 ));
             },
             leading: Container(
