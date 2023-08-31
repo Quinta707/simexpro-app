@@ -38,7 +38,7 @@ import 'package:http/http.dart' as http;
 Future<void> fetchData() async {
   final response = await http.get(
     Uri.parse('${apiUrl}Categoria/Listar'),
-    headers: {HttpHeaders.authorizationHeader: apiKey},
+    headers: {HttpHeaders.accessControlAllowCredentialsHeader: apiKey},
   );
   if(response.statusCode == 200)
   {
