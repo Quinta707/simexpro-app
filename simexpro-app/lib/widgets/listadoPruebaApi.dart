@@ -9,11 +9,12 @@ import 'package:http/http.dart' as http;
 Future<void> fetchData() async {
     final respuesta = await http.get(Uri.parse('${apiUrl}api/Categoria/Listar?key=$apiKey'));
 
-//   if (response.statusCode == 200) {
-//     print('Listado de datos: ${response.body}');
-//   } else {
-//     print('Error en la solicitud. Código de estado: ${response.statusCode}');
-//   }
+  if (respuesta.statusCode == 200) {
+    print('Listado de datos: ${respuesta.body}');
+  } else {
+    print('Error en la solicitud. Código de estado: ${respuesta.statusCode}');
+  }
+}
 // final tarea = Regitro(Local: Local , GolesLocal: GolesLocal, Visitante: Visitante , GolesVisitante: GolesVisitante, Jornada: Jornada);
 //   final jsonTarea = jsonEncode(tarea.toJson());
 //   final response = await http.post(
@@ -32,21 +33,21 @@ Future<void> fetchData() async {
 //       'XApiKey': apiKey,
 //     },
 //     );
-  if(respuesta.statusCode == 200)
-  {
-    final json  = respuesta.body;
-    final decodedJson = jsonDecode(json);
-    final data = decodedJson["data"];
+  // if(respuesta.statusCode == 200)
+  // {
+  //   final json  = respuesta.body;
+  //   final decodedJson = jsonDecode(json);
+  //   final data = decodedJson["data"];
 
-    print(data);
-  }
-  else
-  {
-    print("Error en la respuesta");
-  }
-}
+  //   print(data);
+  // }
+  // else
+  // {
+  //   print("Error en la respuesta");
+  // }
+//}
   
-    //final response = await http.get(Uri.parse('$apiUrl?key=$apiKey'));
+  //   final response = await http.get(Uri.parse('$apiUrl?key=$apiKey'));
 
   //   if (response.statusCode == 200) {
   //     // Si la solicitud es exitosa (código 200), puedes manejar la respuesta aquí
