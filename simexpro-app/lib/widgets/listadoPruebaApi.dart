@@ -1,13 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
+import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simexpro/api.dart';
 import 'package:http/http.dart' as http;
 
-Future<void> fetchData() async {
-    final respuesta = await http.get(Uri.parse('${apiUrl}api/Categoria/Listar?key=$apiKey'));
+//Future<void> fetchData() async {
+    //final respuesta = await http.get(Uri.parse('${apiUrl}api/Categoria/Listar?key=$apiKey'));
 
 //   if (response.statusCode == 200) {
 //     print('Listado de datos: ${response.body}');
@@ -32,19 +34,52 @@ Future<void> fetchData() async {
 //       'XApiKey': apiKey,
 //     },
 //     );
-  if(respuesta.statusCode == 200)
+Future<void> fetchData() async {
+  final response = await http.get(
+    Uri.parse('${apiUrl}Categoria/Listar'),
+    headers: {HttpHeaders.authorizationHeader: apiKey},
+  );
+  if(response.statusCode == 200)
   {
-    final json  = respuesta.body;
+    final json  = response.body;
     final decodedJson = jsonDecode(json);
     final data = decodedJson["data"];
 
-    print(data);
+    print(response.body);
+    return data;
   }
   else
   {
-    print("Error en la respuesta");
+    print(response.headers);
+    return ;
   }
+  // final responseJson = json.decode(response.body);
+  // return jsonDecode(responseJson);
 }
+
+// Future<http.Response> async fetchPost() {
+//   final respuesta = await http.get(
+//     Uri.parse('${apiUrl}Categoria/Listar'),
+//     // Envia headers de autentificación al backend
+//     headers: {HttpHeaders.authorizationHeader: apiKey},
+//   );
+
+//   if(respuesta.hashCode == 200)
+//   {
+//     final json  = respuesta.;
+//     final decodedJson = jsonDecode(json);
+//     final data = decodedJson["data"];
+
+//     print(data);
+//     return data;
+//   }
+//   else
+//   {
+//     print(respuesta)
+//     return respuesta;
+//   }
+// }
+  
   
     //final response = await http.get(Uri.parse('$apiUrl?key=$apiKey'));
 
