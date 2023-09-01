@@ -2,14 +2,15 @@ import 'dart:convert';
 import 'dart:html';
 import 'dart:js';
 
+import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/sign_up_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
-import 'package:simexpro/widgets/toast.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:cherry_toast/cherry_toast.dart';
 
 class loginScreen extends StatefulWidget {
   @override
@@ -28,9 +29,23 @@ Future<void> fetchData(BuildContext context, String username, String password) a
     body: jsonTarea,
   );
   if (response.statusCode == 200) {
-    print(response.body);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(),
+    ));
   } else {
-    print('nOOOOOOOOO');
+    CherryToast.error(
+        title: Text('Error',
+              style: TextStyle(color: Color(0xffE43837)),),
+        enableIconAnimation: false,
+        displayTitle: true,
+        description: Text('El usuario o la contraseña son incorrectos',
+        style: TextStyle(color: Colors.white),),
+        animationType: AnimationType.fromRight,
+        animationDuration: Duration(milliseconds: 1000),
+        autoDismiss: true,
+    ).show(context);
   }
 }
 
@@ -107,23 +122,17 @@ class _loginScreenState extends State<loginScreen> {
                     if (username.isNotEmpty && password.isNotEmpty) {
                       fetchData(context, username, password);
                     } else {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text('Error'),
-                            content: Text('Ingresa el nombre de usuario y la contraseña.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      CherryToast.warning(
+                      title: Text('Advertencia',
+                            style: TextStyle(color: Color(0xffFC9F00)),),
+                      enableIconAnimation: false,
+                      displayTitle: true,
+                      description: Text('Complete los campos correctamente',
+                      style: TextStyle(color: Colors.white),),
+                      animationType: AnimationType.fromRight,
+                      animationDuration: Duration(milliseconds: 1000),
+                      autoDismiss: true,
+                    ).show(context);
                     }
                   },
 
