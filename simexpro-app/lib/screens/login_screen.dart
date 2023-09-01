@@ -1,15 +1,44 @@
+import 'dart:convert';
+import 'dart:html';
+import 'dart:js';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simexpro/screens/sign_up_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
+import 'package:http/http.dart' as http;
+import 'package:simexpro/api.dart';
+import 'package:simexpro/widgets/toast.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 class loginScreen extends StatefulWidget {
   @override
   State<loginScreen> createState() => _loginScreenState();
 }
 
+Future<void> fetchData(BuildContext context, String username, String password) async {
+  final tarea = {'usua_Nombre': username, 'usua_Contrasenia': password};
+  final jsonTarea = jsonEncode(tarea);
+  final response = await http.post(
+    Uri.parse('${apiUrl}Usuarios/Login'),
+    headers: {
+      'XApiKey': apiKey,
+      'Content-Type': 'application/json',
+    },
+    body: jsonTarea,
+  );
+  if (response.statusCode == 200) {
+    print(response.body);
+  } else {
+    print('nOOOOOOOOO');
+  }
+}
+
+
 class _loginScreenState extends State<loginScreen> {
   bool passToggle = true;
+  String username = ''; 
+  String password = '';
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -29,6 +58,11 @@ class _loginScreenState extends State<loginScreen> {
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: TextField(
+                   onChanged: (value) {
+                    setState(() {
+                      username = value; 
+                    });
+                  },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     label: Text("Usuario"),
@@ -39,6 +73,11 @@ class _loginScreenState extends State<loginScreen> {
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      password = value; // Actualiza la contraseña cuando cambia el texto
+                    });
+                  },
                   obscureText: passToggle ? true : false,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -65,12 +104,29 @@ class _loginScreenState extends State<loginScreen> {
                 padding: const EdgeInsets.all(15),
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NavBarRoots(),
-                        ));
+                    if (username.isNotEmpty && password.isNotEmpty) {
+                      fetchData(context, username, password);
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Error'),
+                            content: Text('Ingresa el nombre de usuario y la contraseña.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   },
+
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 15),
                     width: double.infinity,

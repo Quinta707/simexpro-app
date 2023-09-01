@@ -23,6 +23,7 @@ class ProfileScreen extends StatelessWidget{
           buildName(user),
           const SizedBox(height: 20),
           buildAbout(user),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -39,76 +40,73 @@ class ProfileScreen extends StatelessWidget{
 
  
 
-  Widget buildAbout(User user) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 48),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListTile(
-              leading: Container(
-                child: Icon(
-                Icons.person_outline,
-                color: Color.fromRGBO(87, 69, 223, 1),
-                size: 28.0,
-                ),
-              ),
-            title: Text(
-              "Nombre",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-          ),
-            // Icon(
-            //   Icons.person_outline,
-            //   color: Color.fromRGBO(87, 69, 223, 1),
-            //   size: 24.0,
-            // ),
-            // Text(
-            //   'Nombre',
-            //   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            // ),
-            const SizedBox(height: 10),
-            Text(
-              user.name,
-              style: TextStyle(fontSize: 16, height: 1.4),
-            ),
-            Divider(height: 50),
-
-            const SizedBox(height: 16),
-            Icon(
-              Icons.markunread,
-              color: Color.fromRGBO(87, 69, 223, 1),
-              size: 24.0,
-            ),
-            Text(
-              'Correo Electrónico',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              
-            ),
-            const SizedBox(height: 10),
-            Text(
-              user.email,
-              style: TextStyle(fontSize: 16, height: 1.4),
-            ),
-            Divider(height: 50),
-
-            const SizedBox(height: 16),
-            Icon(
-              Icons.manage_accounts,
-              color: Color.fromRGBO(87, 69, 223, 1),
-              size: 24.0,
-            ),
-            Text(
-              'Rol',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              user.rol,
-              style: TextStyle(fontSize: 16, height: 1.4),
-            ),
-            Divider(height: 50),
-
-          ],
+Widget buildAbout(User user) => Container(
+  padding: const EdgeInsets.symmetric(horizontal: 48),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(
+          Icons.person_outline,
+          color: Color.fromRGBO(87, 69, 223, 1),
+          size: 28.0,
         ),
+        title: Text(
+          "Nombre",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          user.name,
+          style: TextStyle(fontSize: 16, height: 1.4),
+        ),
+      ),
+      Divider(height: 8), // Agrega una línea divisoria más pequeña
+      ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(
+          Icons.markunread,
+          color: Color.fromRGBO(87, 69, 223, 1),
+          size: 24.0,
+        ),
+        title: Text(
+          'Correo Electrónico',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          user.email,
+          style: TextStyle(fontSize: 16, height: 1.4),
+        ),
+      ),
+      Divider(height: 8),
+      ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(
+          Icons.manage_accounts,
+          color: Color.fromRGBO(87, 69, 223, 1),
+          size: 24.0,
+        ),
+        title: Text(
+          'Rol',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          user.rol,
+          style: TextStyle(fontSize: 16, height: 1.4),
+        ),
+      ),
+      Divider(height: 8),
+    ],
+  ),
+);
+
+ Widget buildButton(User user) => Column(
+        children: [
+          Text(
+            user.username,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+          ),
+        ],
       );
+
 }
