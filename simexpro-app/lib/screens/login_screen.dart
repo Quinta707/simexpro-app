@@ -10,7 +10,7 @@ import 'package:simexpro/screens/sign_up_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
-import 'package:cherry_toast/cherry_toast.dart';
+import 'package:simexpro/toastconfig/toastconfig.dart';
 
 class loginScreen extends StatefulWidget {
   @override
@@ -18,6 +18,7 @@ class loginScreen extends StatefulWidget {
 }
 
 Future<void> fetchData(BuildContext context, String username, String password) async {
+  print('fetchdata');
   final tarea = {'usua_Nombre': username, 'usua_Contrasenia': password};
   final jsonTarea = jsonEncode(tarea);
   final response = await http.post(
@@ -35,17 +36,23 @@ Future<void> fetchData(BuildContext context, String username, String password) a
         builder: (context) => HomeScreen(),
     ));
   } else {
+    print('a');
     CherryToast.error(
-        title: Text('Error',
-              style: TextStyle(color: Color(0xffE43837)),),
-        enableIconAnimation: false,
-        displayTitle: true,
-        description: Text('El usuario o la contraseña son incorrectos',
-        style: TextStyle(color: Colors.white),),
-        animationType: AnimationType.fromRight,
-        animationDuration: Duration(milliseconds: 1000),
-        autoDismiss: true,
+      title: Text('El usuario o la contraseña son incorrectos',
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+      borderRadius: 0,
     ).show(context);
+    // CherryToast.error(
+    //     title: Text('Error',
+    //           style: TextStyle(color: Color(0xffE43837)),),
+    //     enableIconAnimation: false,
+    //     displayTitle: true,
+    //     description: Text('El usuario o la contraseña son incorrectos',
+    //     style: TextStyle(color: Colors.white),),
+    //     animationType: AnimationType.fromRight,
+    //     animationDuration: Duration(milliseconds: 1000),
+    //     autoDismiss: true,
+    // ).show(context);
   }
 }
 
@@ -118,21 +125,34 @@ class _loginScreenState extends State<loginScreen> {
               Padding(
                 padding: const EdgeInsets.all(15),
                 child: InkWell(
+                  // onTap: () {
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => NavBarRoots(),
+                  //       ));
+                  // },
                   onTap: () {
                     if (username.isNotEmpty && password.isNotEmpty) {
                       fetchData(context, username, password);
                     } else {
+
                       CherryToast.warning(
-                      title: Text('Advertencia',
-                            style: TextStyle(color: Color(0xffFC9F00)),),
-                      enableIconAnimation: false,
-                      displayTitle: true,
-                      description: Text('Complete los campos correctamente',
-                      style: TextStyle(color: Colors.white),),
-                      animationType: AnimationType.fromRight,
-                      animationDuration: Duration(milliseconds: 1000),
-                      autoDismiss: true,
-                    ).show(context);
+                        title: Text('Llene los campos correctamente',
+                             style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+                        borderRadius: 0,
+                      ).show(context);
+                    //   CherryToast.warning(
+                    //   title: Text('Advertencia',
+                    //         style: TextStyle(color: Color(0xffFC9F00)),),
+                    //   enableIconAnimation: false,
+                    //   displayTitle: true,
+                    //   description: Text('Complete los campos correctamente',
+                    //   style: TextStyle(color: Colors.white),),
+                    //   animationType: AnimationType.fromRight,
+                    //   animationDuration: Duration(milliseconds: 1000),
+                    //   autoDismiss: true,
+                    // ).show(context);
                     }
                   },
 
