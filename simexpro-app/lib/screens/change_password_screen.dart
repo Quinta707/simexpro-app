@@ -12,15 +12,15 @@ import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
 
-class loginScreen extends StatefulWidget {
+class ChangePasswordScreen extends StatefulWidget {
   @override
-  State<loginScreen> createState() => _loginScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-Future<void> fetchData(BuildContext context, String username, String password) async {
+Future<void> ValidarClaves(BuildContext context, String newpassword, String confirmpassword) async {
   final tarea = {
-    'usua_Nombre':      username, 
-    'usua_Contrasenia': password 
+    'usua_Nombre':      newpassword, 
+    'usua_Contrasenia': confirmpassword 
   };
   final jsonTarea = jsonEncode(tarea);
   final response = await http.post(
@@ -32,10 +32,6 @@ Future<void> fetchData(BuildContext context, String username, String password) a
     body: jsonTarea,
   );
   if (response.statusCode == 200) {
-    // final decodedJson = jsonDecode(response.body);
-    // final data = decodedJson["data"]; 
-    //  SharedPreferences prefs = await SharedPreferences.getInstance();
-    //   print(data);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -51,10 +47,10 @@ Future<void> fetchData(BuildContext context, String username, String password) a
 }
 
 
-class _loginScreenState extends State<loginScreen> {
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool passToggle = true;
-  String username = ''; 
-  String password = '';
+  String newpassword = ''; 
+  String confirmpassword = '';
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -76,14 +72,26 @@ class _loginScreenState extends State<loginScreen> {
                   child: TextField(
                     onChanged: (value) {
                       setState(() {
-                        username = value;
+                        newpassword = value;
                       });
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      label: Text("Usuario"),
+                      label: Text("Nueva contraseña"),
                       prefixIcon: Icon(Icons.person),
-                      contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10), // Personaliza el tamaño
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          if (passToggle == true) {
+                            passToggle = false;
+                          } else {
+                            passToggle = true;
+                          }
+                          setState(() {});
+                        },
+                        child: passToggle
+                            ? Icon(CupertinoIcons.eye_slash_fill)
+                            : Icon(CupertinoIcons.eye_fill),
+                      ), // Personaliza el tamaño
                     ),
                   ),
                 ),
@@ -92,13 +100,13 @@ class _loginScreenState extends State<loginScreen> {
                   child: TextField(
                     onChanged: (value) {
                       setState(() {
-                        password = value;
+                        confirmpassword = value;
                       });
                     },
                     obscureText: passToggle ? true : false,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      label: Text("Contraseña"),
+                      label: Text("Confirmar contraseña"),
                       prefixIcon: Icon(Icons.lock),
                       suffixIcon: InkWell(
                         onTap: () {
@@ -121,8 +129,8 @@ class _loginScreenState extends State<loginScreen> {
                   padding: const EdgeInsets.all(15),
                   child: InkWell(
                     onTap: () {
-                      if (username.isNotEmpty && password.isNotEmpty) {
-                        fetchData(context, username, password);
+                      if (newpassword.isNotEmpty && confirmpassword.isNotEmpty) {
+                        ValidarClaves(context, newpassword, confirmpassword);
                       } else {
                         CherryToast.warning(
                           title: Text('Llene los campos correctamente',
@@ -147,7 +155,7 @@ class _loginScreenState extends State<loginScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          "Iniciar sesión",
+                          "Guardar nueva contraseña",
                           style: TextStyle(
                             fontSize: 18, // Modifica el tamaño de la fuente
                             fontWeight: FontWeight.bold,
@@ -158,30 +166,6 @@ class _loginScreenState extends State<loginScreen> {
                     ),
                   ),
                 ),
-              SizedBox(height: 20),
-             Row(
-                mainAxisAlignment: MainAxisAlignment.end, // Alinea a la derecha
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RecoverPasswordScreen(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Recuperar contraseña",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromRGBO(87, 69, 223, 1),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
