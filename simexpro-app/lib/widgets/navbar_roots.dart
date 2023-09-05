@@ -4,6 +4,7 @@ import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/settings_screen.dart';
 import 'package:simexpro/widgets/OrdenesProduccion.dart';
+import 'package:simexpro/screens/timeline_screen.dart';
 
 class NavBarRoots extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
   final _screens = [
     Cartas(),
     historialScreen(),
+    TimelineScreen(),
     SettingScreen(),
   ];
 
@@ -48,6 +50,10 @@ class _NavBarRootsState extends State<NavBarRoots> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.calendar_month_outlined), 
                 label: "Historial"),
+
+             BottomNavigationBarItem(
+                icon: Icon(Icons.lock_clock_outlined), 
+                label: "Líneas de tiempo"),
             
             BottomNavigationBarItem(
                 icon: Icon(Icons.settings), 

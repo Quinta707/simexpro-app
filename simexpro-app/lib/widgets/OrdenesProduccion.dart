@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/recover_password_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
@@ -15,16 +16,17 @@ import 'package:simexpro/toastconfig/toastconfig.dart';
 /// Flutter code sample for [Card].
 
 class Cartas extends StatefulWidget {
-  const Cartas({super.key});
-
+  Cartas({super.key});
+   String conteo = ''; 
   @override
   State<StatefulWidget> createState() => CardExamplesApp();
+  
 }
 
 Future<void> fetchData(BuildContext context) async {
 
   final response = await http.get(
-    Uri.parse('${apiUrl} Graficas/TotalOrdenesCompraMensual'),
+    Uri.parse('${apiUrl}Graficas/TotalOrdenesCompraMensual'),
     headers: {
       'XApiKey': apiKey,
     },
@@ -34,7 +36,7 @@ Future<void> fetchData(BuildContext context) async {
     final json  = response.body;
     final decodedJson = jsonDecode(json);
     final data = decodedJson["data"];
-
+    
     print(data);
     return data;
   }
@@ -49,6 +51,11 @@ class CardExamplesApp extends State {
  // const CardExamplesApp({super.key});
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchData(context);
+  }
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
@@ -60,7 +67,6 @@ class CardExamplesApp extends State {
             Spacer(),
             ElevatedCardExample(),
             FilledCardExample(),
-            
             Spacer(),
           ],
         ),

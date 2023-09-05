@@ -1,28 +1,35 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:simexpro/screens/home_screen.dart';
+import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/screens/recover_password_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-Future<void> ValidarClaves(BuildContext context, String newpassword, String confirmpassword) async {
+
+
+Future<void> ValidarClaves(BuildContext context, String newpassword) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final username =  prefs.getString('username');
   final tarea = {
-    'usua_Nombre':      newpassword, 
-    'usua_Contrasenia': confirmpassword 
+    'usua_Nombre':      username, 
+    'usua_Contrasenia': newpassword 
   };
   final jsonTarea = jsonEncode(tarea);
   final response = await http.post(
-    Uri.parse('${apiUrl}Usuarios/Login'),
+    Uri.parse('${apiUrl}Usuarios/CambiarContrasenia'),
     headers: {
       'XApiKey': apiKey,
       'Content-Type': 'application/json',
@@ -30,14 +37,21 @@ Future<void> ValidarClaves(BuildContext context, String newpassword, String conf
     body: jsonTarea,
   );
   if (response.statusCode == 200) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NavBarRoots(),
-    ));
+     CherryToast.success(
+      title: Text('Su contraseña ha sido reestablecida',
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+      borderRadius: 0,
+    ).show(context);
+    // Timer scheduleTimeout([int milliseconds = 10000]) =>
+    // Timer(Duration(milliseconds: milliseconds), handleTimeout);
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => loginScreen(),
+    // ));
   } else {
     CherryToast.error(
-      title: Text('El usuario o contraseña son incorrectos',
+      title: Text('Algo salió mal. Inténtelo nuevamente',
            style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
       borderRadius: 0,
     ).show(context);
@@ -128,7 +142,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   child: InkWell(
                     onTap: () {
                       if (newpassword.isNotEmpty && confirmpassword.isNotEmpty) {
-                        ValidarClaves(context, newpassword, confirmpassword);
+                         if (newpassword == confirmpassword){
+                        ValidarClaves(context, newpassword);
+                        } else{
+                          CherryToast.error(
+                          title: Text('Las contraseñas no coinciden',
+                              style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+                          borderRadius: 0,
+                        ).show(context);
+                        }
                       } else {
                         CherryToast.warning(
                           title: Text('Llene los campos correctamente',

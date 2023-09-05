@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/recover_password_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
@@ -31,10 +32,14 @@ Future<void> fetchData(BuildContext context, String username, String password) a
     body: jsonTarea,
   );
   if (response.statusCode == 200) {
-    // final decodedJson = jsonDecode(response.body);
-    // final data = decodedJson["data"]; 
-    //  SharedPreferences prefs = await SharedPreferences.getInstance();
-    //   print(data);
+    final decodedJson = jsonDecode(response.body);
+    final data = decodedJson["data"]; 
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     prefs.setString('username', data['usua_Nombre']);
+     prefs.setString('email', data['empl_CorreoElectronico']);
+     prefs.setString('userfullname', data['emplNombreCompleto']);
+     prefs.setString('rol', data['role_Descripcion']);
+     prefs.setBool('esAduana', data['usua_esAduana']);
     Navigator.push(
         context,
         MaterialPageRoute(
