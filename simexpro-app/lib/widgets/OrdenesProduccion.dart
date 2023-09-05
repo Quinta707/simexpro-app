@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,58 +12,54 @@ import 'package:simexpro/widgets/navbar_roots.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
+
 /// Flutter code sample for [Card].
 
 class Cartas extends StatefulWidget {
-  Cartas({super.key});
-   String conteo = ''; 
+  const Cartas({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => CardExamplesApp();
-  
+  CardExamplesApp createState() => CardExamplesApp();
 }
 
-Future<void> fetchData(BuildContext context) async {
+class CardExamplesApp extends State<Cartas> {
+  var Conteo = 0;
 
-  final response = await http.get(
-    Uri.parse('${apiUrl}Graficas/TotalOrdenesCompraMensual'),
-    headers: {
-      'XApiKey': apiKey,
-    },
-  );
-  if(response.statusCode == 200)
-  {
-    final json  = response.body;
-    final decodedJson = jsonDecode(json);
-    final data = decodedJson["data"];
-    
-    print(data);
-    return data;
+  Future<void> getData() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}Graficas/TotalOrdenesCompraMensual'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+      final jsonBody = json.decode(response.body);
+      final jsonData = json.decode(jsonBody['data']);
+      setState(() {
+        print(jsonData[0]['orco_Conteo']);
+      });
+    } catch (error) {
+      print(error);
+    }
   }
-  else
-  {
-    print(response.headers);
-    return ;
-  }
-}
-
-class CardExamplesApp extends State {
- // const CardExamplesApp({super.key});
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    fetchData(context);
+    getData();
   }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true),
+          colorSchemeSeed: Color.fromARGB(255, 65, 0, 242), useMaterial3: true),
       home: Scaffold(
         appBar: AppBar(title: const Text('Card Examples')),
-        body:  Column(
-          children: <Widget>[
+        body: Column(
+          children: const <Widget>[
             Spacer(),
+            OutlinedCardExample(),
             ElevatedCardExample(),
             FilledCardExample(),
             Spacer(),
@@ -75,12 +70,6 @@ class CardExamplesApp extends State {
   }
 }
 
-/// An example of the elevated card type.
-///
-/// The default settings for [Card] will provide an elevated
-/// card matching the spec:
-///
-/// https://m3.material.io/components/cards/specs#a012d40d-7a5c-4b07-8740-491dec79d58b
 class ElevatedCardExample extends StatelessWidget {
   const ElevatedCardExample({super.key});
 
@@ -98,12 +87,6 @@ class ElevatedCardExample extends StatelessWidget {
   }
 }
 
-/// An example of the filled card type.
-///
-/// To make a [Card] match the filled type, the default elevation and color
-/// need to be changed to the values from the spec:
-///
-/// https://m3.material.io/components/cards/specs#0f55bf62-edf2-4619-b00d-b9ed462f2c5a
 class FilledCardExample extends StatelessWidget {
   const FilledCardExample({super.key});
 
@@ -123,12 +106,6 @@ class FilledCardExample extends StatelessWidget {
   }
 }
 
-/// An example of the outlined card type.
-///
-/// To make a [Card] match the outlined type, the default elevation and shape
-/// need to be changed to the values from the spec:
-///
-/// https://m3.material.io/components/cards/specs#0f55bf62-edf2-4619-b00d-b9ed462f2c5a
 class OutlinedCardExample extends StatelessWidget {
   const OutlinedCardExample({super.key});
 
