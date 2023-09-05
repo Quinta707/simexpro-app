@@ -40,6 +40,7 @@ Future<void> fetchData(BuildContext context, String username, String password) a
      prefs.setString('userfullname', data['emplNombreCompleto']);
      prefs.setString('rol', data['role_Descripcion']);
      prefs.setBool('esAduana', data['usua_esAduana']);
+     prefs.setString('image', data['usua_Image']);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -60,6 +61,7 @@ class _loginScreenState extends State<loginScreen> {
   String username = ''; 
   String password = '';
   @override
+  
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,

@@ -14,7 +14,7 @@ class NavBarRoots extends StatefulWidget {
 class _NavBarRootsState extends State<NavBarRoots> {
   int _selectedIndex = 0;
   final _screens = [
-    Cartas(),
+    HomeScreen(),
     historialScreen(),
     TimelineScreen(),
     SettingScreen(),

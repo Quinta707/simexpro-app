@@ -36,6 +36,95 @@ Future<void> ValidarCodigo(BuildContext context, String code) async {
   }
 }
 
+Future<void> ObtenerCodigoVerificacion(BuildContext context) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var username =  prefs.getString('usuariotemp');
+  final response = await http.get(
+    Uri.parse('${apiUrl}Usuarios/UsuarioCorreo?usua_Nombre=$username'),
+    headers: {
+      'XApiKey': apiKey,
+      'Content-Type': 'application/json',
+    },
+  );
+  final decodedJson = jsonDecode(response.body);
+    final data = decodedJson["data"]; 
+
+  if (response.statusCode == 200) {
+
+    var generator = RandomStringGenerator(
+      minLength: 5,
+      maxLength: 6,
+      hasSymbols: false,
+    );
+
+  Iterable.generate(1).forEach((_) async {
+    try {
+      var string = generator.generate();
+      EnviarEmail(context, username, data["messageStatus"], string);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('code', string);
+
+    } on RandomStringGeneratorException catch (e) {
+      print(e.message);
+
+       CherryToast.error(
+      title: Text('El código no pudo ser generado',
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+        borderRadius: 0,
+      ).show(context);
+    }
+  });
+  } else if(response.statusCode == 404){
+    CherryToast.error(
+      title: Text('El usuario no existe o no está disponible',
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+      borderRadius: 0,
+    ).show(context);
+  } else {
+    CherryToast.error(
+      title: Text('Algo salió mal. Inténtelo nuevamente',
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+      borderRadius: 0,
+    ).show(context);
+  }
+}
+
+Future<void> EnviarEmail(BuildContext context, String username, String email, String codigo) async {
+  final cuerpo = {
+    'service_id': 'service_vmi2fud',
+    'template_id': 'template_7pts636',
+    'user_id': 'v8MonHOTfcrwu9Q4E',
+    'template_params': {
+        'to_name': username,
+        'message': codigo,
+        'send_to': email,
+    }
+  };
+  final jsoncuerpo = jsonEncode(cuerpo);
+  final response = await http.post(
+    Uri.parse('https://api.emailjs.com/api/v1.0/email/send'),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: jsoncuerpo,
+  );
+  if (response.statusCode == 200) {
+   CherryToast.success(
+      title: Text('Se ha enviado un nuevo código a tu correo',
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+      borderRadius: 0,
+    ).show(context);
+    
+  } else {
+    CherryToast.error(
+      title: Text('Algo salió mal. Contacte un administrador',
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+      borderRadius: 0,
+    ).show(context);
+    print(response);
+  }
+}
+
 class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
   bool passToggle = true;
   String code = ''; 
@@ -118,11 +207,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => loginScreen(),
-                          ));
+                      ObtenerCodigoVerificacion(context);
                     },
                    child: Text(
                       "¿No has recibido tu código",
