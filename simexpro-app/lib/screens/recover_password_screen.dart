@@ -68,9 +68,15 @@ Future<void> ObtenerCodigoVerificacion(BuildContext context, String username) as
       ).show(context);
     }
   });
-  } else {
+  } else if(response.statusCode == 404){
     CherryToast.error(
       title: Text('El usuario no existe o no está disponible',
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+      borderRadius: 0,
+    ).show(context);
+  } else {
+    CherryToast.error(
+      title: Text('Algo salió mal. Inténtelo nuevamente',
            style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
       borderRadius: 0,
     ).show(context);
