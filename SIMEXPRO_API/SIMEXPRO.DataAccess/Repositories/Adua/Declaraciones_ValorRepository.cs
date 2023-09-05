@@ -175,8 +175,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
         public IEnumerable<VW_tbDeclaraciones_ValorCompleto> ListVW()
         {
-            var con = new SIMEXPRO();
-            return con.VW_tbDeclaraciones_ValorCompleto.AsList();
+            throw new NotImplementedException();
         }
 
         public RequestStatus Update(tbDeclaraciones_Valor item)

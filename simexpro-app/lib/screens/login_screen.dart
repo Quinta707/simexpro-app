@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'dart:html';
-import 'dart:js';
+
 
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';

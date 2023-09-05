@@ -34,21 +34,24 @@ namespace SIMEXPRO.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.DataAccess(Configuration.GetConnectionString("ConexionSimexpro"));
+            services.BussinessLogic();
+            services.AddAutoMapper(x => x.AddProfile<MappingProfileExtensions>(), AppDomain.CurrentDomain.GetAssemblies());
+            AddSwagger(services);
+
+
+
             services.AddCors(option =>
             {
                 option.AddPolicy("AllowFlutter", builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000", 
-                                        "https://simexpro.onrender.com",
-                                        "https://simexpro.vercel.app",
-                                        "https://simexpro.up.railway.app") //NOMBRE DEL SERVIDOR
+                    builder.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .WithExposedHeaders("Authorization");
-                }
-                );
-            }
-           );
+                });
+            });
 
             // Configure Azure Key Vault
             //var configBuilder = new ConfigurationBuilder();
@@ -68,15 +71,11 @@ namespace SIMEXPRO.API
             //services.AddSingleton(configuration);
 
 
-            services.DataAccess(Configuration.GetConnectionString("ConexionSimexpro"));
-            services.BussinessLogic();
-            services.AddAutoMapper(x => x.AddProfile<MappingProfileExtensions>(), AppDomain.CurrentDomain.GetAssemblies());
+            
             services.AddControllers();
 
-            services.AddMvc();
-            services.AddControllersWithViews();
-            services.AddControllers();
-            AddSwagger(services);
+        
+            
         }
 
         private void AddSwagger(IServiceCollection services)

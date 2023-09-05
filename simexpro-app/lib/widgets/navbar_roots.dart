@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/settings_screen.dart';
+import 'package:simexpro/widgets/OrdenesProduccion.dart';
 
 class NavBarRoots extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class NavBarRoots extends StatefulWidget {
 class _NavBarRootsState extends State<NavBarRoots> {
   int _selectedIndex = 0;
   final _screens = [
-    HomeScreen(),
+    Cartas(),
     historialScreen(),
     SettingScreen(),
   ];
