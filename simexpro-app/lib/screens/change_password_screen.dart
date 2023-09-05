@@ -5,7 +5,6 @@ import 'dart:js';
 import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/recover_password_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
@@ -18,16 +17,14 @@ class ChangePasswordScreen extends StatefulWidget {
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-Future<void> ValidarClaves(BuildContext context, String newpassword) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  final username =  prefs.getString('username');
+Future<void> ValidarClaves(BuildContext context, String newpassword, String confirmpassword) async {
   final tarea = {
-    'usua_Nombre':      username, 
-    'usua_Contrasenia': newpassword 
+    'usua_Nombre':      newpassword, 
+    'usua_Contrasenia': confirmpassword 
   };
   final jsonTarea = jsonEncode(tarea);
   final response = await http.post(
-    Uri.parse('${apiUrl}Usuarios/CambiarContrasenia'),
+    Uri.parse('${apiUrl}Usuarios/Login'),
     headers: {
       'XApiKey': apiKey,
       'Content-Type': 'application/json',
@@ -35,11 +32,6 @@ Future<void> ValidarClaves(BuildContext context, String newpassword) async {
     body: jsonTarea,
   );
   if (response.statusCode == 200) {
-    CherryToast.success(
-      title: Text('Su contraseña ha sido reestablecida',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
-      borderRadius: 0,
-    ).show(context);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -47,7 +39,7 @@ Future<void> ValidarClaves(BuildContext context, String newpassword) async {
     ));
   } else {
     CherryToast.error(
-      title: Text('Algo salió mal. Inténtelo nuevamente',
+      title: Text('El usuario o contraseña son incorrectos',
            style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
       borderRadius: 0,
     ).show(context);
@@ -138,15 +130,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   child: InkWell(
                     onTap: () {
                       if (newpassword.isNotEmpty && confirmpassword.isNotEmpty) {
-                        if (newpassword == confirmpassword){
-                        ValidarClaves(context, newpassword);
-                        } else{
-                          CherryToast.error(
-                          title: Text('Las contraseñas no coinciden',
-                              style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
-                          borderRadius: 0,
-                        ).show(context);
-                        }
+                        ValidarClaves(context, newpassword, confirmpassword);
                       } else {
                         CherryToast.warning(
                           title: Text('Llene los campos correctamente',
