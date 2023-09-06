@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 40),
+          padding: const EdgeInsets.only(top: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -33,10 +33,6 @@ class HomeScreen extends StatelessWidget {
                         fontSize: 35,
                         fontWeight: FontWeight.w500,
                       ),
-                    ),
-                    CircleAvatar(
-                      radius: 25,
-                      backgroundImage: NetworkImage(image),
                     ),
                   ],
                 ),
