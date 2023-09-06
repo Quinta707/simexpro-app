@@ -76,7 +76,6 @@ class _loginScreenState extends State<loginScreen> {
                   "https://i.ibb.co/vk2tjx1/SIMEXPRO-V3-PNG.png",
                 ),
               ),
-              SizedBox(height: 10),
               Padding(
                   padding: const EdgeInsets.all(18),
                   child: TextField(
@@ -122,7 +121,6 @@ class _loginScreenState extends State<loginScreen> {
                     ),
                   ),
                 ),
-              SizedBox(height: 20),
               Padding(
                   padding: const EdgeInsets.all(15),
                   child: InkWell(

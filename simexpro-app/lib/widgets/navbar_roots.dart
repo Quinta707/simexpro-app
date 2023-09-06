@@ -4,9 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/historial_screen.dart';
+import 'package:simexpro/screens/login_screen.dart';
+import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/screens/settings_screen.dart';
 import 'package:simexpro/widgets/OrdenesProduccion.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
+
+enum MenuItem{
+  item1,
+  item2    
+}
 
 class NavBarRoots extends StatefulWidget {
   @override
@@ -22,15 +29,14 @@ class _NavBarRootsState extends State<NavBarRoots> {
     HomeScreen(),
     historialScreen(),
     TimelineScreen(),
-    SettingScreen(),
   ];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Imagen();
   }
+  
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -42,38 +48,75 @@ class _NavBarRootsState extends State<NavBarRoots> {
             child: CircleAvatar(
             radius: 20,
             backgroundImage: NetworkImage(image),
-            
+            child: PopupMenuButton<MenuItem>(
+              //padding: EdgeInsets.all(10),
+               child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.network(
+                    image,
+                    width: 50,
+                  ),
+                ),
+              onSelected: (value) {
+                if(value == MenuItem.item1){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(),
+                  ));
+                }
+                if(value == MenuItem.item2){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => loginScreen(),
+                  ));
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem<MenuItem>(
+                   value: MenuItem.item1,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Icon(Icons.person_2_outlined, color: Color.fromRGBO(87, 69, 223, 1),)
+                        ),
+                        const Text(
+                          'Mi Perfil',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ],
+                    ),
+                  ),
+                PopupMenuItem<MenuItem>(
+                  value: MenuItem.item2,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Icon(Icons.logout, color: Color.fromRGBO(87, 69, 223, 1),)
+                        ),
+                        const Text(
+                          'Cerrar Sesión',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
           ),
           )
-          
-        
-          //  Positioned(
-          //     top: .0,
-          //     left: .0,
-          //     right: 10,
-          //     child: Center(
-          //       child: CircleAvatar(
-          //         radius: 20,
-          //         backgroundImage: NetworkImage(image),
-          //       ),
-          //     ),
-          //   )
-
-          
-          // IconButton(
-          //   icon: const Icon(Icons.settings),
-          //   tooltip: 'Ajustes',
-          //   onPressed: () {},
-          // ), 
         ], 
         backgroundColor: Color.fromRGBO(17, 24, 39, 1),
-        elevation: 50.0,
+        //elevation: 50.0,
         leading: IconButton(
           icon: const Icon(Icons.menu),
           tooltip: 'Menú',
           onPressed: () {},
         ),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
+        //systemOverlayStyle: SystemUiOverlayStyle.light,
       ), 
       backgroundColor: Colors.white,
       body: _screens[_selectedIndex],
@@ -106,10 +149,6 @@ class _NavBarRootsState extends State<NavBarRoots> {
              BottomNavigationBarItem(
                 icon: Icon(Icons.timelapse_outlined), 
                 label: "Rastreo"),
-            
-            BottomNavigationBarItem(
-                icon: Icon(Icons.settings), 
-                label: "Ajustes"),
           ],
         ),
       ),
