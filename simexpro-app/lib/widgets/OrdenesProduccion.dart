@@ -13,16 +13,9 @@ class Cartas extends StatefulWidget {
   Grafica createState() => Grafica();
 }
 
-class BarChartData {
-  final String modu_Nombre;
-  final int totalProduccionDia;
-  final String porcentaje;
-
-  BarChartData(this.modu_Nombre, this.totalProduccionDia, this.porcentaje);
-}
-
 class Grafica extends State<Cartas> {
   List<BarChartData> data = []; // Lista para almacenar los datos de la API
+  //List<Clientes> grafiica=[];
 
   Future<void> fetchDataFromAPI() async {
     try {
@@ -43,12 +36,9 @@ class Grafica extends State<Cartas> {
                   item['totalProduccionDia'], item['porcentajeProduccion']))
               .toList();
         });
-        print(data);
-      } else {
-        throw Exception('Error al cargar los datos desde la API');
       }
     } catch (error) {
-      print(error);
+      throw Exception('Error: ${error}');
     }
   }
 
@@ -62,37 +52,135 @@ class Grafica extends State<Cartas> {
   Widget build(BuildContext context) {
     final List<charts.Series<BarChartData, String>> seriesList = [
       charts.Series<BarChartData, String>(
-          id: 'Barras',
-          domainFn: (BarChartData data, _) => data.modu_Nombre,
-          measureFn: (BarChartData data, _) => data.totalProduccionDia,
-          data: data, // Utiliza los datos de la API
-          labelAccessorFn: (BarChartData data, _) =>
-            '${data.porcentaje}%', )
+        id: 'Barras',
+        domainFn: (BarChartData data, _) => data.modu_Nombre,
+        measureFn: (BarChartData data, _) => data.totalProduccionDia,
+        labelAccessorFn: (BarChartData data, _) => '${data.porcentaje}%',
+        colorFn: (_, __) => charts.MaterialPalette.black,
+        data: data, // Utiliza los datos de la API
+      )
     ];
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Gráfico de Barras desde API en Flutter'),
-        ),
-        body: Center(
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: charts.BarChart(
-              seriesList,
-              animate: true,
-              vertical: true,
-              domainAxis: charts.OrdinalAxisSpec(
-                renderSpec: charts.SmallTickRendererSpec(
-                    labelRotation: 45), // Rota las etiquetas del eje X
-              ),
-              
-            ),
+    //GRAFICA DE BARRAS (MODULOS MAS PRODUCTIVOS)
+    final chart = new charts.BarChart(
+      seriesList,
+      animate: true,
+      vertical: true,
+      domainAxis: new charts.OrdinalAxisSpec(
+        renderSpec: new charts.SmallTickRendererSpec(
+          labelStyle: new charts.TextStyleSpec(
+            color: charts.MaterialPalette.black,
           ),
+          labelRotation: 45,
+        ),
+      ),
+      barRendererDecorator: charts.BarLabelDecorator<String>(
+        labelAnchor: charts.BarLabelAnchor.end,
+        insideLabelStyleSpec: const charts.TextStyleSpec(
+          fontSize: 12, // Tamaño de letra de la etiqueta de porcentaje
+          color: charts
+              .Color.white, // Color de la letra de la etiqueta de porcentaje
+        ),
+        outsideLabelStyleSpec: charts.TextStyleSpec(
+          fontSize: 12, // Tamaño de letra de la etiqueta de porcentaje
+          color: charts
+              .Color.black, // Color de la letra de la etiqueta de porcentaje
         ),
       ),
     );
+
+    
+    //GRAFICA PIE (CLIENTES MAS PRODUCTIVOS)
+    final pieChart = charts.PieChart(
+      seriesList,
+      animate: true,
+      behaviors: [
+        new charts.DatumLegend(
+          outsideJustification: charts.OutsideJustification.endDrawArea,
+          horizontalFirst: false,
+          desiredMaxRows: 2,
+          cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+          entryTextStyle: charts.TextStyleSpec(
+            color: charts.MaterialPalette.black,
+            fontSize: 12,
+          ),
+        ),
+      ],
+      defaultRenderer: new charts.ArcRendererConfig(
+        arcWidth: 100, // Ancho de los segmentos del gráfico de pastel
+        arcRendererDecorators: [
+          new charts.ArcLabelDecorator(
+            labelPosition: charts.ArcLabelPosition.inside,
+            insideLabelStyleSpec: charts.TextStyleSpec(
+              color: charts.Color.white,
+              fontSize: 12,
+            ),
+            outsideLabelStyleSpec: charts.TextStyleSpec(
+              color: charts.Color.black,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Gráfico de Barras desde API en Flutter'),
+      ),
+      body: ListView(
+        children: [
+          Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Container(
+                    height:
+                        500, // Establece una altura específica para la gráfica
+                    child: chart,
+                  ),
+                ),
+                const Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Divider(
+                      color: Colors.black,
+                      thickness: 2,
+                      height: 20,
+                    ),
+                  ),
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Container(
+                    height:
+                        500, // Establece una altura específica para la gráfica
+                    child: pieChart,
+                  ),
+                ),
+                Text(
+                  'Texto debajo del gráfico',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // Puedes seguir agregando más widgets o filas según sea necesario
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
+}
+
+class BarChartData {
+  final String modu_Nombre;
+  final int totalProduccionDia;
+  final String porcentaje;
+
+  BarChartData(this.modu_Nombre, this.totalProduccionDia, this.porcentaje);
 }
 
 class CardExamplesApp extends State<Cartas> {
