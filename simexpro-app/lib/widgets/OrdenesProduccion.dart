@@ -16,8 +16,9 @@ class Cartas extends StatefulWidget {
 class BarChartData {
   final String modu_Nombre;
   final int totalProduccionDia;
+  final String porcentaje;
 
-  BarChartData(this.modu_Nombre, this.totalProduccionDia);
+  BarChartData(this.modu_Nombre, this.totalProduccionDia, this.porcentaje);
 }
 
 class Grafica extends State<Cartas> {
@@ -38,8 +39,8 @@ class Grafica extends State<Cartas> {
 
         setState(() {
           data = jsonData
-              .map((item) =>
-                  BarChartData(item['modu_Nombre'], item['totalProduccionDia']))
+              .map((item) => BarChartData(item['modu_Nombre'],
+                  item['totalProduccionDia'], item['porcentajeProduccion']))
               .toList();
         });
         print(data);
@@ -61,39 +62,13 @@ class Grafica extends State<Cartas> {
   Widget build(BuildContext context) {
     final List<charts.Series<BarChartData, String>> seriesList = [
       charts.Series<BarChartData, String>(
-        id: 'Barras',
-        domainFn: (BarChartData data, _) => data.modu_Nombre,
-        measureFn: (BarChartData data, _) => data.totalProduccionDia,
-
-        data: data, // Utiliza los datos de la API
-      ),
+          id: 'Barras',
+          domainFn: (BarChartData data, _) => data.modu_Nombre,
+          measureFn: (BarChartData data, _) => data.totalProduccionDia,
+          data: data, // Utiliza los datos de la API
+          labelAccessorFn: (BarChartData data, _) =>
+            '${data.porcentaje}%', )
     ];
-
-    final chart = new charts.BarChart(
-      seriesList,
-      animate: true,
-      vertical: true,
-      domainAxis: new charts.OrdinalAxisSpec(
-        renderSpec: new charts.SmallTickRendererSpec(
-          labelStyle: new charts.TextStyleSpec(
-            color: charts.MaterialPalette.white,
-          ),
-        ),
-      ),
-      barRendererDecorator: charts.BarLabelDecorator<String>(
-        labelAnchor: charts.BarLabelAnchor.end,
-        insideLabelStyleSpec: const charts.TextStyleSpec(
-          fontSize: 14, // Tamaño de letra de la etiqueta de porcentaje
-          color: charts
-              .Color.white, // Color de la letra de la etiqueta de porcentaje
-        ),
-        outsideLabelStyleSpec: charts.TextStyleSpec(
-          fontSize: 14, // Tamaño de letra de la etiqueta de porcentaje
-          color: charts
-              .Color.white, // Color de la letra de la etiqueta de porcentaje
-        ),
-      ),
-    );
 
     return MaterialApp(
       home: Scaffold(
@@ -106,6 +81,12 @@ class Grafica extends State<Cartas> {
             child: charts.BarChart(
               seriesList,
               animate: true,
+              vertical: true,
+              domainAxis: charts.OrdinalAxisSpec(
+                renderSpec: charts.SmallTickRendererSpec(
+                    labelRotation: 45), // Rota las etiquetas del eje X
+              ),
+              
             ),
           ),
         ),
