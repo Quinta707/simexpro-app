@@ -78,7 +78,13 @@ class TabBarDemo extends State<Graficas> {
 
   @override
   Widget build(BuildContext context) {
-    
+
+    // Genera una lista de colores aleatorios para el grafico pie
+    final List<charts.Color> randomColors = List.generate(
+      data.length,
+      (_) => getRandomColor(),
+    );
+
     //ASIGNACION DEL GRAFICO DE BARRAS (MODULOS MAS PRODUCTIVOS)
     final List<charts.Series<BarChartData, String>> seriesList = [
       charts.Series<BarChartData, String>(
@@ -86,7 +92,7 @@ class TabBarDemo extends State<Graficas> {
         domainFn: (BarChartData data, _) => data.modu_Nombre,
         measureFn: (BarChartData data, _) => data.totalProduccionDia,
         labelAccessorFn: (BarChartData data, _) => '${data.porcentaje}%',
-        colorFn: (_, __) => getRandomColor(),
+        colorFn: (BarChartData data, int? index) => randomColors[index ?? 0], // Asigna el color desde la lista de colores aleatorios
         data: data, // Utiliza los datos de la API
       )
     ];
@@ -145,7 +151,7 @@ class TabBarDemo extends State<Graficas> {
               color: charts.MaterialPalette
                   .black, // Color transparente para la línea líder
               length:
-                  10, // Ajusta la longitud de la línea líder según sea necesario
+                  0, // Ajusta la longitud de la línea líder según sea necesario
               thickness:
                   1.0, // Ajusta el grosor de la línea líder según sea necesario
             ),
@@ -165,6 +171,7 @@ class TabBarDemo extends State<Graficas> {
     );
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: DefaultTabController(
         length: 3,
         child: Scaffold(

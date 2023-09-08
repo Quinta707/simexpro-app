@@ -1,96 +1,68 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:simexpro/screens/login_screen.dart';
-import 'package:simexpro/screens/profile_screen.dart';
-import 'package:simexpro/widgets/navbar_roots.dart';
+import 'package:simexpro/screens/maquinas_screen.dart';
+import 'package:simexpro/toastconfig/toastconfig.dart';
 
 class TimelineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Configuración",
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w500,
+          Container(
+            alignment: Alignment.center,
+            child: Text(
+              "Líneas de tiempo",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           SizedBox(height: 30),
-          ListTile(
-            leading: CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage("https://i.ibb.co/f2jLjwm/dc0ca1840498.jpg"),
-            ),
-            title: Text(
-              "jumAngie",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 25,
-              ),
-            ),
-            subtitle: Text("Perfil"),
-          ),
-          Divider(height: 50),
-          ListTile(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfileScreen(),
+          Container(
+            alignment: Alignment.center,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MaquinasScreen(),
                 ));
-            },
-            leading: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade100,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                CupertinoIcons.person,
-                color: Colors.blue,
-                size: 35,
+              },
+              child: CircleAvatar(
+                backgroundImage: NetworkImage('https://i.ibb.co/VYPzhv8/MAQUINAS.png'),
+                radius: 100,
               ),
             ),
-            title: Text(
-              "Perfil",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 20,
-              ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Text('Máquinas',
+              style: TextStyle(fontSize: 20),
             ),
-            trailing: Icon(Icons.arrow_forward_ios_rounded),
           ),
           SizedBox(height: 20),
-        ListTile(
-             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => loginScreen(),
-                ));
-            },
-            leading: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.redAccent.shade100,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.info_outline_rounded,
-                color: Colors.redAccent,
-                size: 35,
+           Container(
+            alignment: Alignment.center,
+            child: InkWell(
+              onTap: () {
+                CherryToast.success(title: Text('Funciona', 
+                style: TextStyle(color: Colors.white)),
+                borderRadius: 0,
+                ).show(context);
+              },
+              child: CircleAvatar(
+                backgroundImage: NetworkImage('https://i.ibb.co/vVz8MdF/ORDEN-1.png'),
+                radius: 100,
               ),
             ),
-            title: Text(
-              "Cerrar Sesión",
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 20,
-              ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Text('Órdenes',
+              style: TextStyle(fontSize: 20),
             ),
           ),
         ],

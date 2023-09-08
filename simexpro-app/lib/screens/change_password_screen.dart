@@ -19,6 +19,19 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 
+Future<void> delayFunction(BuildContext context) async {
+   CherryToast.success(
+      title: Text('Su contraseña ha sido reestablecida',
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+      borderRadius: 0,
+    ).show(context);
+  await Future.delayed(Duration(seconds: 3));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => loginScreen(),
+    ));
+}
 
 Future<void> ValidarClaves(BuildContext context, String newpassword) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -37,18 +50,8 @@ Future<void> ValidarClaves(BuildContext context, String newpassword) async {
     body: jsonTarea,
   );
   if (response.statusCode == 200) {
-     CherryToast.success(
-      title: Text('Su contraseña ha sido reestablecida',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
-      borderRadius: 0,
-    ).show(context);
-    // Timer scheduleTimeout([int milliseconds = 10000]) =>
-    // Timer(Duration(milliseconds: milliseconds), handleTimeout);
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => loginScreen(),
-    // ));
+    delayFunction(context);
+
   } else {
     CherryToast.error(
       title: Text('Algo salió mal. Inténtelo nuevamente',
@@ -58,11 +61,11 @@ Future<void> ValidarClaves(BuildContext context, String newpassword) async {
   }
 }
 
-
+ String newpassword = ''; 
+  String confirmpassword = '';
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool passToggle = true;
-  String newpassword = ''; 
-  String confirmpassword = '';
+ 
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -186,6 +189,29 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ),
                   ),
                 ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => loginScreen(),
+                          ));
+                    },
+                   child: Text(
+                      "Regresar al login",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromRGBO(87, 69, 223, 1),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

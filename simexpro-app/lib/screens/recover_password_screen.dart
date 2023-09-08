@@ -33,6 +33,9 @@ print(generator.generate());
 }
 
 Future<void> ObtenerCodigoVerificacion(BuildContext context, String username) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+     prefs.setString('usuariotemp', username);
+
   final response = await http.get(
     Uri.parse('${apiUrl}Usuarios/UsuarioCorreo?usua_Nombre=$username'),
     headers: {
