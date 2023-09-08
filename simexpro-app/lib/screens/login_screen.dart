@@ -1,11 +1,7 @@
 import 'dart:convert';
-
-
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/recover_password_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
 import 'package:http/http.dart' as http;

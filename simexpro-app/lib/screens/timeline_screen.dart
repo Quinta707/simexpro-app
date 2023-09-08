@@ -17,6 +17,7 @@ class TimelineScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w500,
+                color: Color.fromRGBO(148, 82, 249, 1)
               ),
             ),
           ),

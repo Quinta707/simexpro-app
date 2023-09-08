@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:simexpro/toastconfig/toastconfig.dart';
 
 class MaquinasScreen extends StatelessWidget {
+  bool isDark = false;
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            alignment: Alignment.center,
-              child: Text('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'),
-          )
-        ],
-      ),
+    final ThemeData themeData = ThemeData(
+        useMaterial3: true,
+        brightness: isDark ? Brightness.dark : Brightness.light);
+
+    return Padding(
+       padding: EdgeInsets.all(5),
     );
   }
 }
-

@@ -121,6 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.62.0"
+  floating_search_bar:
+    dependency: "direct main"
+    description:
+      name: floating_search_bar
+      sha256: "550844e16f43268c213e8927a3cd01f7b6e6566f3c1ac5f0f6a6de60caf5f4ac"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   flutter:
     dependency: "direct main"
     description: flutter
