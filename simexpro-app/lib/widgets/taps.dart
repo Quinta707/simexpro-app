@@ -145,7 +145,7 @@ class TabBarDemo extends State<Graficas> {
               color: charts.MaterialPalette
                   .black, // Color transparente para la línea líder
               length:
-                  10, // Ajusta la longitud de la línea líder según sea necesario
+                  0, // Ajusta la longitud de la línea líder según sea necesario
               thickness:
                   1.0, // Ajusta el grosor de la línea líder según sea necesario
             ),
@@ -165,54 +165,127 @@ class TabBarDemo extends State<Graficas> {
     );
 
     return MaterialApp(
-      theme: ThemeData(
-        tabBarTheme: TabBarTheme(
-          indicatorColor: Colors.black,
-        ),
-      ),
       home: DefaultTabController(
         length: 3,
         child: Scaffold(
-      body: DefaultTabController(
-        length: 3,
-            child: Column(
-              children: [
-                TabBar(
-                  dividerColor: Colors.black,
-                  indicatorColor: Colors.black,
-                  tabs: [
-                    Tab(icon: Icon(Icons.directions_car)),
-                    Tab(icon: Icon(Icons.directions_transit)),
-                    Tab(icon: Icon(Icons.directions_bike)),
-                  ],
-                ),
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Container(
-                          height: 500,
-                          child: chart,
+          appBar: AppBar(
+            title: const Image(
+                height: 35,
+                image: NetworkImage('https://i.ibb.co/HgdBM0r/slogan.png')),
+            centerTitle: true,
+            actions: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage(''),
+                  child: PopupMenuButton<MenuItem>(
+                    //padding: EdgeInsets.all(10),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Image.network(
+                        '',
+                        width: 50,
+                      ),
+                    ),
+                    onSelected: (value) {
+                      if (value == MenuItem.item1) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProfileScreen(),
+                            ));
+                      }
+                      if (value == MenuItem.item2) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => loginScreen(),
+                            ));
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem<MenuItem>(
+                        value: MenuItem.item1,
+                        child: Row(
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.person_2_outlined,
+                                  color: Color.fromRGBO(87, 69, 223, 1),
+                                )),
+                            const Text(
+                              'Mi Perfil',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Container(
-                          height: 500,
-                          child: pieChart,
+                      PopupMenuItem<MenuItem>(
+                        value: MenuItem.item2,
+                        child: Row(
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.logout,
+                                  color: Color.fromRGBO(87, 69, 223, 1),
+                                )),
+                            const Text(
+                              'Cerrar Sesión',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
                         ),
-                      ),
-                      Center(
-                        child: Text('Contenido de la pestaña 3'),
                       ),
                     ],
                   ),
                 ),
+              )
+            ],
+            backgroundColor: Color.fromRGBO(17, 24, 39, 1),
+            //elevation: 50.0,
+            leading: IconButton(
+              icon: const Icon(Icons.menu),
+              tooltip: 'Menú',
+              onPressed: () {},
+            ),
+
+            bottom: const TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.directions_car)),
+                Tab(icon: Icon(Icons.directions_transit)),
+                Tab(icon: Icon(Icons.directions_bike)),
               ],
             ),
+            //systemOverlayStyle: SystemUiOverlayStyle.light,
           ),
-        )
+          body: TabBarView(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Container(
+                  height:
+                      500, // Establece una altura específica para la gráfica
+                  child: chart,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Container(
+                  height:
+                      500, // Establece una altura específica para la gráfica
+                  child: pieChart,
+                ),
+              ),
+              Center(
+                child: Text(
+                    'Contenido de la pestaña 3'), // Contenido de la pestaña 3
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
