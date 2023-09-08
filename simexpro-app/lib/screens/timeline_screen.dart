@@ -25,15 +25,15 @@ class TimelineScreen extends StatelessWidget {
             alignment: Alignment.center,
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MaquinasScreen(),
-                ));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => MaquinasScreen(),
+                // ));
               },
               child: CircleAvatar(
                 backgroundImage: NetworkImage('https://i.ibb.co/VYPzhv8/MAQUINAS.png'),
-                radius: 100,
+                radius: 90,
               ),
             ),
           ),
@@ -55,7 +55,7 @@ class TimelineScreen extends StatelessWidget {
               },
               child: CircleAvatar(
                 backgroundImage: NetworkImage('https://i.ibb.co/vVz8MdF/ORDEN-1.png'),
-                radius: 100,
+                radius: 90,
               ),
             ),
           ),
