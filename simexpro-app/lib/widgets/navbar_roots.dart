@@ -1,14 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
-import 'package:simexpro/screens/settings_screen.dart';
-import 'package:simexpro/widgets/OrdenesProduccion.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
+import 'package:simexpro/widgets/taps.dart';
 
 enum MenuItem{
   item1,
@@ -26,7 +23,7 @@ Future<void>Imagen() async{
 class _NavBarRootsState extends State<NavBarRoots> {
   int _selectedIndex = 0;
   final _screens = [
-    HomeScreen(),
+    Graficas(),
     historialScreen(),
     TimelineScreen(),
   ];
@@ -38,7 +35,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
   }
   
   Widget build(BuildContext context) {
-    return Scaffold(
+      return Scaffold(
       appBar: AppBar(
         title: const Image(height: 35, image: NetworkImage('https://i.ibb.co/HgdBM0r/slogan.png')),
         centerTitle: true,

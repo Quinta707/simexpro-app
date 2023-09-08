@@ -1,153 +1,395 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
-
-import 'package:cherry_toast/resources/arrays.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simexpro/screens/home_screen.dart';
-import 'package:simexpro/screens/recover_password_screen.dart';
-import 'package:simexpro/widgets/navbar_roots.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
-import 'package:simexpro/toastconfig/toastconfig.dart';
-/// Flutter code sample for [Card].
+
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class Cartas extends StatefulWidget {
-  Cartas({super.key});
-   String conteo = ''; 
+  const Cartas({Key? key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => CardExamplesApp();
-  
+  //CardExamplesApp createState() => CardExamplesApp();
+  Grafica createState() => Grafica();
 }
 
-Future<void> fetchData(BuildContext context) async {
+class Grafica extends State<Cartas> {
+  List<BarChartData> data = []; // Lista para almacenar los datos de la API
+  //List<Clientes> grafiica=[];
 
-  final response = await http.get(
-    Uri.parse('${apiUrl}Graficas/TotalOrdenesCompraMensual'),
-    headers: {
-      'XApiKey': apiKey,
-    },
-  );
-  if(response.statusCode == 200)
-  {
-    final json  = response.body;
-    final decodedJson = jsonDecode(json);
-    final data = decodedJson["data"];
-    
-    print(data);
-    return data;
-  }
-  else
-  {
-    print(response.headers);
-    return ;
-  }
-}
+  Future<void> fetchDataFromAPI() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}Graficas/ProductividadModulos'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
 
-class CardExamplesApp extends State {
- // const CardExamplesApp({super.key});
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final List<dynamic> jsonData = responseData['data'];
+
+        setState(() {
+          data = jsonData
+              .map((item) => BarChartData(item['modu_Nombre'],
+                  item['totalProduccionDia'], item['porcentajeProduccion']))
+              .toList();
+        });
+      }
+    } catch (error) {
+      throw Exception('Error: ${error}');
+    }
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    fetchData(context);
+    fetchDataFromAPI(); // Llama a la función para cargar los datos desde la API
   }
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-          colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true),
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Card Examples')),
-        body:  Column(
-          children: <Widget>[
-            Spacer(),
-            ElevatedCardExample(),
-            FilledCardExample(),
-            Spacer(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// An example of the elevated card type.
-///
-/// The default settings for [Card] will provide an elevated
-/// card matching the spec:
-///
-/// https://m3.material.io/components/cards/specs#a012d40d-7a5c-4b07-8740-491dec79d58b
-class ElevatedCardExample extends StatelessWidget {
-  const ElevatedCardExample({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Card(
-        child: SizedBox(
-          width: 300,
-          height: 100,
-          child: Center(child: Text('Elevated Card')),
-        ),
-      ),
-    );
-  }
-}
+    final List<charts.Series<BarChartData, String>> seriesList = [
+      charts.Series<BarChartData, String>(
+        id: 'Barras',
+        domainFn: (BarChartData data, _) => data.modu_Nombre,
+        measureFn: (BarChartData data, _) => data.totalProduccionDia,
+        labelAccessorFn: (BarChartData data, _) => '${data.porcentaje}%',
+        colorFn: (_, __) => charts.MaterialPalette.black,
+        data: data, // Utiliza los datos de la API
+      )
+    ];
 
-/// An example of the filled card type.
-///
-/// To make a [Card] match the filled type, the default elevation and color
-/// need to be changed to the values from the spec:
-///
-/// https://m3.material.io/components/cards/specs#0f55bf62-edf2-4619-b00d-b9ed462f2c5a
-class FilledCardExample extends StatelessWidget {
-  const FilledCardExample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Card(
-        elevation: 0,
-        color: Theme.of(context).colorScheme.surfaceVariant,
-        child: const SizedBox(
-          width: 300,
-          height: 100,
-          child: Center(child: Text('Filled Card')),
-        ),
-      ),
-    );
-  }
-}
-
-/// An example of the outlined card type.
-///
-/// To make a [Card] match the outlined type, the default elevation and shape
-/// need to be changed to the values from the spec:
-///
-/// https://m3.material.io/components/cards/specs#0f55bf62-edf2-4619-b00d-b9ed462f2c5a
-class OutlinedCardExample extends StatelessWidget {
-  const OutlinedCardExample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
+    //GRAFICA DE BARRAS (MODULOS MAS PRODUCTIVOS)
+    final chart = new charts.BarChart(
+      seriesList,
+      animate: true,
+      vertical: true,
+      domainAxis: new charts.OrdinalAxisSpec(
+        renderSpec: new charts.SmallTickRendererSpec(
+          labelStyle: new charts.TextStyleSpec(
+            color: charts.MaterialPalette.black,
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          labelRotation: 45,
         ),
-        child: const SizedBox(
-          width: 300,
-          height: 100,
-          child: Center(child: Text('Outlined Card')),
+      ),
+      barRendererDecorator: charts.BarLabelDecorator<String>(
+        labelAnchor: charts.BarLabelAnchor.end,
+        insideLabelStyleSpec: const charts.TextStyleSpec(
+          fontSize: 12, // Tamaño de letra de la etiqueta de porcentaje
+          color: charts
+              .Color.white, // Color de la letra de la etiqueta de porcentaje
         ),
+        outsideLabelStyleSpec: charts.TextStyleSpec(
+          fontSize: 12, // Tamaño de letra de la etiqueta de porcentaje
+          color: charts
+              .Color.black, // Color de la letra de la etiqueta de porcentaje
+        ),
+      ),
+    );
+
+    
+    //GRAFICA PIE (CLIENTES MAS PRODUCTIVOS)
+    final pieChart = charts.PieChart(
+      seriesList,
+      animate: true,
+      behaviors: [
+        new charts.DatumLegend(
+          outsideJustification: charts.OutsideJustification.endDrawArea,
+          horizontalFirst: false,
+          desiredMaxRows: 2,
+          cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+          entryTextStyle: charts.TextStyleSpec(
+            color: charts.MaterialPalette.black,
+            fontSize: 12,
+          ),
+        ),
+      ],
+      defaultRenderer: new charts.ArcRendererConfig(
+        arcWidth: 100, // Ancho de los segmentos del gráfico de pastel
+        arcRendererDecorators: [
+          new charts.ArcLabelDecorator(
+            labelPosition: charts.ArcLabelPosition.inside,
+            insideLabelStyleSpec: charts.TextStyleSpec(
+              color: charts.Color.white,
+              fontSize: 12,
+            ),
+            outsideLabelStyleSpec: charts.TextStyleSpec(
+              color: charts.Color.black,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Gráfico de Barras desde API en Flutter'),
+      ),
+      body: ListView(
+        children: [
+          Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Container(
+                    height:
+                        500, // Establece una altura específica para la gráfica
+                    child: chart,
+                  ),
+                ),
+                const Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Divider(
+                      color: Colors.black,
+                      thickness: 2,
+                      height: 20,
+                    ),
+                  ),
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Container(
+                    height:
+                        500, // Establece una altura específica para la gráfica
+                    child: pieChart,
+                  ),
+                ),
+                Text(
+                  'Texto debajo del gráfico',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // Puedes seguir agregando más widgets o filas según sea necesario
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BarChartData {
+  final String modu_Nombre;
+  final int totalProduccionDia;
+  final String porcentaje;
+
+  BarChartData(this.modu_Nombre, this.totalProduccionDia, this.porcentaje);
+}
+
+class CardExamplesApp extends State<Cartas> {
+  var Conteo = 0;
+  var ConteoMes = 0;
+  var Mes = "";
+
+  List<dynamic> data = [];
+  List<dynamic> dataMes = [];
+
+  Future<void> OrdenesAnio() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}Graficas/TotalOrdenesCompraAnual'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+      final jsonBody = json.decode(response.body);
+      final data = jsonBody['data'];
+
+      setState(() {
+        Conteo = data[0]['orco_Conteo'];
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> OrdenesMes() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}Graficas/TotalOrdenesCompraMensual'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+      final jsonBody = json.decode(response.body);
+      final dataMes = jsonBody['data'];
+
+      setState(() {
+        ConteoMes = dataMes[0]['orco_Conteo'];
+        Mes = dataMes[0]['mesLabel'];
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    OrdenesAnio();
+    OrdenesMes();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 15),
+          Container(
+            width: 300,
+            height: 100,
+            padding: EdgeInsets.symmetric(vertical: 5),
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(86, 101, 115, 1.0),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  const ListTile(
+                    title: Text(
+                      "ÓRDENES COMPLETADAS EN EL AÑO",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                          color: Colors.white),
+                    ),
+                    // trailing: CircleAvatar(
+                    //   radius: 25,
+                    //   backgroundImage: NetworkImage(
+                    //       "https://i.ibb.co/BnHMGJn/TERMINADO.png"),
+                    // ),
+                  ),
+                  const Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Divider(
+                      color: Colors.white,
+                      thickness: 2,
+                      height: 20,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            alignment: Alignment.bottomRight,
+                            decoration: const BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            Conteo == 1
+                                ? ' ${Conteo} Órden Completada en ${DateTime.now().year}'
+                                : '${Conteo} Órdenes Completadas en ${DateTime.now().year}',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 15),
+          Container(
+            width: 300,
+            height: 100,
+            padding: EdgeInsets.symmetric(vertical: 5),
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(86, 101, 115, 1.0),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  const ListTile(
+                    title: Text(
+                      "ÓRDENES COMPLETADAS EN EL MES",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                          color: Colors.white),
+                    ),
+                    // trailing: CircleAvatar(
+                    //   radius: 25,
+                    //   backgroundImage: NetworkImage(
+                    //       "https://i.ibb.co/BnHMGJn/TERMINADO.png"),
+                    // ),
+                  ),
+                  const Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Divider(
+                      color: Colors.white,
+                      thickness: 2,
+                      height: 20,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            alignment: Alignment.bottomRight,
+                            decoration: const BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            ConteoMes == 1
+                                ? ' ${ConteoMes} Órden Completada en ${Mes}'
+                                : '${ConteoMes} Órdenes Completadas en ${Mes}',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
