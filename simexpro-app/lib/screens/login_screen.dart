@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simexpro/screens/change_password_screen.dart';
+import 'package:simexpro/screens/confirm_code_screen.dart';
 import 'package:simexpro/screens/recover_password_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
 import 'package:http/http.dart' as http;
@@ -75,9 +77,10 @@ class _loginScreenState extends State<loginScreen> {
             children: [
               SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.only(top: 60),
+                padding: const EdgeInsets.only(top: 5),
                 child: Image.network(
-                  "https://i.ibb.co/KyT958M/SIMEXPRO-V3-PEQUE-O.png",
+                  "https://i.ibb.co/vk2tjx1/SIMEXPRO-V3-PNG.png",
+                  height: 230,
                 ),
               ),
               Padding(
@@ -97,7 +100,7 @@ class _loginScreenState extends State<loginScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(18),
+                        padding: const EdgeInsets.only(right: 18, left: 18, bottom: 18),
                         child: TextField(
                           onChanged: (value) {
                             setState(() {
@@ -108,7 +111,6 @@ class _loginScreenState extends State<loginScreen> {
                             border: OutlineInputBorder(),
                             label: Text("Usuario"),
                             prefixIcon: Icon(Icons.person),
-                            contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10), // Personaliza el tamaño
                           ),
                         ),
                       ),
@@ -142,7 +144,33 @@ class _loginScreenState extends State<loginScreen> {
                         ),
                       ),
                     Padding(
-                        padding: const EdgeInsets.all(2),
+                      padding: EdgeInsets.only(left: 15, right: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end, 
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ConfirmCodeScreen(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "¿Contraseña olvidada?",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromRGBO(87, 69, 223, 1),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                      Padding(
+                        padding: const EdgeInsets.all(15),
                         child: InkWell(
                           onTap: () {
                             if (username.isNotEmpty && password.isNotEmpty) {
@@ -155,39 +183,12 @@ class _loginScreenState extends State<loginScreen> {
                               ).show(context);
                             }
                           },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end, // Alinea a la derecha
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RecoverPasswordScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  "¿Contraseña olvidada?",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromRGBO(87, 69, 223, 1),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.all(18),
-                      child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20), // Personaliza el tamaño
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20), 
                             width: double.infinity,
                             decoration: BoxDecoration(
                               color: Color.fromRGBO(87, 69, 223, 1),
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(50),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black12,
@@ -208,11 +209,13 @@ class _loginScreenState extends State<loginScreen> {
                             ),
                           ),
                         ),
+                       ),
+                       SizedBox(height: 15)
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 200),
               ],
             ),
           ),
