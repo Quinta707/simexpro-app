@@ -1,3 +1,4 @@
+import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ charts.Color getRandomColor() {
 
 class TabBarDemo extends State<Graficas> {
   List<BarChartData> data = [];
+  List<Clientes> ClientesData = [];
 
   //TRAER DATOS DE LA GRAFICA DE BARRAS
   Future<void> fetchDataFromAPI() async {
@@ -69,16 +71,42 @@ class TabBarDemo extends State<Graficas> {
     }
   }
 
+  //PETICION PARA OPTENER LOS DATOS DE LA GRAFICA (CLIENTES PRODUCIVOS)
+  Future<void> clientesProdivos() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}Graficas/ClientesProductivos'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final List<dynamic> jsonData = responseData['data'];
+
+        setState(() {
+          ClientesData = jsonData
+              .map((item) => Clientes(
+                  item['clie_Nombre_O_Razon_Social'], item['cantidadIngresos']))
+              .toList();
+        });
+      }
+    } catch (error) {
+      throw Exception('Error: ${error}');
+    }
+  }
+
   //LLMMAR  A LAS FUNCIONES QUE HACEN LAS PETICIONES A LA API
   void initState() {
     super.initState();
     fetchDataFromAPI();
-    Imagen();
+    clientesProdivos();
+    //Imagen();
   }
 
   @override
   Widget build(BuildContext context) {
-
     // Genera una lista de colores aleatorios para el grafico pie
     final List<charts.Color> randomColors = List.generate(
       data.length,
@@ -92,8 +120,28 @@ class TabBarDemo extends State<Graficas> {
         domainFn: (BarChartData data, _) => data.modu_Nombre,
         measureFn: (BarChartData data, _) => data.totalProduccionDia,
         labelAccessorFn: (BarChartData data, _) => '${data.porcentaje}%',
-        colorFn: (BarChartData data, int? index) => randomColors[index ?? 0], // Asigna el color desde la lista de colores aleatorios
+        colorFn: (BarChartData data, int? index) => randomColors[
+            index ?? 0], // Asigna el color desde la lista de colores aleatorios
         data: data, // Utiliza los datos de la API
+      )
+    ];
+
+    //ASIGNACION DEL GRAFICO DE BARRAS (MODULOS MAS PRODUCTIVOS)
+
+    //final totalIngresos = ClientesData.map((cliente) => cliente.Cantidad_Ingresos).reduce((a, b) => a + b);
+    final List<charts.Series<Clientes, String>> ClientesGrafica = [
+      charts.Series<Clientes, String>(
+        id: 'Barras',
+        domainFn: (Clientes data, _) => data.cliente_Nombre,
+        measureFn: (Clientes data, _) => data.Cantidad_Ingresos,
+        labelAccessorFn: (Clientes data, _) {
+          final porcentaje =
+              (data.Cantidad_Ingresos / ClientesData.map((cliente) => cliente.Cantidad_Ingresos).reduce((a, b) => a + b) * 100).toStringAsFixed(2);
+          return '${porcentaje}%';
+        },
+        colorFn: (Clientes data, int? index) => randomColors[
+            index ?? 0], // Asigna el color desde la lista de colores aleatorios
+        data: ClientesData, // Utiliza los datos de la API
       )
     ];
 
@@ -127,7 +175,7 @@ class TabBarDemo extends State<Graficas> {
 
     //GRAFICA PIE (CLIENTES MAS PRODUCTIVOS)
     final pieChart = charts.PieChart(
-      seriesList,
+      ClientesGrafica,
       animate: true,
       behaviors: [
         charts.DatumLegend(
@@ -137,7 +185,7 @@ class TabBarDemo extends State<Graficas> {
           cellPadding: EdgeInsets.only(right: 4.0, bottom: 4.0),
           entryTextStyle: charts.TextStyleSpec(
             color: charts.MaterialPalette.black,
-            fontSize: 12,
+            fontSize: 15,
           ),
         ),
       ],
@@ -304,4 +352,11 @@ class BarChartData {
   final String porcentaje;
 
   BarChartData(this.modu_Nombre, this.totalProduccionDia, this.porcentaje);
+}
+
+class Clientes {
+  final String cliente_Nombre;
+  final int Cantidad_Ingresos;
+
+  Clientes(this.cliente_Nombre, this.Cantidad_Ingresos);
 }
