@@ -61,128 +61,160 @@ class _loginScreenState extends State<loginScreen> {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
-      child: SingleChildScrollView(
+      child:  SingleChildScrollView(
         child: SafeArea(
-          child: Column(
+          child: Container(
+            alignment: Alignment.center,
+             decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage("https://i.ibb.co/0yqp5w1/fondo.png"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+            child: Column(
             children: [
               SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.only(top: 60),
                 child: Image.network(
-                  "https://i.ibb.co/vk2tjx1/SIMEXPRO-V3-PNG.png",
+                  "https://i.ibb.co/KyT958M/SIMEXPRO-V3-PEQUE-O.png",
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        username = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      label: Text("Usuario"),
-                      prefixIcon: Icon(Icons.person),
-                      contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10), // Personaliza el tamaño
-                    ),
+                padding: EdgeInsets.all(20),
+                child: Card(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        password = value;
-                      });
-                    },
-                    obscureText: passToggle ? true : false,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      label: Text("Contraseña"),
-                      prefixIcon: Icon(Icons.lock),
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          if (passToggle == true) {
-                            passToggle = false;
-                          } else {
-                            passToggle = true;
-                          }
-                          setState(() {});
-                        },
-                        child: passToggle
-                            ? Icon(CupertinoIcons.eye_slash_fill)
-                            : Icon(CupertinoIcons.eye_fill),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 15),
+                      Padding(
+                        padding: EdgeInsets.all(18),
+                        child:  Text('INICIO DE SESIÓN',
+                        style: TextStyle( fontWeight: FontWeight.bold, fontSize: 35, color: Color.fromRGBO(148, 82, 249, 1)),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: InkWell(
-                    onTap: () {
-                      if (username.isNotEmpty && password.isNotEmpty) {
-                        fetchData(context, username, password);
-                      } else {
-                        CherryToast.warning(
-                          title: Text('Llene los campos correctamente',
-                              style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
-                          borderRadius: 0,
-                        ).show(context);
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20), // Personaliza el tamaño
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(87, 69, 223, 1),
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Iniciar sesión",
-                          style: TextStyle(
-                            fontSize: 18, // Modifica el tamaño de la fuente
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.all(18),
+                        child: TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              username = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            label: Text("Usuario"),
+                            prefixIcon: Icon(Icons.person),
+                            contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10), // Personaliza el tamaño
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(18),
+                        child: TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              password = value;
+                            });
+                          },
+                          obscureText: passToggle ? true : false,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            label: Text("Contraseña"),
+                            prefixIcon: Icon(Icons.key),
+                            suffixIcon: InkWell(
+                              onTap: () {
+                                if (passToggle == true) {
+                                  passToggle = false;
+                                } else {
+                                  passToggle = true;
+                                }
+                                setState(() {});
+                              },
+                              child: passToggle
+                                  ? Icon(CupertinoIcons.eye_slash_fill)
+                                  : Icon(CupertinoIcons.eye_fill),
+                            ),
+                          ),
+                        ),
+                      ),
+                    Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: InkWell(
+                          onTap: () {
+                            if (username.isNotEmpty && password.isNotEmpty) {
+                              fetchData(context, username, password);
+                            } else {
+                              CherryToast.warning(
+                                title: Text('Llene los campos correctamente',
+                                    style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+                                borderRadius: 0,
+                              ).show(context);
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end, // Alinea a la derecha
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RecoverPasswordScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "¿Contraseña olvidada?",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(87, 69, 223, 1),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(18),
+                      child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20), // Personaliza el tamaño
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(87, 69, 223, 1),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Iniciar sesión",
+                                style: TextStyle(
+                                  fontSize: 18, // Modifica el tamaño de la fuente
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              SizedBox(height: 20),
-             Row(
-                mainAxisAlignment: MainAxisAlignment.end, // Alinea a la derecha
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RecoverPasswordScreen(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Recuperar contraseña",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromRGBO(87, 69, 223, 1),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                SizedBox(height: 50),
+              ],
+            ),
           ),
         ),
       ),
