@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simexpro/screens/change_password_screen.dart';
-import 'package:simexpro/screens/confirm_code_screen.dart';
 import 'package:simexpro/screens/recover_password_screen.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
 import 'package:http/http.dart' as http;
@@ -153,7 +151,7 @@ class _loginScreenState extends State<loginScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ConfirmCodeScreen(),
+                                  builder: (context) => RecoverPasswordScreen(),
                                 ),
                               );
                             },

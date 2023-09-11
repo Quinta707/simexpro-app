@@ -235,7 +235,7 @@ class _RecoverPasswordScreenState extends State<RecoverPasswordScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              "Regresar  al",
+                              "Regresar al",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,

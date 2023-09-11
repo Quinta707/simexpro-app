@@ -153,7 +153,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 15, right: 15),
+                    padding: EdgeInsets.all(20),
                     child: Card(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -186,7 +186,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                         decoration: InputDecoration(
                           labelText: "Ingrese el token recibido",
                           border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.person),
+                          prefixIcon: Icon(Icons.token),
                         ),
                       ),
                     ),
@@ -232,6 +232,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                           ),
                         )
                     ),
+                    SizedBox(height: 10),
                     Padding(
                       padding: EdgeInsets.only(right: 15, left: 15),
                       child: Text(
