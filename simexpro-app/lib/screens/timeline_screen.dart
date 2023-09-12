@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simexpro/screens/maquinas_screen.dart';
+import 'package:simexpro/screens/orders_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
 
 class TimelineScreen extends StatelessWidget {
@@ -26,11 +27,11 @@ class TimelineScreen extends StatelessWidget {
             alignment: Alignment.center,
             child: InkWell(
               onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => MaquinasScreen(),
-                // ));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MaquinasScreen(),
+                ));
               },
               child: CircleAvatar(
                 backgroundImage: NetworkImage('https://i.ibb.co/VYPzhv8/MAQUINAS.png'),
@@ -49,10 +50,11 @@ class TimelineScreen extends StatelessWidget {
             alignment: Alignment.center,
             child: InkWell(
               onTap: () {
-                CherryToast.success(title: Text('Funciona', 
-                style: TextStyle(color: Colors.white)),
-                borderRadius: 0,
-                ).show(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OrdersScreen(),
+                ));
               },
               child: CircleAvatar(
                 backgroundImage: NetworkImage('https://i.ibb.co/vVz8MdF/ORDEN-1.png'),
