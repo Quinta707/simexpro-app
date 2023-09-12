@@ -15,8 +15,10 @@ class Cartas extends StatefulWidget {
 
 class Grafica extends State<Cartas> {
   List<BarChartData> data = []; // Lista para almacenar los datos de la API
-  //List<Clientes> grafiica=[];
+  List<Clietes> ClientesData=[];
 
+
+  //PETICION PARA OPTENER LOS DATOS DE LA GRAFICA (MODULOS MAS EFICIENTES)
   Future<void> fetchDataFromAPI() async {
     try {
       final response = await http.get(
@@ -42,6 +44,32 @@ class Grafica extends State<Cartas> {
     }
   }
 
+  //PETICION PARA OPTENER LOS DATOS DE LA GRAFICA (CLIENTES PRODUCIVOS)
+  Future<void> clientesProdivos() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}Graficas/ClientesProductivos'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final List<dynamic> jsonData = responseData['data'];
+
+        setState(() {
+          ClientesData = jsonData
+              .map((item) => Clietes(item['clie_Nombre_O_Razon_Social'],item['cantidadIngresos']))
+              .toList();
+        });
+      }
+    } catch (error) {
+      throw Exception('Error: ${error}');
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +78,7 @@ class Grafica extends State<Cartas> {
 
   @override
   Widget build(BuildContext context) {
+
     final List<charts.Series<BarChartData, String>> seriesList = [
       charts.Series<BarChartData, String>(
         id: 'Barras',
@@ -60,6 +89,17 @@ class Grafica extends State<Cartas> {
         data: data, // Utiliza los datos de la API
       )
     ];
+
+    // final List<charts.Series<Clietes, String>> listDataClientes = [
+    //   charts.Series<Clietes, String>(
+    //     id: 'pie',
+    //     domainFn: (Clietes ClientesData, _) => ClientesData.cliente_Nombre,
+    //     measureFn: ( BarChartDatadata, _) => data.totalProduccionDia,
+    //     labelAccessorFn: (BarChartData data, _) => '${data.porcentaje}%',
+    //     colorFn: (_, __) => charts.MaterialPalette.black,
+    //     data: data, // Utiliza los datos de la API
+    //   )
+    // ];
 
     //GRAFICA DE BARRAS (MODULOS MAS PRODUCTIVOS)
     final chart = new charts.BarChart(
@@ -89,7 +129,6 @@ class Grafica extends State<Cartas> {
       ),
     );
 
-    
     //GRAFICA PIE (CLIENTES MAS PRODUCTIVOS)
     final pieChart = charts.PieChart(
       seriesList,
@@ -182,6 +221,15 @@ class BarChartData {
 
   BarChartData(this.modu_Nombre, this.totalProduccionDia, this.porcentaje);
 }
+
+class Clietes {
+  final String cliente_Nombre;
+  final int Cantidad_Ingresos;
+
+  Clietes(this.cliente_Nombre, this.Cantidad_Ingresos);
+}
+
+
 
 class CardExamplesApp extends State<Cartas> {
   var Conteo = 0;
