@@ -48,6 +48,10 @@ class TabBarDemo extends State<Graficas> {
   var ConteoMesPendiente = 0;
   var ConteoMesFinalizado = 0;
 
+  var GananciasSemanales = 0;
+  var GananciasMensuales = 0;
+  var GananciasAnio = 0;
+
   List<BarChartData> data = [];
   List<Clientes> ClientesData = [];
 
@@ -134,6 +138,35 @@ class TabBarDemo extends State<Graficas> {
 
   //PETICION PARA OPTENER LA CABTIDAD DE  ORDENES EN EL MES
   Future<void> OrdenesMes() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}Graficas/OrdenenesEntregadasPendientes_Mensual'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+      final jsonBody = json.decode(response.body);
+      final dataMes = jsonBody['data'];
+
+      for (var item in dataMes) {
+        String avance = item['orco_Avance'];
+        int conteo = item['orco_Conteo'];
+
+        setState(() {
+          if (avance == "Terminado") {
+            ConteoMesFinalizado += conteo;
+          } else if (avance == "Pendiente") {
+            ConteoMesPendiente += conteo;
+          }
+        });
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  //PETICION PARA OBTENER LAS GANACIAS DEL AÑO
+  Future<void> OpteneGananciasAnio() async {
     try {
       final response = await http.get(
         Uri.parse('${apiUrl}Graficas/OrdenenesEntregadasPendientes_Mensual'),
@@ -280,36 +313,6 @@ class TabBarDemo extends State<Graficas> {
               color: charts.Color
                   .black, // Color de la letra de la etiqueta de porcentaje
             ),
-          ),
-        ],
-      ),
-    );
-
-    final LineChart lineChart = LineChart(
-      LineChartData(
-        gridData: FlGridData(show: false),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(
-          show: true,
-          border: Border.all(
-            color: Colors.blue, // Cambia el color de la línea
-            width: 1,
-          ),
-        ),
-        minX: 0,
-        maxX: 1, // Aquí solo necesitas dos puntos (0 y 1) para un solo dato
-        minY: 0,
-        maxY: 1000, // Ajusta el rango según tus datos de ganancias
-        lineBarsData: [
-          LineChartBarData(
-            spots: [
-              FlSpot(0, 0),   // Punto inicial (mes 0, ganancia 0)
-              FlSpot(1, 600), // Punto final (mes 1, ganancia 500)
-            ],
-            isCurved: true, // Hacer que la línea sea curva
-            color:Colors.blue, // Cambia el color de la línea
-            dotData: FlDotData(show: true), // Mostrar el punto
-            belowBarData: BarAreaData(show: false),
           ),
         ],
       ),
@@ -645,35 +648,233 @@ class TabBarDemo extends State<Graficas> {
                       ],
                     ),
                     SizedBox(height: 15),
-                    Container(
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Ganancias Mensuales'),
-                          SizedBox(
-                            width: 300,
-                            height: 200,
-                            child: lineChart,
-                          ),
-                        ],
-                      ),
-                    )
                   ],
                 ),
               ),
               Center(
-                  
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                    Text('Ganancias Mensuales'),
-                    SizedBox(
-                      width: 150,
-                      height: 100,
-                      child: lineChart,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 15),
+                    Container(
+                      width: 385,
+                      height: 110,
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Lado izquierdo: Texto
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                alignment: Alignment
+                                    .center, // Centrar el contenido en la columna
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center, // Centrar el texto horizontalmente
+                                  children: [
+                                    const Text(
+                                      "GANANCIAS DEL AÑO",
+                                      textAlign: TextAlign
+                                          .center, // Alinea el texto al centro
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                        color: Color.fromARGB(255, 87, 87, 87),
+                                      ),
+                                    ),
+                                    Text(
+                                      '10000.00',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Color.fromARGB(255, 24, 78, 255),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // Lado derecho: Imagen
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://i.ibb.co/D7wzVgL/3.png'), // Reemplaza con la ruta de tu imagen
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ]))
+                    SizedBox(height: 15),
+                    Container(
+                      width: 385,
+                      height: 110,
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Lado izquierdo: Texto
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      "GANANCIAS DEL MES",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                        color: Color.fromARGB(255, 87, 87, 87),
+                                      ),
+                                    ),
+                                    Text(
+                                      '100.00',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Color.fromARGB(255, 24, 78, 255),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Lado derecho: Imagen
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://i.ibb.co/6JDFV6r/2.png'), // Reemplaza con la ruta de tu imagen
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Container(
+                      width: 385,
+                      height: 110,
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Lado izquierdo: Texto
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      "GANANCIA SEMANAL",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                        color: Color.fromARGB(255, 87, 87, 87),
+                                      ),
+                                    ),
+                                    Text(
+                                      '100.00',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Color.fromARGB(255, 24, 78, 255),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Lado derecho: Imagen
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://i.ibb.co/yQDH0WP/1.png'), // Reemplaza con la ruta de tu imagen
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
