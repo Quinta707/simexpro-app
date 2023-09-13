@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:easy_search_bar/easy_search_bar.dart';
+import 'package:easy_search_bar/widgets/filterable_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +15,7 @@ import 'package:simexpro/toastconfig/toastconfig.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:http/http.dart' as http;
 
-import '../api.dart';
+import 'package:simexpro/api.dart';
 
 class MaquinasScreen extends StatefulWidget {
 
@@ -29,20 +30,41 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-Future<void> TraerDatos(BuildContext context, String codigopo) async {
+List<dynamic> Lista(List data, String numserie) {
+  List<String> filtrado = [];
+  for (var item in data) {
+    if(data[item]['maquinaNumeroSerie'] == numserie){
+      filtrado.addAll(data as Iterable<String>);
+    }
+  }
+  print(filtrado);
+  print('abajodefiltrado');
+  return filtrado;
+}
+
+
+Future<void> TraerDatos(BuildContext context, String numserie) async {
   final response = await http.get(
-    Uri.parse('${apiUrl}OrdenCompra/LineaTiempoOrdenCompra?orco_Codigo=$codigopo'),
+    Uri.parse('${apiUrl}MaquinaHistorial/Listar'),
     headers: {
       'XApiKey': apiKey,
       'Content-Type': 'application/json',
     },
   );
   final decodedJson = jsonDecode(response.body);
-    final data = decodedJson["data"]; 
-    print(data);
-  if (response.statusCode == 200) {
+  final data = decodedJson["data"];
+  //Lista(data, numserie);
+  //List<String> filtrado = [];
+  //filtrado.addAll(data);
+  //final result = data.retainWhere((data) => data['maquinaNumeroSerie'] == numserie);
+  //print(result);
+    //final datamaquina = data.filterable_list(data[Iterable]['maquinaNumeroSerie'].toString() == numserie);
+    
+    //final prueba = data[Iterable]['maquinaNumeroSerie'];
+    //print(prueba);
+  if (data != "") {
       CherryToast.success(title: Text('Trae los datos', style: TextStyle(color: Colors.white))).show(context);
-      print(response.body);
+      print(data);
   }
   else{
       CherryToast.success(title: Text('El número de máquina no existe', style: TextStyle(color: Colors.white))).show(context);
