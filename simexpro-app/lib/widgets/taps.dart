@@ -48,9 +48,9 @@ class TabBarDemo extends State<Graficas> {
   var ConteoMesPendiente = 0;
   var ConteoMesFinalizado = 0;
 
-  var GananciasSemanales = 0;
-  var GananciasMensuales = 0;
-  var GananciasAnio = 0;
+  num GananciasSemanales = 0;
+  num GananciasMensuales = 0;
+  num GananciasAnio = 0;
 
   List<BarChartData> data = [];
   List<Clientes> ClientesData = [];
@@ -169,24 +169,67 @@ class TabBarDemo extends State<Graficas> {
   Future<void> OpteneGananciasAnio() async {
     try {
       final response = await http.get(
-        Uri.parse('${apiUrl}Graficas/OrdenenesEntregadasPendientes_Mensual'),
+        Uri.parse('${apiUrl}Graficas/VentasAnuales'),
         headers: {
           'XApiKey': apiKey,
         },
       );
       final jsonBody = json.decode(response.body);
-      final dataMes = jsonBody['data'];
+      final data = jsonBody['data'];
 
-      for (var item in dataMes) {
-        String avance = item['orco_Avance'];
-        int conteo = item['orco_Conteo'];
+      for (var item in data) {
+        int conteo = item['totalIngresos'];
 
         setState(() {
-          if (avance == "Terminado") {
-            ConteoMesFinalizado += conteo;
-          } else if (avance == "Pendiente") {
-            ConteoMesPendiente += conteo;
-          }
+          GananciasAnio = conteo;
+        });
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  //PETICION PARA OBTENER LAS GANACIAS DEL MES
+  Future<void> OpteneGananciasMes() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}Graficas/VentasMensuales'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+      final jsonBody = json.decode(response.body);
+      final data = jsonBody['data'];
+
+      for (var item in data) {
+        int conteo = item['totalIngresos'];
+
+        setState(() {
+          GananciasMensuales = conteo;
+        });
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  //PETICION PARA OBTENER LAS GANACIAS DE LA SEMANA
+  Future<void> OpteneGananciasSemana() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}Graficas/VentasSemanales'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+      final jsonBody = json.decode(response.body);
+      final data = jsonBody['data'];
+
+      for (var item in data) {
+        int conteo = item['totalIngresos'];
+
+        setState(() {
+          GananciasSemanales = conteo;
         });
       }
     } catch (error) {
@@ -201,6 +244,9 @@ class TabBarDemo extends State<Graficas> {
     clientesProdivos();
     OrdenesAnio();
     OrdenesMes();
+    OpteneGananciasAnio();
+    OpteneGananciasMes();
+    OpteneGananciasSemana();
     //Imagen();
   }
 
@@ -419,20 +465,60 @@ class TabBarDemo extends State<Graficas> {
           ),
           body: TabBarView(
             children: [
-              Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Container(
-                  height:
-                      500, // Establece una altura específica para la gráfica
-                  child: chart,
+              Card(
+                margin: EdgeInsets.all(10.0), // Margen de la tarjeta
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          'Modulos Eficientes',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.0), // Centra el título
+                      ),
+                      Container(
+                        height:
+                            500, // Establece una altura específica para el contenido
+                        padding: EdgeInsets.all(
+                            16.0), // Padding dentro de la tarjeta
+                        child:
+                            chart, // El contenido de la tarjeta, en este caso, el gráfico
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Container(
-                  height:
-                      500, // Establece una altura específica para la gráfica
-                  child: pieChart,
+              Card(
+                margin: EdgeInsets.all(10.0), // Margen de la tarjeta
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          'Clientes mas Productivos',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.0), // Centra el título
+                      ),
+                      Container(
+                        height:
+                            500, // Establece una altura específica para el contenido
+                        padding: EdgeInsets.all(
+                            16.0), // Padding dentro de la tarjeta
+                        child:
+                            pieChart, // El contenido de la tarjeta, en este caso, el gráfico
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Center(
@@ -443,9 +529,16 @@ class TabBarDemo extends State<Graficas> {
                     Container(
                       width: 385,
                       height: 110,
+                      margin: EdgeInsets.symmetric(horizontal: 10),
                       padding: EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(208, 255, 213, 1),
+                        //color: Color.fromRGBO(232, 252, 232, 1),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://i.ibb.co/89tR9Tz/Dise-o-sin-t-tulo-9.png'), // Reemplaza con la ruta de tu imagen
+                          fit: BoxFit
+                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                        ),
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
@@ -454,6 +547,8 @@ class TabBarDemo extends State<Graficas> {
                             spreadRadius: 2,
                           ),
                         ],
+                        border:
+                            Border.all(color: Color.fromARGB(255, 83, 83, 83)),
                       ),
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
@@ -461,12 +556,12 @@ class TabBarDemo extends State<Graficas> {
                           children: [
                             const ListTile(
                               title: Text(
-                                "ÓRDENES COMPLETADAS EN EL AÑO",
+                                "ÓRDENES FINALIZADAS EN EL AÑO",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 17,
-                                    color: Color.fromARGB(255, 11, 174, 60)),
+                                    color: Color.fromARGB(255, 255, 255, 255)),
                               ),
                             ),
                             const Padding(
@@ -474,7 +569,7 @@ class TabBarDemo extends State<Graficas> {
                                   const EdgeInsets.symmetric(horizontal: 15),
                               child: Divider(
                                 color: Colors.white,
-                                thickness: 2,
+                                thickness: 3,
                                 height: 20,
                               ),
                             ),
@@ -487,7 +582,8 @@ class TabBarDemo extends State<Graficas> {
                                       padding: const EdgeInsets.all(5),
                                       alignment: Alignment.bottomRight,
                                       decoration: const BoxDecoration(
-                                        color: Colors.green,
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
                                         shape: BoxShape.circle,
                                       ),
                                     ),
@@ -497,7 +593,8 @@ class TabBarDemo extends State<Graficas> {
                                           ? ' ${Conteo} Órden Completada en ${DateTime.now().year}'
                                           : '${Conteo} Órdenes Completadas en ${DateTime.now().year}',
                                       style: TextStyle(
-                                        color: Color.fromARGB(255, 11, 174, 60),
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
                                       ),
                                     ),
                                   ],
@@ -518,7 +615,7 @@ class TabBarDemo extends State<Graficas> {
                             margin: EdgeInsets.only(left: 10),
                             padding: EdgeInsets.symmetric(vertical: 5),
                             decoration: BoxDecoration(
-                              color: Color.fromRGBO(255, 175, 175, 1),
+                              //color: Color.fromRGBO(255, 175, 175, 1),
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
@@ -527,6 +624,14 @@ class TabBarDemo extends State<Graficas> {
                                   spreadRadius: 2,
                                 ),
                               ],
+                              border: Border.all(
+                                  color: Color.fromARGB(255, 83, 83, 83)),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    'https://i.ibb.co/NyhmR3k/Dise-o-sin-t-tulo-8.png'), // Reemplaza con la ruta de tu imagen
+                                fit: BoxFit
+                                    .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                              ),
                             ),
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
@@ -539,13 +644,13 @@ class TabBarDemo extends State<Graficas> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 13,
-                                          color:
-                                              Color.fromARGB(255, 255, 22, 22)),
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255)),
                                     ),
                                   ),
                                   const Padding(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
+                                      horizontal: 10,
                                     ),
                                     child: Divider(
                                       color: Colors.white,
@@ -566,7 +671,7 @@ class TabBarDemo extends State<Graficas> {
                                             style: TextStyle(
                                               fontSize: 13,
                                               color: Color.fromARGB(
-                                                  255, 255, 22, 22),
+                                                  255, 255, 255, 255),
                                             ),
                                           ),
                                         ],
@@ -586,7 +691,7 @@ class TabBarDemo extends State<Graficas> {
                             margin: EdgeInsets.only(right: 10),
                             padding: EdgeInsets.symmetric(vertical: 5),
                             decoration: BoxDecoration(
-                              color: Color.fromRGBO(208, 255, 213, 1),
+                              //color: Color.fromRGBO(208, 255, 213, 1),
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
@@ -595,6 +700,14 @@ class TabBarDemo extends State<Graficas> {
                                   spreadRadius: 2,
                                 ),
                               ],
+                              border: Border.all(
+                                  color: Color.fromARGB(255, 83, 83, 83)),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    'https://i.ibb.co/pjVnQ64/Dise-o-sin-t-tulo-10.png'), // Reemplaza con la ruta de tu imagen
+                                fit: BoxFit
+                                    .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                              ),
                             ),
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
@@ -607,13 +720,13 @@ class TabBarDemo extends State<Graficas> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 13,
-                                          color:
-                                              Color.fromARGB(255, 11, 174, 60)),
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255)),
                                     ),
                                   ),
                                   const Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
+                                        horizontal: 10),
                                     child: Divider(
                                       color: Colors.white,
                                       thickness: 2,
@@ -632,7 +745,7 @@ class TabBarDemo extends State<Graficas> {
                                                 : '${ConteoMesFinalizado} Órdenes Completadas',
                                             style: TextStyle(
                                               color: Color.fromARGB(
-                                                  255, 11, 174, 60),
+                                                  255, 255, 255, 255),
                                               fontSize: 13,
                                             ),
                                           ),
@@ -648,6 +761,160 @@ class TabBarDemo extends State<Graficas> {
                       ],
                     ),
                     SizedBox(height: 15),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            width: 165,
+                            height: 110,
+                            margin: EdgeInsets.only(left: 10),
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            decoration: BoxDecoration(
+                              //color: Color.fromRGBO(255, 175, 175, 1),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                              border: Border.all(
+                                  color: Color.fromARGB(255, 83, 83, 83)),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    'https://i.ibb.co/NyhmR3k/Dise-o-sin-t-tulo-8.png'), // Reemplaza con la ruta de tu imagen
+                                fit: BoxFit
+                                    .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                              ),
+                            ),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                children: [
+                                  const ListTile(
+                                    title: Text(
+                                      "ÓRDENES PENDIENTES DE LA SEMANA",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255)),
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                    ),
+                                    child: Divider(
+                                      color: Colors.white,
+                                      thickness: 2,
+                                      height: 20,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            ConteoMesPendiente == 1
+                                                ? ' ${ConteoMesPendiente} Órden Pendiente'
+                                                : '${ConteoMesPendiente} Órdenes Pendientes',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Container(
+                            width: 167,
+                            height: 110,
+                            margin: EdgeInsets.only(right: 10),
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            decoration: BoxDecoration(
+                              //color: Color.fromRGBO(208, 255, 213, 1),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                              border: Border.all(
+                                  color: Color.fromARGB(255, 83, 83, 83)),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    'https://i.ibb.co/pjVnQ64/Dise-o-sin-t-tulo-10.png'), // Reemplaza con la ruta de tu imagen
+                                fit: BoxFit
+                                    .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                              ),
+                            ),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                children: [
+                                  const ListTile(
+                                    title: Text(
+                                      "ÓRDENES FINALIZADAS DE LA SEMANA",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255)),
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Divider(
+                                      color: Colors.white,
+                                      thickness: 2,
+                                      height: 20,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            ConteoMesFinalizado == 1
+                                                ? ' ${ConteoMesFinalizado} Órden Completada'
+                                                : '${ConteoMesFinalizado} Órdenes Completadas',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -698,7 +965,7 @@ class TabBarDemo extends State<Graficas> {
                                       ),
                                     ),
                                     Text(
-                                      '10000.00',
+                                      '${GananciasAnio} .LPS',
                                       style: TextStyle(
                                         fontSize: 20,
                                         color: Color.fromARGB(255, 24, 78, 255),
@@ -770,7 +1037,7 @@ class TabBarDemo extends State<Graficas> {
                                       ),
                                     ),
                                     Text(
-                                      '100.00',
+                                      '${GananciasMensuales} .LPS',
                                       style: TextStyle(
                                         fontSize: 20,
                                         color: Color.fromARGB(255, 24, 78, 255),
@@ -841,7 +1108,7 @@ class TabBarDemo extends State<Graficas> {
                                       ),
                                     ),
                                     Text(
-                                      '100.00',
+                                      '${GananciasSemanales} .LPS',
                                       style: TextStyle(
                                         fontSize: 20,
                                         color: Color.fromARGB(255, 24, 78, 255),
