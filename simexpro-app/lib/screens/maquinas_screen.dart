@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,7 +29,7 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-Future<void> TraerDatos(String codigopo) async {
+Future<void> TraerDatos(BuildContext context, String codigopo) async {
   final response = await http.get(
     Uri.parse('${apiUrl}OrdenCompra/LineaTiempoOrdenCompra?orco_Codigo=$codigopo'),
     headers: {
@@ -38,9 +39,14 @@ Future<void> TraerDatos(String codigopo) async {
   );
   final decodedJson = jsonDecode(response.body);
     final data = decodedJson["data"]; 
-
+    print(data);
   if (response.statusCode == 200) {
-      print(data);
+      CherryToast.success(title: Text('Trae los datos', style: TextStyle(color: Colors.white))).show(context);
+      print(response.body);
+  }
+  else{
+      CherryToast.success(title: Text('El número de máquina no existe', style: TextStyle(color: Colors.white))).show(context);
+      print(response.body);
   }
 }
 
@@ -153,14 +159,17 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                     padding: const EdgeInsets.all(15),
                     child: Container(
                       alignment: Alignment.center,
-                      child: Text(
+                      child: Center(
+                        child: Text(
                           "Días inactivos de las máquinas",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.w500,
-                            color: Color.fromRGBO(148, 82, 249, 1)
+                            color: Color.fromRGBO(148, 82, 249, 1),
                           ),
                         ),
+                      ),
                     ), 
                   ),
                   //SizedBox(height: 15),
@@ -189,8 +198,7 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                             ),
                             onPressed: (){
-                              CherryToast.success(title: Text('Trae los datoss', style: TextStyle(color: Colors.white))).show(context);
-                              TraerDatos('$searchValue');
+                              TraerDatos(context, '$searchValue');
                             }, 
                             icon: Icon(Icons.search), 
                             label: Text('Buscar',
@@ -207,7 +215,6 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                 ],
               ),
             ),
-            
     );
   }
 }

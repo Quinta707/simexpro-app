@@ -44,7 +44,7 @@ class CherryToast extends StatefulWidget {
     this.actionHandler,
     this.description,
     this.backgroundColor = defaultBackgroundColor1,
-    this.shadowColor = defaultShadowColor,
+    this.shadowColor = successColor,
     this.displayTitle = true,
     this.toastPosition = Position.top,
     this.animationDuration = const Duration(
@@ -73,7 +73,7 @@ class CherryToast extends StatefulWidget {
     this.action,
     this.actionHandler,
     this.backgroundColor = defaultBackgroundColor1,
-    this.shadowColor = defaultShadowColor,
+    this.shadowColor = errorColor,
     this.description,
     this.displayTitle = true,
     this.toastPosition = Position.top,
@@ -105,7 +105,7 @@ class CherryToast extends StatefulWidget {
     this.description,
     this.displayTitle = true,
     this.backgroundColor = defaultBackgroundColor1,
-    this.shadowColor = defaultShadowColor,
+    this.shadowColor = warningColor,
     this.toastPosition = Position.top,
     this.animationDuration = const Duration(
       milliseconds: 1500,
@@ -134,7 +134,7 @@ class CherryToast extends StatefulWidget {
     this.actionHandler,
     this.description,
     this.backgroundColor = defaultBackgroundColor1,
-    this.shadowColor = defaultShadowColor,
+    this.shadowColor = infoColor,
     this.displayTitle = true,
     this.toastPosition = Position.top,
     this.animationDuration = const Duration(
