@@ -47,6 +47,8 @@ class TabBarDemo extends State<Graficas> {
   num Conteo = 0;
   var ConteoMesPendiente = 0;
   var ConteoMesFinalizado = 0;
+  var ConteoSemanaPendiente = 0;
+  var ConteoSemanaFinalizado = 0;
 
   num GananciasSemanales = 0;
   num GananciasMensuales = 0;
@@ -165,6 +167,35 @@ class TabBarDemo extends State<Graficas> {
     }
   }
 
+  //PETICION PARA OPTENER LA CABTIDAD DE  ORDENES EN EL MES
+  Future<void> OrdenSemana() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}Graficas/OrdenenesEntregadasPendientes_Semanal'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+      final jsonBody = json.decode(response.body);
+      final dataMes = jsonBody['data'];
+
+      for (var item in dataMes) {
+        String avance = item['orco_Avance'];
+        int conteo = item['orco_Conteo'];
+
+        setState(() {
+          if (avance == "Terminado") {
+            ConteoSemanaFinalizado += conteo;
+          } else if (avance == "Pendiente") {
+            ConteoSemanaPendiente += conteo;
+          }
+        });
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
   //PETICION PARA OBTENER LAS GANACIAS DEL AÑO
   Future<void> OpteneGananciasAnio() async {
     try {
@@ -244,6 +275,7 @@ class TabBarDemo extends State<Graficas> {
     clientesProdivos();
     OrdenesAnio();
     OrdenesMes();
+    OrdenSemana();
     OpteneGananciasAnio();
     OpteneGananciasMes();
     OpteneGananciasSemana();
@@ -452,13 +484,12 @@ class TabBarDemo extends State<Graficas> {
               tooltip: 'Menú',
               onPressed: () {},
             ),
-
             bottom: const TabBar(
               tabs: [
-                Tab(icon: Icon(Icons.directions_car)),
-                Tab(icon: Icon(Icons.directions_transit)),
-                Tab(icon: Icon(Icons.directions_bike)),
-                Tab(icon: Icon(Icons.directions_bike)),
+                Tab(icon: Icon(Icons.auto_graph_sharp)),
+                Tab(icon: Icon(Icons.pie_chart)),
+                Tab(icon: Icon(Icons.add_task)),
+                Tab(icon: Icon(Icons.attach_money_rounded)),
               ],
             ),
             //systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -554,9 +585,9 @@ class TabBarDemo extends State<Graficas> {
                         width: MediaQuery.of(context).size.width,
                         child: Column(
                           children: [
-                            const ListTile(
+                            ListTile(
                               title: Text(
-                                "ÓRDENES FINALIZADAS EN EL AÑO",
+                                'ÓRDENES FINALIZADAS EN ${DateTime.now().year}',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -590,11 +621,12 @@ class TabBarDemo extends State<Graficas> {
                                     SizedBox(width: 5),
                                     Text(
                                       Conteo == 1
-                                          ? ' ${Conteo} Órden Completada en ${DateTime.now().year}'
-                                          : '${Conteo} Órdenes Completadas en ${DateTime.now().year}',
+                                          ? ' ${Conteo} Órden Completada'
+                                          : '${Conteo} Órdenes Completadas',
                                       style: TextStyle(
                                         color:
                                             Color.fromARGB(255, 255, 255, 255),
+                                        fontSize: 20,
                                       ),
                                     ),
                                   ],
@@ -603,6 +635,38 @@ class TabBarDemo extends State<Graficas> {
                             ),
                           ],
                         ),
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              thickness: 2,
+                              height: 20,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              "ESTE MES",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(
+                              color: Color.fromARGB(255, 6, 5, 5),
+                              thickness: 2,
+                              height: 20,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: 15),
@@ -669,7 +733,7 @@ class TabBarDemo extends State<Graficas> {
                                                 ? ' ${ConteoMesPendiente} Órden Pendiente'
                                                 : '${ConteoMesPendiente} Órdenes Pendientes',
                                             style: TextStyle(
-                                              fontSize: 13,
+                                              fontSize: 15,
                                               color: Color.fromARGB(
                                                   255, 255, 255, 255),
                                             ),
@@ -746,7 +810,7 @@ class TabBarDemo extends State<Graficas> {
                                             style: TextStyle(
                                               color: Color.fromARGB(
                                                   255, 255, 255, 255),
-                                              fontSize: 13,
+                                              fontSize: 15,
                                             ),
                                           ),
                                         ],
@@ -759,6 +823,38 @@ class TabBarDemo extends State<Graficas> {
                           ),
                         ),
                       ],
+                    ),
+                    SizedBox(height: 15),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              thickness: 2,
+                              height: 20,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              "ESTA SEMANA",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(
+                              color: Color.fromARGB(255, 6, 5, 5),
+                              thickness: 2,
+                              height: 20,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 15),
                     Row(
@@ -821,10 +917,10 @@ class TabBarDemo extends State<Graficas> {
                                         children: [
                                           Text(
                                             ConteoMesPendiente == 1
-                                                ? ' ${ConteoMesPendiente} Órden Pendiente'
-                                                : '${ConteoMesPendiente} Órdenes Pendientes',
+                                                ? ' ${ConteoSemanaPendiente} Órden Pendiente'
+                                                : '${ConteoSemanaPendiente} Órdenes Pendientes',
                                             style: TextStyle(
-                                              fontSize: 13,
+                                              fontSize: 15,
                                               color: Color.fromARGB(
                                                   255, 255, 255, 255),
                                             ),
@@ -896,12 +992,12 @@ class TabBarDemo extends State<Graficas> {
                                         children: [
                                           Text(
                                             ConteoMesFinalizado == 1
-                                                ? ' ${ConteoMesFinalizado} Órden Completada'
-                                                : '${ConteoMesFinalizado} Órdenes Completadas',
+                                                ? ' ${ConteoSemanaFinalizado} Órden Completada'
+                                                : '${ConteoSemanaFinalizado} Órdenes Completadas',
                                             style: TextStyle(
                                               color: Color.fromARGB(
                                                   255, 255, 255, 255),
-                                              fontSize: 13,
+                                              fontSize: 15,
                                             ),
                                           ),
                                         ],
@@ -924,12 +1020,50 @@ class TabBarDemo extends State<Graficas> {
                   children: [
                     SizedBox(height: 15),
                     Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              thickness: 2,
+                              height: 20,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              "NUESTRAS GANACIAS",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(
+                              color: Color.fromARGB(255, 6, 5, 5),
+                              thickness: 2,
+                              height: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Container(
                       width: 385,
-                      height: 110,
+                      height: 120,
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       padding: EdgeInsets.symmetric(vertical: 20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://i.ibb.co/9tk9yQL/Dise-o-sin-t-tulo-11.png'), // Reemplaza con la ruta de tu imagen
+                          fit: BoxFit
+                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                        ),
+                        //color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
@@ -946,7 +1080,7 @@ class TabBarDemo extends State<Graficas> {
                           Expanded(
                             flex: 2,
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(7.0),
                               child: Container(
                                 alignment: Alignment
                                     .center, // Centrar el contenido en la columna
@@ -955,20 +1089,29 @@ class TabBarDemo extends State<Graficas> {
                                       .center, // Centrar el texto horizontalmente
                                   children: [
                                     const Text(
-                                      "GANANCIAS DEL AÑO",
+                                      "GANANCIAS DEL AÑO ",
                                       textAlign: TextAlign
                                           .center, // Alinea el texto al centro
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17,
-                                        color: Color.fromARGB(255, 87, 87, 87),
+                                        //fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      child: Divider(
+                                        color: Color.fromARGB(255, 255, 106, 0),
+                                        thickness: 3,
+                                        height: 20,
                                       ),
                                     ),
                                     Text(
                                       '${GananciasAnio} .LPS',
                                       style: TextStyle(
                                         fontSize: 20,
-                                        color: Color.fromARGB(255, 24, 78, 255),
+                                        color: Color.fromARGB(255, 0, 0, 0),
                                       ),
                                     ),
                                   ],
@@ -984,7 +1127,7 @@ class TabBarDemo extends State<Graficas> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                      'https://i.ibb.co/D7wzVgL/3.png'), // Reemplaza con la ruta de tu imagen
+                                      'https://i.ibb.co/hR42cJz/2-removebg-preview.png'), // Reemplaza con la ruta de tu imagen
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.only(
@@ -1000,11 +1143,17 @@ class TabBarDemo extends State<Graficas> {
                     SizedBox(height: 15),
                     Container(
                       width: 385,
-                      height: 110,
+                      height: 122,
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       padding: EdgeInsets.symmetric(vertical: 20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://i.ibb.co/9tk9yQL/Dise-o-sin-t-tulo-11.png'), // Reemplaza con la ruta de tu imagen
+                          fit: BoxFit
+                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                        ),
+                        //color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
@@ -1031,16 +1180,24 @@ class TabBarDemo extends State<Graficas> {
                                       "GANANCIAS DEL MES",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17,
-                                        color: Color.fromARGB(255, 87, 87, 87),
+                                        fontSize: 20,
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      child: Divider(
+                                        color: Color.fromARGB(255, 255, 106, 0),
+                                        thickness: 3,
+                                        height: 20,
                                       ),
                                     ),
                                     Text(
                                       '${GananciasMensuales} .LPS',
                                       style: TextStyle(
                                         fontSize: 20,
-                                        color: Color.fromARGB(255, 24, 78, 255),
+                                        color: Color.fromARGB(255, 0, 0, 0),
                                       ),
                                     ),
                                   ],
@@ -1055,7 +1212,7 @@ class TabBarDemo extends State<Graficas> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                      'https://i.ibb.co/6JDFV6r/2.png'), // Reemplaza con la ruta de tu imagen
+                                      'https://i.ibb.co/tqfjyJN/3-removebg-preview.png'), // Reemplaza con la ruta de tu imagen
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.only(
@@ -1071,11 +1228,17 @@ class TabBarDemo extends State<Graficas> {
                     SizedBox(height: 15),
                     Container(
                       width: 385,
-                      height: 110,
+                      height: 122,
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       padding: EdgeInsets.symmetric(vertical: 20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://i.ibb.co/9tk9yQL/Dise-o-sin-t-tulo-11.png'), // Reemplaza con la ruta de tu imagen
+                          fit: BoxFit
+                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                        ),
+                        //color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
@@ -1102,16 +1265,24 @@ class TabBarDemo extends State<Graficas> {
                                       "GANANCIA SEMANAL",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17,
-                                        color: Color.fromARGB(255, 87, 87, 87),
+                                        fontSize: 20,
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      child: Divider(
+                                        color: Color.fromARGB(255, 255, 106, 0),
+                                        thickness: 3,
+                                        height: 20,
                                       ),
                                     ),
                                     Text(
                                       '${GananciasSemanales} .LPS',
                                       style: TextStyle(
                                         fontSize: 20,
-                                        color: Color.fromARGB(255, 24, 78, 255),
+                                        color: Color.fromARGB(255, 46, 46, 46),
                                       ),
                                     ),
                                   ],
@@ -1126,7 +1297,7 @@ class TabBarDemo extends State<Graficas> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                      'https://i.ibb.co/yQDH0WP/1.png'), // Reemplaza con la ruta de tu imagen
+                                      'https://i.ibb.co/WF5x1g6/1-removebg-preview.png'), // Reemplaza con la ruta de tu imagen
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.only(
