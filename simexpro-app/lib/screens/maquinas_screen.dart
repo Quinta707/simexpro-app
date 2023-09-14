@@ -1,9 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:easy_search_bar/easy_search_bar.dart';
-import 'package:easy_search_bar/widgets/filterable_list.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/historial_screen.dart';
@@ -53,23 +49,22 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
   );
   final decodedJson = jsonDecode(response.body);
   final data = decodedJson["data"];
-  //Lista(data, numserie);
-  //List<String> filtrado = [];
-  //filtrado.addAll(data);
-  //final result = data.retainWhere((data) => data['maquinaNumeroSerie'] == numserie);
-  //print(result);
-    //final datamaquina = data.filterable_list(data[Iterable]['maquinaNumeroSerie'].toString() == numserie);
+      List<Map> filteredlist = [];
+  print(numserie);
+  for(var i = 0; i < data.length; i++){
+      
+    if(data[i]["maquinaNumeroSerie"].toString() == numserie){
+    filteredlist.add(data[i]);
     
-    //final prueba = data[Iterable]['maquinaNumeroSerie'];
-    //print(prueba);
-  if (data != "") {
-      CherryToast.success(title: Text('Trae los datos', style: TextStyle(color: Colors.white))).show(context);
-      print(data);
-  }
-  else{
-      CherryToast.success(title: Text('El número de máquina no existe', style: TextStyle(color: Colors.white))).show(context);
-      print(response.body);
-  }
+    }
+    print(data[i]['maquinaNumeroSerie'].toString());
+  }  
+  print(numserie);
+  print(filteredlist);
+  filteredlist.isEmpty
+  ? CherryToast.error(title: Text('El número de máquina no existe', style: TextStyle(color: Colors.white)),  borderRadius: 5,).show(context)
+  : CherryToast.success(title: Text('Trae los datos', style: TextStyle(color: Colors.white)),  borderRadius: 5,).show(context);
+
 }
 
 class _MaquinasScreenState extends State<MaquinasScreen> {  
@@ -79,13 +74,13 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
     historialScreen(),
     TimelineScreen(),
   ];
+    String searchValue = '';
   @override
   void initState() {
     super.initState();
     Imagen();
   }
   Widget build(BuildContext context) {
-    String searchValue = '';
     return Scaffold(
          appBar: AppBar(
               title: const Image(
@@ -207,30 +202,35 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                             },
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              label: Text("Elija un número de serie"),
+                              label: Text("Digite un número de serie"),
                             ),
                           ),
                           SizedBox(height: 20),
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                          ButtonTheme(
+                            height: 20,
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                               ),
-                              backgroundColor: Color.fromRGBO(99, 74, 158, 1),
-                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                              onPressed: (){
+                                searchValue == null || searchValue == ""
+                                  ? CherryToast.warning(title: Text('Llene los campos correctamente', style: TextStyle(color: Colors.white)), borderRadius: 5,).show(context)
+                                  : TraerDatos(context, searchValue);
+                              }, 
+                              icon: Icon(Icons.search), 
+                              label: Text('Buscar',
+                                style: TextStyle(
+                                      fontSize: 18, 
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                              ),
                             ),
-                            onPressed: (){
-                              TraerDatos(context, '$searchValue');
-                            }, 
-                            icon: Icon(Icons.search), 
-                            label: Text('Buscar',
-                              style: TextStyle(
-                                    fontSize: 18, 
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                            ),
-                          ),
+                          )
                       ],
                     ), 
                   ),

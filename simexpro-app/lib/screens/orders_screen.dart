@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +36,8 @@ Future<void> TraerDatos(String codigopo) async {
     },
   );
   final decodedJson = jsonDecode(response.body);
-    final data = decodedJson["data"]; 
+  final data = decodedJson["data"]; 
+  print(codigopo);
 
   if (response.statusCode == 200) {
       print(data);
@@ -51,13 +51,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
     historialScreen(),
     TimelineScreen(),
   ];
+  String searchValue = '';
   @override
   void initState() {
     super.initState();
     Imagen();
   }
   Widget build(BuildContext context) {
-    String searchValue = '';
     return Scaffold(
          appBar: AppBar(
               title: const Image(
@@ -189,8 +189,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                             ),
                             onPressed: (){
-                              CherryToast.success(title: Text('Trae los datoss', style: TextStyle(color: Colors.white))).show(context);
-                              TraerDatos('$searchValue');
+                              CherryToast.success(title: Text('Trae los datoss', style: TextStyle(color: Colors.white)), borderRadius: 5,).show(context);
+                              TraerDatos(searchValue);
                             }, 
                             icon: Icon(Icons.search), 
                             label: Text('Buscar',

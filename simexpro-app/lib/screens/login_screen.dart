@@ -46,7 +46,7 @@ Future<void> fetchData(BuildContext context, String username, String password) a
     CherryToast.error(
       title: Text('El usuario o contraseña son incorrectos',
            style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
-      borderRadius: 0,
+      borderRadius: 5,
     ).show(context);
   }
 }
@@ -163,8 +163,8 @@ class _loginScreenState extends State<loginScreen> {
                                   "¿Contraseña olvidada?",
                                   style: TextStyle(
                                     fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromRGBO(87, 69, 223, 1),
+                                    fontWeight: FontWeight.normal,
+                                    color: Color.fromRGBO(79, 70, 229, 1),
                                   ),
                                 ),
                               ),
@@ -181,7 +181,7 @@ class _loginScreenState extends State<loginScreen> {
                                   CherryToast.warning(
                                     title: Text('Llene los campos correctamente',
                                         style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
-                                    borderRadius: 0,
+                                    borderRadius: 5,
                                   ).show(context);
                                 }
                               },
@@ -189,7 +189,7 @@ class _loginScreenState extends State<loginScreen> {
                                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20), 
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color: Color.fromRGBO(87, 69, 223, 1),
+                                  color: Color.fromRGBO(79, 70, 229, 1),
                                   borderRadius: BorderRadius.circular(50),
                                   boxShadow: [
                                     BoxShadow(
