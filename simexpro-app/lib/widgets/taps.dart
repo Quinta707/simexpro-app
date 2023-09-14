@@ -559,7 +559,7 @@ class TabBarDemo extends State<Graficas> {
                     SizedBox(height: 15),
                     Container(
                       width: 385,
-                      height: 110,
+                      height: 111,
                       margin: EdgeInsets.symmetric(horizontal: 10),
                       padding: EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
