@@ -206,7 +206,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 40),
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -226,7 +226,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       ))
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 40),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
