@@ -8,6 +8,7 @@ import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
+import 'package:simexpro/screens/qrscanner_screen.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
 import 'package:simexpro/widgets/taps.dart';
@@ -237,11 +238,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                     ),
                     onPressed: () {
-                      CherryToast.success(
-                              title: Text('Trae los datoss',
-                                  style: TextStyle(color: Colors.white)))
-                          .show(context);
-                      TraerDatos('$searchValue');
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(
+                          builder: (context) => QRScannerScreen(),
+                        )
+                      );
                     },
                     icon: Icon(Icons.qr_code),
                     label: Text(

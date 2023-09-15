@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/orders_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
-import 'package:simexpro/screens/qrscanner_screen.dart';
 
 class TimelineScreen extends StatelessWidget {
   @override
@@ -69,29 +68,29 @@ class TimelineScreen extends StatelessWidget {
               style: TextStyle(fontSize: 20),
             ),
           ),
-          SizedBox(height: 20),
-          Container(
-            alignment: Alignment.center,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => QRScannerScreen(),
-                ));
-              },
-              child: CircleAvatar(
-                backgroundImage: NetworkImage('https://i.ibb.co/vVz8MdF/ORDEN-1.png'),
-                radius: 90,
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: Text('Prueba',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
+          // SizedBox(height: 20),
+          // Container(
+          //   alignment: Alignment.center,
+          //   child: InkWell(
+          //     onTap: () {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => QRScannerScreen(),
+          //       ));
+          //     },
+          //     child: CircleAvatar(
+          //       backgroundImage: NetworkImage('https://i.ibb.co/vVz8MdF/ORDEN-1.png'),
+          //       radius: 90,
+          //     ),
+          //   ),
+          // ),
+          // Container(
+          //   alignment: Alignment.center,
+          //   child: Text('Prueba',
+          //     style: TextStyle(fontSize: 20),
+          //   ),
+          // ),
         ],
       ),
     );

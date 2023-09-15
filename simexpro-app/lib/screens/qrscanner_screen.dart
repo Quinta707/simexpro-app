@@ -18,7 +18,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       appBar: AppBar(
         title: const Image(
           height: 35,
-          image: NetworkImage('https://i.ibb.co/HgdBM0r/slogan.png')),
+          image: NetworkImage('https://i.ibb.co/HgdBM0r/slogan.png')
+        ),
+        centerTitle: true,
       ),
     );
   }
