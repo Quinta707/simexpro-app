@@ -31,7 +31,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         centerTitle: true,
         actions: <Widget>[
           Padding(
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: CircleAvatar(
               radius: 20,
               backgroundImage: NetworkImage(image),
@@ -64,14 +64,14 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                   PopupMenuItem<MenuItem>(
                     value: MenuItem.item1,
                     child: Row(
-                      children: [
+                      children: const [
                         Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding: EdgeInsets.only(right: 8.0),
                             child: Icon(
                               Icons.person_2_outlined,
                               color: Color.fromRGBO(87, 69, 223, 1),
                             )),
-                        const Text(
+                        Text(
                           'Mi Perfil',
                           style: TextStyle(fontSize: 15),
                         ),
@@ -81,14 +81,14 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                   PopupMenuItem<MenuItem>(
                     value: MenuItem.item2,
                     child: Row(
-                      children: [
+                      children: const [
                         Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding: EdgeInsets.only(right: 8.0),
                             child: Icon(
                               Icons.logout,
                               color: Color.fromRGBO(87, 69, 223, 1),
                             )),
-                        const Text(
+                        Text(
                           'Cerrar Sesión',
                           style: TextStyle(fontSize: 15),
                         ),
@@ -105,6 +105,51 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         //   icon: const Icon(Icons.menu),
         //   tooltip: 'Menú',
         //   onPressed: () {},
+        // ),
+      ),
+      body: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              const Text("Orden de Compra: PRUE123"),
+              GridView.count(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(20),
+                crossAxisSpacing: 5.0,
+                crossAxisCount: 3,
+                childAspectRatio: 17.0,
+                // height: ,
+                children: <Widget>[
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                  ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.brown[100],
+                  //     borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  //   ),
+                  // ),
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.yellow,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                                    color: Colors.green,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                  ),
+                ],
+              )                     
+            ],
+          ),
+        // child: Container(
+          // child: 
         // ),
       ),
     );

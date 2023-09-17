@@ -77,7 +77,7 @@ class TabBarDemo extends State<Graficas> {
         });
       }
     } catch (error) {
-      throw Exception('Error: ${error}');
+      throw Exception('Error: $error');
     }
   }
 
