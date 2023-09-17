@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
+import 'package:simexpro/screens/potracking_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/screens/qrscanner_screen.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
@@ -28,7 +29,7 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-Future<void> TraerDatos(String codigopo) async {
+Future<void> TraerDatos(String codigopo, context) async {
   final response = await http.get(
     Uri.parse(
         '${apiUrl}OrdenCompra/LineaTiempoOrdenCompra?orco_Codigo=$codigopo'),
@@ -40,8 +41,14 @@ Future<void> TraerDatos(String codigopo) async {
   final decodedJson = jsonDecode(response.body);
   final data = decodedJson["data"];
 
-  if (response.statusCode == 200) {
-    print(data);
+  if (data.length > 0) {
+    print('data after search $data');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => POTrackingScreen(),
+      )
+    );
   }
 }
 
@@ -58,8 +65,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
     Imagen();
   }
 
-  Widget build(BuildContext context) {
     String searchValue = '';
+    void updatedText (val){
+      setState((){
+        searchValue = val;
+      });
+    }
+
+  Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Image(
@@ -171,9 +185,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 children: [
                   TextField(
                     onChanged: (value) {
-                      setState(() {
-                        searchValue = value;
-                      });
+                      updatedText(value);
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -191,11 +203,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                     ),
                     onPressed: () {
-                      CherryToast.success(
-                              title: Text('Trae los datoss',
-                                  style: TextStyle(color: Colors.white)))
-                          .show(context);
-                      TraerDatos('$searchValue');
+                      // CherryToast.success(
+                      //         title: Text('Trae los datoss',
+                      //             style: TextStyle(color: Colors.white)))
+                      //     .show(context);
+                      TraerDatos('$searchValue', context);
                     },
                     icon: Icon(Icons.search),
                     label: Text(
