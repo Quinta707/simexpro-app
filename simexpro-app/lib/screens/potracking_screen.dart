@@ -107,7 +107,9 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         //   onPressed: () {},
         // ),
       ),
-      body: Center(
+      backgroundColor: Colors.purple,
+      body: 
+          Center(
           child: Column(
             children: [
               const SizedBox(height: 30),
@@ -127,7 +129,6 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       color: Colors.black12,
                       borderRadius: BorderRadius.all(Radius.circular(18)),
                     ),
-                // alignment: Alignment.center,
                 child: const Text(
                   "Orden de Compra: PRUE123",
                 ),
@@ -147,12 +148,6 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                     ),
                   ),
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.brown[100],
-                  //     borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  //   ),
-                  // ),
                   Container(
                     decoration: const BoxDecoration(
                       color: Colors.yellow,
