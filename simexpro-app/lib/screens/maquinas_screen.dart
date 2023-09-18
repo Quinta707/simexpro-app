@@ -13,7 +13,10 @@ import 'package:simexpro/widgets/taps.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:simexpro/api.dart';
+import 'package:timeline_list/timeline.dart';
+import 'package:timeline_list/timeline_model.dart';
 
+    List datamaquina = [];
 class MaquinasScreen extends StatefulWidget {
 
   const MaquinasScreen({Key? key}) : super(key: key);
@@ -65,6 +68,7 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
   filteredlist.isEmpty
   ? CherryToast.error(title: Text('El número de máquina no existe', style: TextStyle(color: Colors.white)),  borderRadius: 5,).show(context)
   : CherryToast.success(title: Text('Trae los datos', style: TextStyle(color: Colors.white)),  borderRadius: 5,).show(context);
+    datamaquina = data;
 
 }
 
@@ -232,34 +236,44 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20),
-                          ButtonTheme(
-                            height: 20,
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                ),
-                                backgroundColor: Color.fromRGBO(99, 74, 158, 1),
-                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              ),
-                              onPressed: (){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => PackageDeliveryTrackingPage(),
-                                ));
-                              }, 
-                              icon: Icon(Icons.account_tree_sharp), 
-                              label: Text('prueba de timeline',
-                                style: TextStyle(
-                                      fontSize: 18, 
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                              ),
-                            ),
-                          )
+                          // SizedBox(height: 20),
+                          // ButtonTheme(
+                          //   height: 20,
+                          //   child: ElevatedButton.icon(
+                          //     style: ElevatedButton.styleFrom(
+                          //       shape: RoundedRectangleBorder(
+                          //           borderRadius: BorderRadius.circular(10),
+                          //       ),
+                          //       backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                          //       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                          //     ),
+                          //     onPressed: (){
+                          //       Navigator.push(
+                          //           context,
+                          //           MaterialPageRoute(
+                          //             builder: (context) => PackageDeliveryTrackingPage(),
+                          //       ));
+                          //     }, 
+                          //     icon: Icon(Icons.account_tree_sharp), 
+                          //     label: Text('prueba de timeline',
+                          //       style: TextStyle(
+                          //             fontSize: 18, 
+                          //             fontWeight: FontWeight.bold,
+                          //             color: Colors.white,
+                          //           ),
+                          //     ),
+                          //   ),
+                          // ),
+                          // SizedBox(height: 10),
+                          // Padding(padding: EdgeInsets.all(5),
+                          //   child: Card(
+                          //     child: Timeline.builder(
+                          //       itemBuilder: centerTimelineBuilder,
+                          //       itemCount: datamaquina.length,
+                          //       position: TimelinePosition.Center,
+                          //     ),
+                          //   ),
+                          // ),
                       ],
                     ), 
                   ),
@@ -269,3 +283,39 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
     );
   }
 }
+
+TimelineModel centerTimelineBuilder(BuildContext context, int i) {
+    final i = datamaquina.length;
+    final textTheme = Theme.of(context).textTheme;
+    return TimelineModel(
+        Card(
+          margin: EdgeInsets.symmetric(vertical: 16.0),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          clipBehavior: Clip.antiAlias,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Text(datamaquina[i]['maquinaNumeroSerie'], style: textTheme.bodySmall),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Text(
+                  datamaquina[i]['mahi_FechaInicio'],
+                  style: textTheme.titleLarge,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+              ],
+            ),
+          ),
+        )
+      );   
+    }
