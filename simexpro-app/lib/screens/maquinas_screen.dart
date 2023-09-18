@@ -1,7 +1,5 @@
 import 'dart:convert';
-
-import 'package:easy_search_bar/easy_search_bar.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/historial_screen.dart';
@@ -13,7 +11,7 @@ import 'package:simexpro/toastconfig/toastconfig.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:http/http.dart' as http;
 
-import '../api.dart';
+import 'package:simexpro/api.dart';
 
 class MaquinasScreen extends StatefulWidget {
 
@@ -28,20 +26,45 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-Future<void> TraerDatos(String codigopo) async {
+List<dynamic> Lista(List data, String numserie) {
+  List<String> filtrado = [];
+  for (var item in data) {
+    if(data[item]['maquinaNumeroSerie'] == numserie){
+      filtrado.addAll(data as Iterable<String>);
+    }
+  }
+  print(filtrado);
+  print('abajodefiltrado');
+  return filtrado;
+}
+
+
+Future<void> TraerDatos(BuildContext context, String numserie) async {
   final response = await http.get(
-    Uri.parse('${apiUrl}OrdenCompra/LineaTiempoOrdenCompra?orco_Codigo=$codigopo'),
+    Uri.parse('${apiUrl}MaquinaHistorial/Listar'),
     headers: {
       'XApiKey': apiKey,
       'Content-Type': 'application/json',
     },
   );
   final decodedJson = jsonDecode(response.body);
-    final data = decodedJson["data"]; 
+  final data = decodedJson["data"];
+      List<Map> filteredlist = [];
+  print(numserie);
+  for(var i = 0; i < data.length; i++){
+      
+    if(data[i]["maquinaNumeroSerie"].toString() == numserie){
+    filteredlist.add(data[i]);
+    
+    }
+    print(data[i]['maquinaNumeroSerie'].toString());
+  }  
+  print(numserie);
+  print(filteredlist);
+  filteredlist.isEmpty
+  ? CherryToast.error(title: Text('El número de máquina no existe', style: TextStyle(color: Colors.white)),  borderRadius: 5,).show(context)
+  : CherryToast.success(title: Text('Trae los datos', style: TextStyle(color: Colors.white)),  borderRadius: 5,).show(context);
 
-  if (response.statusCode == 200) {
-      print(data);
-  }
 }
 
 class _MaquinasScreenState extends State<MaquinasScreen> {  
@@ -51,13 +74,13 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
     historialScreen(),
     TimelineScreen(),
   ];
+    String searchValue = '';
   @override
   void initState() {
     super.initState();
     Imagen();
   }
   Widget build(BuildContext context) {
-    String searchValue = '';
     return Scaffold(
          appBar: AppBar(
               title: const Image(
@@ -153,14 +176,17 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                     padding: const EdgeInsets.all(15),
                     child: Container(
                       alignment: Alignment.center,
-                      child: Text(
+                      child: Center(
+                        child: Text(
                           "Días inactivos de las máquinas",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.w500,
-                            color: Color.fromRGBO(148, 82, 249, 1)
+                            color: Color.fromRGBO(148, 82, 249, 1),
                           ),
                         ),
+                      ),
                     ), 
                   ),
                   //SizedBox(height: 15),
@@ -176,38 +202,41 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                             },
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              label: Text("Elija un número de serie"),
+                              label: Text("Digite un número de serie"),
                             ),
                           ),
                           SizedBox(height: 20),
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                          ButtonTheme(
+                            height: 20,
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                               ),
-                              backgroundColor: Color.fromRGBO(99, 74, 158, 1),
-                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                              onPressed: (){
+                                searchValue == null || searchValue == ""
+                                  ? CherryToast.warning(title: Text('Llene los campos correctamente', style: TextStyle(color: Colors.white)), borderRadius: 5,).show(context)
+                                  : TraerDatos(context, searchValue);
+                              }, 
+                              icon: Icon(Icons.search), 
+                              label: Text('Buscar',
+                                style: TextStyle(
+                                      fontSize: 18, 
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                              ),
                             ),
-                            onPressed: (){
-                              CherryToast.success(title: Text('Trae los datoss', style: TextStyle(color: Colors.white))).show(context);
-                              TraerDatos('$searchValue');
-                            }, 
-                            icon: Icon(Icons.search), 
-                            label: Text('Buscar',
-                              style: TextStyle(
-                                    fontSize: 18, 
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                            ),
-                          ),
+                          )
                       ],
                     ), 
                   ),
                 ],
               ),
             ),
-            
     );
   }
 }

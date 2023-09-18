@@ -23,7 +23,7 @@ Future<void> delayFunction(BuildContext context) async {
    CherryToast.success(
       title: Text('Su contraseña ha sido reestablecida',
            style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
-      borderRadius: 0,
+      borderRadius: 5,
     ).show(context);
   await Future.delayed(Duration(seconds: 3));
     Navigator.push(
@@ -56,7 +56,7 @@ Future<void> ValidarClaves(BuildContext context, String newpassword) async {
     CherryToast.error(
       title: Text('Algo salió mal. Inténtelo nuevamente',
            style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
-      borderRadius: 0,
+      borderRadius: 5,
     ).show(context);
   }
 }
@@ -154,14 +154,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   CherryToast.error(
                                   title: Text('Las contraseñas no coinciden',
                                       style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
-                                  borderRadius: 0,
+                                  borderRadius: 5,
                                 ).show(context);
                                 }
                               } else {
                                 CherryToast.warning(
                                   title: Text('Llene los campos correctamente',
                                       style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
-                                  borderRadius: 0,
+                                  borderRadius: 5,
                                 ).show(context);
                               }
                             },
