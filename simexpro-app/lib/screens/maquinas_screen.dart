@@ -6,6 +6,7 @@ import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
+import 'package:simexpro/screens/prueba.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
 import 'package:simexpro/widgets/taps.dart';
@@ -223,6 +224,34 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                               }, 
                               icon: Icon(Icons.search), 
                               label: Text('Buscar',
+                                style: TextStyle(
+                                      fontSize: 18, 
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          ButtonTheme(
+                            height: 20,
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                              ),
+                              onPressed: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PackageDeliveryTrackingPage(),
+                                ));
+                              }, 
+                              icon: Icon(Icons.account_tree_sharp), 
+                              label: Text('prueba de timeline',
                                 style: TextStyle(
                                       fontSize: 18, 
                                       fontWeight: FontWeight.bold,
