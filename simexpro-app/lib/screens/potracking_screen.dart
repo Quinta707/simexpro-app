@@ -107,19 +107,19 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         //   onPressed: () {},
         // ),
       ),
-      backgroundColor: Colors.purple,
+      backgroundColor: const Color.fromRGBO(99, 74, 158, 1),
       body: 
           Center(
           child: Column(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height / 2,
+                height: (MediaQuery.of(context).size.height / 2) + 25,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(50),
                     bottomRight: Radius.circular(50)),
                   color: Colors.white),
-                child: Stack(
+                child: Column(
                   children: [
                     const SizedBox(height: 30),
                     // ClipRRect(
