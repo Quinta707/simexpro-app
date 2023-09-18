@@ -437,7 +437,7 @@ class Graficas extends State<GraficasAduanas> {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
-                              'images/Cargas.png'), // Reemplaza con la ruta de tu imagen
+                              'images/111.jpeg'), // Reemplaza con la ruta de tu imagen
                           fit: BoxFit
                               .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                         ),
