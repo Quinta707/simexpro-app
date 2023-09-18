@@ -61,7 +61,7 @@ class TabBarDemo extends State<Graficas> {
         final Map<String, dynamic> responseData = json.decode(response.body);
         final List<dynamic> jsonData = responseData['data'];
 
-        setState(() {
+        setState(() { 
           data = jsonData
               .map((item) => BarChartData(item['modu_Nombre'],
                   item['totalProduccionDia'], item['porcentajeProduccion']))
@@ -501,6 +501,7 @@ class TabBarDemo extends State<Graficas> {
                             fontWeight: FontWeight.bold,
                             fontSize: 18.0,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 16.0), // Centra el título
@@ -524,11 +525,12 @@ class TabBarDemo extends State<Graficas> {
                     children: [
                       ListTile(
                         title: Text(
-                          'Clientes mas Productivos',
+                          'Clientes Rentables: Líderes de Ingresos',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18.0,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 16.0), // Centra el título
