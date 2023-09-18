@@ -1,16 +1,7 @@
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simexpro/screens/home_screen.dart';
-import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
-import 'package:simexpro/screens/settings_screen.dart';
-import 'package:simexpro/widgets/OrdenesProduccion.dart';
-import 'package:simexpro/screens/timeline_screen.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
@@ -18,7 +9,6 @@ import 'package:simexpro/api.dart';
 import 'dart:convert';
 
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:fl_chart/fl_chart.dart';
 
 import 'dart:math';
 
@@ -45,7 +35,7 @@ charts.Color getRandomColor() {
 
 class TabBarDemo extends State<Graficas> {
   num Conteo = 0;
-  var ConteoMesPendiente = 0;
+  var ConteoMesPendiente = 0; 
   var ConteoMesFinalizado = 0;
   var ConteoSemanaPendiente = 0;
   var ConteoSemanaFinalizado = 0;
@@ -284,6 +274,7 @@ class TabBarDemo extends State<Graficas> {
 
   @override
   Widget build(BuildContext context) {
+
     // Genera una lista de colores aleatorios para el grafico pie
     final List<charts.Color> randomColors = List.generate(
       data.length,
@@ -303,7 +294,7 @@ class TabBarDemo extends State<Graficas> {
       )
     ];
 
-    //ASIGNACION DEL GRAFICO DE BARRAS (MODULOS MAS PRODUCTIVOS)
+    //ASIGNACION DEL GRAFICO PIE (CLIENTES MAS PRODUCTIVOS)
     final List<charts.Series<Clientes, String>> ClientesGrafica = [
       charts.Series<Clientes, String>(
         id: 'Barras',
@@ -322,6 +313,8 @@ class TabBarDemo extends State<Graficas> {
         data: ClientesData, // Utiliza los datos de la API
       )
     ];
+
+
 
     //GRAFICA DE BARRAS (MODULOS MAS PRODUCTIVOS)
     final chart = new charts.BarChart(
@@ -565,8 +558,8 @@ class TabBarDemo extends State<Graficas> {
                       decoration: BoxDecoration(
                         //color: Color.fromRGBO(232, 252, 232, 1),
                         image: DecorationImage(
-                          image: NetworkImage(
-                              'https://i.ibb.co/89tR9Tz/Dise-o-sin-t-tulo-9.png'), // Reemplaza con la ruta de tu imagen
+                          image: AssetImage(
+                              'images/MaquinaCosturera.png'), // Reemplaza con la ruta de tu imagen
                           fit: BoxFit
                               .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                         ),
@@ -691,8 +684,8 @@ class TabBarDemo extends State<Graficas> {
                               border: Border.all(
                                   color: Color.fromARGB(255, 83, 83, 83)),
                               image: DecorationImage(
-                                image: NetworkImage(
-                                    'https://i.ibb.co/NyhmR3k/Dise-o-sin-t-tulo-8.png'), // Reemplaza con la ruta de tu imagen
+                                image: AssetImage(
+                                    'images/Listado.png'), // Reemplaza con la ruta de tu imagen
                                 fit: BoxFit
                                     .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                               ),
@@ -767,8 +760,8 @@ class TabBarDemo extends State<Graficas> {
                               border: Border.all(
                                   color: Color.fromARGB(255, 83, 83, 83)),
                               image: DecorationImage(
-                                image: NetworkImage(
-                                    'https://i.ibb.co/pjVnQ64/Dise-o-sin-t-tulo-10.png'), // Reemplaza con la ruta de tu imagen
+                                image: AssetImage(
+                                    'images/Listado.png'), // Reemplaza con la ruta de tu imagen
                                 fit: BoxFit
                                     .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                               ),
@@ -878,8 +871,8 @@ class TabBarDemo extends State<Graficas> {
                               border: Border.all(
                                   color: Color.fromARGB(255, 83, 83, 83)),
                               image: DecorationImage(
-                                image: NetworkImage(
-                                    'https://i.ibb.co/NyhmR3k/Dise-o-sin-t-tulo-8.png'), // Reemplaza con la ruta de tu imagen
+                                image: AssetImage(
+                                    'images/Cajas.png'),// Reemplaza con la ruta de tu imagen
                                 fit: BoxFit
                                     .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                               ),
@@ -954,8 +947,8 @@ class TabBarDemo extends State<Graficas> {
                               border: Border.all(
                                   color: Color.fromARGB(255, 83, 83, 83)),
                               image: DecorationImage(
-                                image: NetworkImage(
-                                    'https://i.ibb.co/pjVnQ64/Dise-o-sin-t-tulo-10.png'), // Reemplaza con la ruta de tu imagen
+                                image: AssetImage(
+                                    'images/Cajas.png'), // Reemplaza con la ruta de tu imagen
                                 fit: BoxFit
                                     .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                               ),
@@ -1058,8 +1051,8 @@ class TabBarDemo extends State<Graficas> {
                       padding: EdgeInsets.symmetric(vertical: 20),
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(
-                              'https://i.ibb.co/9tk9yQL/Dise-o-sin-t-tulo-11.png'), // Reemplaza con la ruta de tu imagen
+                          image: AssetImage(
+                              'images/FondoBlanco.png'), // Reemplaza con la ruta de tu imagen
                           fit: BoxFit
                               .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                         ),
@@ -1126,8 +1119,8 @@ class TabBarDemo extends State<Graficas> {
                             child: Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: NetworkImage(
-                                      'https://i.ibb.co/hR42cJz/2-removebg-preview.png'), // Reemplaza con la ruta de tu imagen
+                                  image: AssetImage(
+                                      'images/Grafica1.png'), // Reemplaza con la ruta de tu imagen
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.only(
@@ -1148,8 +1141,8 @@ class TabBarDemo extends State<Graficas> {
                       padding: EdgeInsets.symmetric(vertical: 20),
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(
-                              'https://i.ibb.co/9tk9yQL/Dise-o-sin-t-tulo-11.png'), // Reemplaza con la ruta de tu imagen
+                          image: AssetImage(
+                              'images/FondoBlanco.png'), // Reemplaza con la ruta de tu imagen
                           fit: BoxFit
                               .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                         ),
@@ -1211,8 +1204,8 @@ class TabBarDemo extends State<Graficas> {
                             child: Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: NetworkImage(
-                                      'https://i.ibb.co/tqfjyJN/3-removebg-preview.png'), // Reemplaza con la ruta de tu imagen
+                                  image: AssetImage(
+                                      'images/Grafica2.png'), // Reemplaza con la ruta de tu imagen
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.only(
@@ -1233,8 +1226,8 @@ class TabBarDemo extends State<Graficas> {
                       padding: EdgeInsets.symmetric(vertical: 20),
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(
-                              'https://i.ibb.co/9tk9yQL/Dise-o-sin-t-tulo-11.png'), // Reemplaza con la ruta de tu imagen
+                          image: AssetImage(
+                              'images/FondoBlanco.png'), // Reemplaza con la ruta de tu imagen
                           fit: BoxFit
                               .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                         ),
@@ -1296,8 +1289,8 @@ class TabBarDemo extends State<Graficas> {
                             child: Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: NetworkImage(
-                                      'https://i.ibb.co/WF5x1g6/1-removebg-preview.png'), // Reemplaza con la ruta de tu imagen
+                                  image: AssetImage(
+                                      'images/Grafica3.png'), // Reemplaza con la ruta de tu imagen
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.only(
