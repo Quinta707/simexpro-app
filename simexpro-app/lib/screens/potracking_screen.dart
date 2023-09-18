@@ -112,56 +112,69 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
           Center(
           child: Column(
             children: [
-              const SizedBox(height: 30),
-              // ClipRRect(
-              //   borderRadius: BorderRadius.circular(10),
-              //   child: Text(
-              //     "Orden de Compra: PRUE123",
-              //     style: TextStyle(background: Paint()..color = Colors.black12
-              //                     ..strokeWidth = 17
-              //                     ..style = PaintingStyle.stroke,)
-              //   ),  
-              // ),
               Container(
-                // width: ,
-                padding: const EdgeInsets.all(12),
+                height: MediaQuery.of(context).size.height / 2,
                 decoration: const BoxDecoration(
-                      color: Colors.black12,
-                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(50),
+                    bottomRight: Radius.circular(50)),
+                  color: Colors.white),
+                child: Stack(
+                  children: [
+                    const SizedBox(height: 30),
+                    // ClipRRect(
+                    //   borderRadius: BorderRadius.circular(10),
+                    //   child: Text(
+                    //     "Orden de Compra: PRUE123",
+                    //     style: TextStyle(background: Paint()..color = Colors.black12
+                    //                     ..strokeWidth = 17
+                    //                     ..style = PaintingStyle.stroke,)
+                    //   ),  
+                    // ),
+                    Container(
+                      // width: ,
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
+                            color: Colors.black12,
+                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                          ),
+                      child: const Text(
+                        "Orden de Compra: PRUE123",
+                      ),
                     ),
-                child: const Text(
-                  "Orden de Compra: PRUE123",
+                    const SizedBox(height: 10),
+                    GridView.count(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(20),
+                      crossAxisSpacing: 5.0,
+                      crossAxisCount: 3,
+                      childAspectRatio: 17.0,
+                      // height: ,
+                      children: <Widget>[
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                        ),
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.yellow,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                        ),
+                        Container(
+                          decoration: const BoxDecoration(
+                                          color: Colors.green,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                        ),
+                      ],
+                    )   
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
-              GridView.count(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 5.0,
-                crossAxisCount: 3,
-                childAspectRatio: 17.0,
-                // height: ,
-                children: <Widget>[
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.yellow,
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                                    color: Colors.green,
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                  ),
-                ],
-              )                     
+                                
             ],
           ),
         // child: Container(
