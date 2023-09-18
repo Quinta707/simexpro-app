@@ -7,6 +7,7 @@ import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/widgets/taps.dart';
+//import 'package:simexpro/widgets/taps_Aduana.dart';
 
 enum MenuItem { item1, item2 }
 
