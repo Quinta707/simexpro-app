@@ -110,8 +110,29 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
       body: Center(
           child: Column(
             children: [
-              const SizedBox(height: 20),
-              const Text("Orden de Compra: PRUE123"),
+              const SizedBox(height: 30),
+              // ClipRRect(
+              //   borderRadius: BorderRadius.circular(10),
+              //   child: Text(
+              //     "Orden de Compra: PRUE123",
+              //     style: TextStyle(background: Paint()..color = Colors.black12
+              //                     ..strokeWidth = 17
+              //                     ..style = PaintingStyle.stroke,)
+              //   ),  
+              // ),
+              Container(
+                // width: ,
+                padding: const EdgeInsets.all(12),
+                decoration: const BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                    ),
+                // alignment: Alignment.center,
+                child: const Text(
+                  "Orden de Compra: PRUE123",
+                ),
+              ),
+              const SizedBox(height: 10),
               GridView.count(
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(20),
