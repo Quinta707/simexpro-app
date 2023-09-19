@@ -198,7 +198,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                             color: Colors.red[100],
                             borderRadius: const BorderRadius.all(Radius.circular(18)),
                           ),
-                      child: Stack(
+                      child: Wrap(
                         children: [
                           Container(
                             decoration: const BoxDecoration(
@@ -209,15 +209,19 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                            height: 20.0 / 2,
                             // child: const Text(" "),
                           ),
-                          const Spacer(flex: 2,),
-                          const Text(
-                            "PENDIENTE",
-                            style: TextStyle(fontSize: 11),
-                          ),
+                          // const Spacer(flex: 1,),
+                          const SizedBox(width: 7),
+                          const Positioned(
+                            // right: 9.0,
+                            child: Text(
+                              "PENDIENTE",
+                              style: TextStyle(fontSize: 11),
+                            ),
+                          )
                         ],
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 20),
                     Image.asset(
                       'images/trackingpos/pendientefinal.png',
                       height: (MediaQuery.of(context).size.height / 4) + 15,),
