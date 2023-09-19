@@ -39,7 +39,7 @@ Future<void> TraerDatos(String codigopo, context) async {
   );
   final decodedJson = jsonDecode(response.body);
   final data = decodedJson["data"]; 
-  print(codigopo);
+  print(response);
 
   if (data.length > 0) {
     print('data after search $data');
