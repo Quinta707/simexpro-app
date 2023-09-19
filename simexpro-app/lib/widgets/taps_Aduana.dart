@@ -437,7 +437,7 @@ class Graficas extends State<GraficasAduanas> {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
-                              'images/111.jpeg'), // Reemplaza con la ruta de tu imagen
+                              'images/Cargas.png'), // Reemplaza con la ruta de tu imagen
                           fit: BoxFit
                               .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                         ),
@@ -467,7 +467,7 @@ class Graficas extends State<GraficasAduanas> {
                                       .center, // Centrar el texto horizontalmente
                                   children: [
                                     const Text(
-                                      "GANANCIAS DEL AÑO ",
+                                      "IMPORT DEL AÑO ",
                                       textAlign: TextAlign
                                           .center, // Alinea el texto al centro
                                       style: TextStyle(
@@ -556,11 +556,13 @@ class Graficas extends State<GraficasAduanas> {
                                   children: [
                                     const Text(
                                       "IMPORTACIONES DEL MES",
-                                      textAlign: TextAlign.start,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 20,
-                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
                                       ),
+
                                     ),
                                     const Padding(
                                       padding: const EdgeInsets.symmetric(
