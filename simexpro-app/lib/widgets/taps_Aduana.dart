@@ -42,7 +42,6 @@ class Graficas extends State<GraficasAduanas> {
   num ImportaciionesMensuales = 0;
   num ImportaciionesAnio = 0;
 
-
   String MesActual = "";
 
   //PETICION PARA OPTENER LOS DATOS DE LA GRAFICA (REGIMENES ADUANEROS MAS UTILIZADOS)
@@ -207,8 +206,7 @@ class Graficas extends State<GraficasAduanas> {
               .toStringAsFixed(1);
           return '${Porcentaje}%';
         },
-        colorFn: (RegimenesAduaneros data, int? index) => randomColors[
-            index ?? 0], // Asigna el color desde la lista de colores aleatorios
+        colorFn: (RegimenesAduaneros data, int? index) => getRandomColor(), // Asigna el color desde la lista de colores aleatorios
         data: RegimenesData, // Utiliza los datos de la API
       )
     ];
@@ -218,11 +216,11 @@ class Graficas extends State<GraficasAduanas> {
         DatosGraficaAduanasIngresos = [
       charts.Series<AduanasIngresos, String>(
         id: 'Barras',
-        domainFn: (AduanasIngresos data, _) => data.adua_Nombre,
+        domainFn: (AduanasIngresos data, _) => '${data.adua_Nombre} - ${data.cantidad}' ,
         measureFn: (AduanasIngresos data, _) => data.cantidad,
         labelAccessorFn: (AduanasIngresos data, _) => '${data.porcentaje}%',
-        colorFn: (AduanasIngresos data, int? index) =>
-            getRandomColor(), // Asigna el color desde la lista de colores aleatorios
+        colorFn: (AduanasIngresos data, int? index) => randomColors[
+            index ?? 0], // Asigna el color desde la lista de colores aleatorios
         data: AduanasData, // Utiliza los datos de la API
       )
     ];
@@ -255,6 +253,9 @@ class Graficas extends State<GraficasAduanas> {
       ),
     );
 
+
+
+
     //GRAFICA DE BARRAS (ADUANAS DE INGRESO CON MAYOR IMPORTACIÓN)
     final GraficaAduanasIngreso = new charts.BarChart(
       DatosGraficaAduanasIngresos,
@@ -280,6 +281,50 @@ class Graficas extends State<GraficasAduanas> {
           color: charts
               .Color.black, // Color de la letra de la etiqueta de porcentaje
         ),
+      ),
+    );
+
+    final pieChart = charts.PieChart(
+      DatosGraficaAduanasIngresos,
+      animate: true,
+      behaviors: [
+        charts.DatumLegend(
+          outsideJustification: charts.OutsideJustification.start,
+          horizontalFirst: false,
+          desiredMaxRows: 5,
+          cellPadding: EdgeInsets.only(right: 4.0, bottom: 4.0),
+          entryTextStyle: charts.TextStyleSpec(
+            color: charts.MaterialPalette.black,
+            fontSize: 15,
+          ),
+        ),
+      ],
+      defaultRenderer: charts.ArcRendererConfig(
+        arcWidth: 100, // Ancho de los segmentos del gráfico de pastel
+        arcRendererDecorators: [
+          charts.ArcLabelDecorator(
+            labelPosition: charts.ArcLabelPosition
+                .auto, // Mostrar etiquetas automáticamente fuera cuando sea necesario
+            leaderLineStyleSpec: charts.ArcLabelLeaderLineStyleSpec(
+              color: charts.MaterialPalette
+                  .black, // Color transparente para la línea líder
+              length:
+                  5, // Ajusta la longitud de la línea líder según sea necesario
+              thickness:
+                  1.0, // Ajusta el grosor de la línea líder según sea necesario
+            ),
+            insideLabelStyleSpec: const charts.TextStyleSpec(
+              fontSize: 12, // Tamaño de letra de la etiqueta de porcentaje
+              color: charts.Color
+                  .white, // Color de la letra de la etiqueta de porcentaje
+            ),
+            outsideLabelStyleSpec: charts.TextStyleSpec(
+              fontSize: 12, // Tamaño de letra de la etiqueta de porcentaje
+              color: charts.Color
+                  .black, // Color de la letra de la etiqueta de porcentaje
+            ),
+          ),
+        ],
       ),
     );
 
@@ -433,7 +478,7 @@ class Graficas extends State<GraficasAduanas> {
                         padding: EdgeInsets.all(
                             16.0), // Padding dentro de la tarjeta
                         child:
-                            GraficaAduanasIngreso, // El contenido de la tarjeta, en este caso, el gráfico
+                            pieChart, // El contenido de la tarjeta, en este caso, el gráfico
                       ),
                     ],
                   ),
@@ -515,7 +560,7 @@ class Graficas extends State<GraficasAduanas> {
                                     crossAxisAlignment: CrossAxisAlignment
                                         .center, // Centrar el texto horizontalmente
                                     children: [
-                                       Text(
+                                      Text(
                                         "IMPORTACIONES DEL ${DateTime.now().year}",
                                         textAlign: TextAlign
                                             .center, // Alinea el texto al centro

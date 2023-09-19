@@ -300,7 +300,7 @@ class TabBarDemo extends State<Graficas> {
     final List<charts.Series<Clientes, String>> ClientesGrafica = [
       charts.Series<Clientes, String>(
         id: 'Barras',
-        domainFn: (Clientes data, _) => data.cliente_Nombre,
+        domainFn: (Clientes data, _) => '${data.cliente_Nombre} - ${data.Cantidad_Ingresos}',
         measureFn: (Clientes data, _) => data.Cantidad_Ingresos,
         labelAccessorFn: (Clientes data, _) {
           final porcentaje = (data.Cantidad_Ingresos /
@@ -350,9 +350,9 @@ class TabBarDemo extends State<Graficas> {
       animate: true,
       behaviors: [
         charts.DatumLegend(
-          outsideJustification: charts.OutsideJustification.endDrawArea,
+          outsideJustification: charts.OutsideJustification.start,
           horizontalFirst: false,
-          desiredMaxRows: 2,
+          desiredMaxRows: 10,
           cellPadding: EdgeInsets.only(right: 4.0, bottom: 4.0),
           entryTextStyle: charts.TextStyleSpec(
             color: charts.MaterialPalette.black,
@@ -1124,7 +1124,7 @@ class TabBarDemo extends State<Graficas> {
                                         .center, // Centrar el texto horizontalmente
                                     children: [
                                       Text(
-                                        "GANANCIAS  DEL  ${DateTime.now().year}",
+                                        "GANANCIAS  DEL \n  ${DateTime.now().year}",
                                         textAlign: TextAlign
                                             .center, // Alinea el texto al centro
                                         style: TextStyle(
