@@ -11,10 +11,11 @@ class POTrackingScreen extends StatefulWidget {
   const POTrackingScreen({Key? key}) : super (key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _POTrackingScreenState createState() => _POTrackingScreenState();
 }
 
-Future<void> Imagen() async {
+Future<void> imagen() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   image = prefs.getString('image');
 }
@@ -113,7 +114,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
           child: Column(
             children: [
               Container(
-                height: (MediaQuery.of(context).size.height / 2) + 25,
+                height: (MediaQuery.of(context).size.height / 2) + 45,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(50),
@@ -159,18 +160,41 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                         ),
                         Container(
                           decoration: const BoxDecoration(
-                            color: Colors.yellow,
+                            color: Colors.black12,
                             borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
                         ),
                         Container(
                           decoration: const BoxDecoration(
-                                          color: Colors.green,
+                                          color: Colors.black12,
                             borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
                         ),
                       ],
-                    )   
+                    ),   
+                    const SizedBox(height: 15),
+                    Container(
+                      // width: ,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                            color: Colors.red[100],
+                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                          ),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red
+                        ),
+                        child: const Text(
+                          "PENDIENTE",
+                          style: TextStyle(fontSize: 11),
+                        ),
+                      )
+                    ),
+                    const SizedBox(height: 30),
+                    Image.asset(
+                      'images/trackingpos/pendientefinal.png',
+                      height: (MediaQuery.of(context).size.height / 4) + 15,),
                   ],
                 ),
               ),
