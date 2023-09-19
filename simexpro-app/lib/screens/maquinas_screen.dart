@@ -15,10 +15,11 @@ import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
 import 'package:timeline_list/timeline.dart';
 import 'package:timeline_list/timeline_model.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
-    List datamaquina = [];
+List datamaquina = [];
+
 class MaquinasScreen extends StatefulWidget {
-
   const MaquinasScreen({Key? key}) : super(key: key);
 
   @override
@@ -33,7 +34,7 @@ Future<void> Imagen() async {
 List<dynamic> Lista(List data, String numserie) {
   List<String> filtrado = [];
   for (var item in data) {
-    if(data[item]['maquinaNumeroSerie'] == numserie){
+    if (data[item]['maquinaNumeroSerie'] == numserie) {
       filtrado.addAll(data as Iterable<String>);
     }
   }
@@ -41,7 +42,6 @@ List<dynamic> Lista(List data, String numserie) {
   print('abajodefiltrado');
   return filtrado;
 }
-
 
 Future<void> TraerDatos(BuildContext context, String numserie) async {
   final response = await http.get(
@@ -53,269 +53,206 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
   );
   final decodedJson = jsonDecode(response.body);
   final data = decodedJson["data"];
-      List<Map> filteredlist = [];
+  List<Map> filteredlist = [];
   print(numserie);
-  for(var i = 0; i < data.length; i++){
-      
-    if(data[i]["maquinaNumeroSerie"].toString() == numserie){
-    filteredlist.add(data[i]);
-    
+  for (var i = 0; i < data.length; i++) {
+    if (data[i]["maquinaNumeroSerie"].toString() == numserie) {
+      filteredlist.add(data[i]);
     }
     print(data[i]['maquinaNumeroSerie'].toString());
-  }  
+  }
   print(numserie);
   print(filteredlist);
   filteredlist.isEmpty
-  ? CherryToast.error(title: Text('El número de máquina no existe', style: TextStyle(color: Colors.white)),  borderRadius: 5,).show(context)
-  : CherryToast.success(title: Text('Trae los datos', style: TextStyle(color: Colors.white)),  borderRadius: 5,).show(context);
-    datamaquina = data;
-
+      ? CherryToast.error(
+          title: Text('El número de máquina no existe',
+              style: TextStyle(color: Colors.white)),
+          borderRadius: 5,
+        ).show(context)
+      : CherryToast.success(
+          title: Text('Trae los datos', style: TextStyle(color: Colors.white)),
+          borderRadius: 5,
+        ).show(context);
+  datamaquina = data;
 }
 
-class _MaquinasScreenState extends State<MaquinasScreen> {  
+class _MaquinasScreenState extends State<MaquinasScreen> {
   int _selectedIndex = 0;
   final _screens = [
     Graficas(),
     historialScreen(),
     TimelineScreen(),
   ];
-    String searchValue = '';
+  String searchValue = '';
   @override
   void initState() {
     super.initState();
     Imagen();
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
-         appBar: AppBar(
-              title: const Image(
-                height: 35,
-                image: NetworkImage('https://i.ibb.co/HgdBM0r/slogan.png'),
-              ),
-              centerTitle: true,
-              actions: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(image),
-                    child: PopupMenuButton<MenuItem>(
-                      //padding: EdgeInsets.all(10),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Image.network(
-                          image,
-                          width: 50,
-                        ),
-                      ),
-                      onSelected: (value) {
-                        if (value == MenuItem.item1) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileScreen(),
-                              ));
-                        }
-                        if (value == MenuItem.item2) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => loginScreen(),
-                              ));
-                        }
-                      },
-                      itemBuilder: (context) => [
-                        PopupMenuItem<MenuItem>(
-                          value: MenuItem.item1,
-                          child: Row(
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Icon(
-                                    Icons.person_2_outlined,
-                                    color: Color.fromRGBO(87, 69, 223, 1),
-                                  )),
-                              const Text(
-                                'Mi Perfil',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem<MenuItem>(
-                          value: MenuItem.item2,
-                          child: Row(
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Icon(
-                                    Icons.logout,
-                                    color: Color.fromRGBO(87, 69, 223, 1),
-                                  )),
-                              const Text(
-                                'Cerrar Sesión',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ],
-                          ),
+      appBar: AppBar(
+        title: const Image(
+          height: 35,
+          image: NetworkImage('https://i.ibb.co/HgdBM0r/slogan.png'),
+        ),
+        centerTitle: true,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(image),
+              child: PopupMenuButton<MenuItem>(
+                //padding: EdgeInsets.all(10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.network(
+                    image,
+                    width: 50,
+                  ),
+                ),
+                onSelected: (value) {
+                  if (value == MenuItem.item1) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(),
+                        ));
+                  }
+                  if (value == MenuItem.item2) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => loginScreen(),
+                        ));
+                  }
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem<MenuItem>(
+                    value: MenuItem.item1,
+                    child: Row(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.person_2_outlined,
+                              color: Color.fromRGBO(87, 69, 223, 1),
+                            )),
+                        const Text(
+                          'Mi Perfil',
+                          style: TextStyle(fontSize: 15),
                         ),
                       ],
                     ),
                   ),
-                )
-              ],
-              backgroundColor: Color.fromRGBO(17, 24, 39, 1),
-              //elevation: 50.0,
-              leading: IconButton(
-                icon: const Icon(Icons.menu),
-                tooltip: 'Menú',
-                onPressed: () {},
-              ),
-              //systemOverlayStyle: SystemUiOverlayStyle.light,
-            ),
-            body: Center(
-              child: Column(
-                children: [
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Center(
-                        child: Text(
-                          "Días inactivos de las máquinas",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromRGBO(148, 82, 249, 1),
-                          ),
-                        ),
-                      ),
-                    ), 
-                  ),
-                  //SizedBox(height: 15),
-                  Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Column(
+                  PopupMenuItem<MenuItem>(
+                    value: MenuItem.item2,
+                    child: Row(
                       children: [
-                          TextField(
-                            onChanged: (value) {
-                              setState(() {
-                                searchValue = value;
-                              });
-                            },
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              label: Text("Digite un número de serie"),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          ButtonTheme(
-                            height: 20,
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                ),
-                                backgroundColor: Color.fromRGBO(99, 74, 158, 1),
-                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              ),
-                              onPressed: (){
-                                searchValue == null || searchValue == ""
-                                  ? CherryToast.warning(title: Text('Llene los campos correctamente', style: TextStyle(color: Colors.white)), borderRadius: 5,).show(context)
-                                  : TraerDatos(context, searchValue);
-                              }, 
-                              icon: Icon(Icons.search), 
-                              label: Text('Buscar',
-                                style: TextStyle(
-                                      fontSize: 18, 
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                              ),
-                            ),
-                          ),
-                          // SizedBox(height: 20),
-                          // ButtonTheme(
-                          //   height: 20,
-                          //   child: ElevatedButton.icon(
-                          //     style: ElevatedButton.styleFrom(
-                          //       shape: RoundedRectangleBorder(
-                          //           borderRadius: BorderRadius.circular(10),
-                          //       ),
-                          //       backgroundColor: Color.fromRGBO(99, 74, 158, 1),
-                          //       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          //     ),
-                          //     onPressed: (){
-                          //       Navigator.push(
-                          //           context,
-                          //           MaterialPageRoute(
-                          //             builder: (context) => PackageDeliveryTrackingPage(),
-                          //       ));
-                          //     }, 
-                          //     icon: Icon(Icons.account_tree_sharp), 
-                          //     label: Text('prueba de timeline',
-                          //       style: TextStyle(
-                          //             fontSize: 18, 
-                          //             fontWeight: FontWeight.bold,
-                          //             color: Colors.white,
-                          //           ),
-                          //     ),
-                          //   ),
-                          // ),
-                          // SizedBox(height: 10),
-                          // Padding(padding: EdgeInsets.all(5),
-                          //   child: Card(
-                          //     child: Timeline.builder(
-                          //       itemBuilder: centerTimelineBuilder,
-                          //       itemCount: datamaquina.length,
-                          //       position: TimelinePosition.Center,
-                          //     ),
-                          //   ),
-                          // ),
+                        Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.logout,
+                              color: Color.fromRGBO(87, 69, 223, 1),
+                            )),
+                        const Text(
+                          'Cerrar Sesión',
+                          style: TextStyle(fontSize: 15),
+                        ),
                       ],
-                    ), 
+                    ),
                   ),
                 ],
               ),
             ),
+          )
+        ],
+        backgroundColor: Color.fromRGBO(17, 24, 39, 1),
+        //elevation: 50.0,
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          tooltip: 'Menú',
+          onPressed: () {},
+        ),
+        //systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Container(
+                alignment: Alignment.center,
+                child: Center(
+                  child: Text(
+                    "Días inactivos de las máquinas",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(148, 82, 249, 1),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            //SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        searchValue = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text("Digite un número de serie"),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ButtonTheme(
+                    height: 20,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      ),
+                      onPressed: () {
+                        searchValue == null || searchValue == ""
+                            ? CherryToast.warning(
+                                title: Text('Llene los campos correctamente',
+                                    style: TextStyle(color: Colors.white)),
+                                borderRadius: 5,
+                              ).show(context)
+                            : TraerDatos(context, searchValue);
+                      },
+                      icon: Icon(Icons.search),
+                      label: Text(
+                        'Buscar',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
-
-TimelineModel centerTimelineBuilder(BuildContext context, int i) {
-    final i = datamaquina.length;
-    final textTheme = Theme.of(context).textTheme;
-    return TimelineModel(
-        Card(
-          margin: EdgeInsets.symmetric(vertical: 16.0),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          clipBehavior: Clip.antiAlias,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const SizedBox(
-                  height: 8.0,
-                ),
-                Text(datamaquina[i]['maquinaNumeroSerie'], style: textTheme.bodySmall),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                Text(
-                  datamaquina[i]['mahi_FechaInicio'],
-                  style: textTheme.titleLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-              ],
-            ),
-          ),
-        )
-      );   
-    }

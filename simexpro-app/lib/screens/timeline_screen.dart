@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simexpro/screens/lineatiempo.dart';
 import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/orders_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
@@ -30,7 +31,7 @@ class TimelineScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MaquinasScreen(),
+                      builder: (context) => TimelineApp(),
                 ));
               },
               child: CircleAvatar(
