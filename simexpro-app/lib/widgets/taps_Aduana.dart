@@ -42,6 +42,9 @@ class Graficas extends State<GraficasAduanas> {
   num ImportaciionesMensuales = 0;
   num ImportaciionesAnio = 0;
 
+
+  String MesActual = "";
+
   //PETICION PARA OPTENER LOS DATOS DE LA GRAFICA (REGIMENES ADUANEROS MAS UTILIZADOS)
   Future<void> GetRegimenesAduaneros() async {
     try {
@@ -107,7 +110,7 @@ class Graficas extends State<GraficasAduanas> {
   Future<void> OpteneImportacionesMes() async {
     try {
       final response = await http.get(
-        Uri.parse('${apiUrl}Graficas/AduanasGraficas/Importaciones_Anio'),
+        Uri.parse('${apiUrl}AduanasGraficas/Importaciones_Contador_Mes'),
         headers: {
           'XApiKey': apiKey,
         },
@@ -116,10 +119,53 @@ class Graficas extends State<GraficasAduanas> {
       final data = jsonBody['data'];
 
       for (var item in data) {
-        int conteo = item['cantidad'];
-
         setState(() {
-          ImportaciionesMensuales = conteo;
+          MesActual = item['mes'];
+          ImportaciionesMensuales = item['cantidad'];
+        });
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  //PETICION PARA OBTENER LAS IMPORTACIONES DEL MES
+  Future<void> OpteneImportacionesAnio() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}AduanasGraficas/Importaciones_Contador_Anio'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+      final jsonBody = json.decode(response.body);
+      final data = jsonBody['data'];
+
+      for (var item in data) {
+        setState(() {
+          ImportaciionesAnio = item['cantidad'];
+        });
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  //PETICION PARA OBTENER LAS IMPORTACIONES DEL MES
+  Future<void> OpteneImportacionesSemana() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}AduanasGraficas/Importaciones_Contador_Semana'),
+        headers: {
+          'XApiKey': apiKey,
+        },
+      );
+      final jsonBody = json.decode(response.body);
+      final data = jsonBody['data'];
+
+      for (var item in data) {
+        setState(() {
+          ImportaciionesSemanales = item['cantidad'];
         });
       }
     } catch (error) {
@@ -132,6 +178,9 @@ class Graficas extends State<GraficasAduanas> {
     super.initState();
     GetRegimenesAduaneros();
     GetAduanasIngreso();
+    OpteneImportacionesAnio();
+    OpteneImportacionesMes();
+    OpteneImportacionesSemana();
     //Imagen();
   }
 
@@ -341,9 +390,8 @@ class Graficas extends State<GraficasAduanas> {
                     children: [
                       ListTile(
                         title: Text(
-                          'Regimenes Aduaneros más Usados',
+                          'REGIMENES ADUANEROS MÁS USADOS',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
                             fontSize: 18.0,
                           ),
                           textAlign: TextAlign.center,
@@ -370,9 +418,8 @@ class Graficas extends State<GraficasAduanas> {
                     children: [
                       ListTile(
                         title: Text(
-                          'Aduanas de Ingreso con mayor importación',
+                          'ADUANAS DE INGRESO CON MAYOR IMPORTACIÓN',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
                             fontSize: 18.0,
                           ),
                           textAlign: TextAlign.center,
@@ -392,305 +439,318 @@ class Graficas extends State<GraficasAduanas> {
                   ),
                 ),
               ),
-              Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 15),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              thickness: 2,
-                              height: 20,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              "NUESTRAS IMPORTACIONES",
-                              style: TextStyle(
-                                fontSize: 20,
+              SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 15),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
                                 color: Color.fromARGB(255, 0, 0, 0),
+                                thickness: 2,
+                                height: 20,
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              color: Color.fromARGB(255, 6, 5, 5),
-                              thickness: 2,
-                              height: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Container(
-                      width: 385,
-                      height: 120,
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                              'images/Cargas.png'), // Reemplaza con la ruta de tu imagen
-                          fit: BoxFit
-                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
-                        ),
-                        //color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Lado izquierdo: Texto
-                          Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(7.0),
-                              child: Container(
-                                alignment: Alignment
-                                    .center, // Centrar el contenido en la columna
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment
-                                      .center, // Centrar el texto horizontalmente
-                                  children: [
-                                    const Text(
-                                      "IMPORT DEL AÑO ",
-                                      textAlign: TextAlign
-                                          .center, // Alinea el texto al centro
-                                      style: TextStyle(
-                                        //fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Divider(
-                                        color: Color.fromARGB(255, 255, 106, 0),
-                                        thickness: 3,
-                                        height: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      ' .LPS',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    ),
-                                  ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                "NUESTRAS IMPORTACIONES",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color.fromARGB(255, 0, 0, 0),
                                 ),
                               ),
                             ),
+                            Expanded(
+                              child: Divider(
+                                color: Color.fromARGB(255, 6, 5, 5),
+                                thickness: 2,
+                                height: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        width: 385,
+                        height: 145,
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'images/Cargas.png'), // Reemplaza con la ruta de tu imagen
+                            fit: BoxFit
+                                .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                           ),
+                          //color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Lado izquierdo: Texto
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(7.0),
+                                child: Container(
+                                  alignment: Alignment
+                                      .center, // Centrar el contenido en la columna
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .center, // Centrar el texto horizontalmente
+                                    children: [
+                                       Text(
+                                        "IMPORTACIONES DEL ${DateTime.now().year}",
+                                        textAlign: TextAlign
+                                            .center, // Alinea el texto al centro
+                                        style: TextStyle(
+                                          //fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Divider(
+                                          color:
+                                              Color.fromARGB(255, 255, 106, 0),
+                                          thickness: 3,
+                                          height: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${ImportaciionesAnio}',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
 
-                          // Lado derecho: Imagen
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'images/Grafica1.png'), // Reemplaza con la ruta de tu imagen
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Container(
-                      width: 385,
-                      height: 122,
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                              'images/Cargas.png'), // Reemplaza con la ruta de tu imagen
-                          fit: BoxFit
-                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
-                        ),
-                        //color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Lado izquierdo: Texto
-                          Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                            // Lado derecho: Imagen
+                            Expanded(
+                              flex: 1,
                               child: Container(
-                                alignment: Alignment.center,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      "IMPORTACIONES DEL MES",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color:
-                                            Color.fromARGB(255, 255, 255, 255),
-                                      ),
-
-                                    ),
-                                    const Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Divider(
-                                        color: Color.fromARGB(255, 255, 106, 0),
-                                        thickness: 3,
-                                        height: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${ImportaciionesMensuales} .LPS',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    ),
-                                  ],
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        'images/Barco.png'), // Reemplaza con la ruta de tu imagen
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          // Lado derecho: Imagen
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'images/Grafica2.png'), // Reemplaza con la ruta de tu imagen
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Container(
-                      width: 385,
-                      height: 122,
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                              'images/FondoBlanco.png'), // Reemplaza con la ruta de tu imagen
-                          fit: BoxFit
-                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                          ],
                         ),
-                        //color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            spreadRadius: 2,
-                          ),
-                        ],
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Lado izquierdo: Texto
-                          Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                      SizedBox(height: 15),
+                      Container(
+                        width: 385,
+                        height: 145,
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'images/Cargas.png'), // Reemplaza con la ruta de tu imagen
+                            fit: BoxFit
+                                .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                          ),
+                          //color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Lado izquierdo: Texto
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "IMPORTACIONES DE ${MesActual.toUpperCase()}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Divider(
+                                          color:
+                                              Color.fromARGB(255, 255, 106, 0),
+                                          thickness: 3,
+                                          height: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${ImportaciionesMensuales}',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 244, 243, 243),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Lado derecho: Imagen
+                            Expanded(
+                              flex: 1,
                               child: Container(
-                                alignment: Alignment.center,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      "GANANCIA SEMANAL",
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Divider(
-                                        color: Color.fromARGB(255, 255, 106, 0),
-                                        thickness: 3,
-                                        height: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      '.LPS',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 46, 46, 46),
-                                      ),
-                                    ),
-                                  ],
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        'images/Mundo.png'), // Reemplaza con la ruta de tu imagen
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          // Lado derecho: Imagen
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'images/Grafica3.png'), // Reemplaza con la ruta de tu imagen
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 15),
+                      Container(
+                        width: 385,
+                        height: 145,
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'images/Cargas.png'), // Reemplaza con la ruta de tu imagen
+                            fit: BoxFit
+                                .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                          ),
+                          //color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Lado izquierdo: Texto
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        "IMPORTACIONES DE LA SEMANA",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Divider(
+                                          color:
+                                              Color.fromARGB(255, 255, 106, 0),
+                                          thickness: 3,
+                                          height: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${ImportaciionesSemanales}',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 244, 243, 243),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Lado derecho: Imagen
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        'images/cargamento.png'), // Reemplaza con la ruta de tu imagen
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                    ],
+                  ),
                 ),
               ),
               Card()
