@@ -9,13 +9,11 @@ import 'login_screen.dart';
 
 // ignore: must_be_immutable
 class POTrackingScreen extends StatefulWidget {
-  String data;
-
-  POTrackingScreen({super.key, required this.data});
+  final data;
+  const POTrackingScreen({Key? key, required this.data}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _POTrackingScreenState createState() => _POTrackingScreenState();
+  State<POTrackingScreen> createState() => _POTrackingScreenState();
 }
 
 Future<void> imagen() async {
@@ -24,10 +22,6 @@ Future<void> imagen() async {
 }
 
 class _POTrackingScreenState extends State<POTrackingScreen> {
-
-  // String data;
-
-  // POTrackingScreen({required this.data});
   
   @override 
   Widget build(BuildContext context) {
@@ -147,8 +141,8 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                             color: Colors.black12,
                             borderRadius: BorderRadius.all(Radius.circular(18)),
                           ),
-                      child: const Text(
-                        "Orden de Compra: PRUE123",
+                      child: Text(
+                        "Orden de Compra: ${widget.data[0]["orco_Codigo"]}",
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -181,24 +175,6 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       ],
                     ),   
                     const SizedBox(height: 15),
-                    // Container(
-                    //   // width: ,
-                    //   padding: const EdgeInsets.all(12),
-                    //   decoration: BoxDecoration(
-                    //         color: Colors.red[100],
-                    //         borderRadius: const BorderRadius.all(Radius.circular(18)),
-                    //       ),
-                    //   child: Container(
-                    //     decoration: const BoxDecoration(
-                    //       shape: BoxShape.circle,
-                    //       color: Colors.red
-                    //     ),
-                    //     child: const Text(
-                    //       "PENDIENTE",
-                    //       style: TextStyle(fontSize: 11),
-                    //     ),
-                    //   )
-                    // ),
                     Container(
                       // width: ,
                       padding: const EdgeInsets.all(12),
@@ -215,9 +191,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                             ),
                            width: 20.0 / 2,
                            height: 20.0 / 2,
-                            // child: const Text(" "),
                           ),
-                          // const Spacer(flex: 1,),
                           const SizedBox(width: 7),
                           const Positioned(
                             // right: 9.0,

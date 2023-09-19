@@ -71,7 +71,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
     String searchValue = '';
-    
+
     void updatedText (val){
       setState((){
         searchValue = val;
