@@ -173,6 +173,24 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       ],
                     ),   
                     const SizedBox(height: 15),
+                    // Container(
+                    //   // width: ,
+                    //   padding: const EdgeInsets.all(12),
+                    //   decoration: BoxDecoration(
+                    //         color: Colors.red[100],
+                    //         borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    //       ),
+                    //   child: Container(
+                    //     decoration: const BoxDecoration(
+                    //       shape: BoxShape.circle,
+                    //       color: Colors.red
+                    //     ),
+                    //     child: const Text(
+                    //       "PENDIENTE",
+                    //       style: TextStyle(fontSize: 11),
+                    //     ),
+                    //   )
+                    // ),
                     Container(
                       // width: ,
                       padding: const EdgeInsets.all(12),
@@ -180,16 +198,24 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                             color: Colors.red[100],
                             borderRadius: const BorderRadius.all(Radius.circular(18)),
                           ),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.red
-                        ),
-                        child: const Text(
-                          "PENDIENTE",
-                          style: TextStyle(fontSize: 11),
-                        ),
-                      )
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                           width: 20.0 / 2,
+                           height: 20.0 / 2,
+                            // child: const Text(" "),
+                          ),
+                          const Spacer(flex: 2,),
+                          const Text(
+                            "PENDIENTE",
+                            style: TextStyle(fontSize: 11),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 30),
                     Image.asset(
