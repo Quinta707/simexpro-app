@@ -46,9 +46,14 @@ Future<void> TraerDatos(String codigopo, context) async {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => POTrackingScreen(),
+        builder: (context) => POTrackingScreen(data: data),
       )
     );
+  } else{
+    CherryToast.warning(
+        title: const Text('El código ingresado no es válido',
+            style: TextStyle(color: Colors.white)))
+    .show(context);
   }
 }
 
@@ -66,6 +71,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
     String searchValue = '';
+    
     void updatedText (val){
       setState((){
         searchValue = val;

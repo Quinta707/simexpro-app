@@ -7,8 +7,11 @@ import '../widgets/navbar_roots.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
 
+// ignore: must_be_immutable
 class POTrackingScreen extends StatefulWidget {
-  const POTrackingScreen({Key? key}) : super (key: key);
+  String data;
+
+  POTrackingScreen({super.key, required this.data});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -21,6 +24,11 @@ Future<void> imagen() async {
 }
 
 class _POTrackingScreenState extends State<POTrackingScreen> {
+
+  // String data;
+
+  // POTrackingScreen({required this.data});
+  
   @override 
   Widget build(BuildContext context) {
     return Scaffold (
