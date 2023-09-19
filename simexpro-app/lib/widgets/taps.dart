@@ -11,7 +11,7 @@ import 'dart:convert';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'dart:math';
-
+String imagen = '';
 enum MenuItem { item1, item2 }
 
 class Graficas extends StatefulWidget {
@@ -21,7 +21,7 @@ class Graficas extends StatefulWidget {
 
 Future<void> Imagen() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //imagen = prefs.getString('image');
+  imagen = prefs.getString('image');
 }
 
 // Función para generar un color aleatorio
@@ -272,7 +272,7 @@ class TabBarDemo extends State<Graficas> {
     OpteneGananciasAnio();
     OpteneGananciasMes();
     OpteneGananciasSemana();
-    //Imagen();
+    Imagen();
   }
 
   @override
@@ -404,13 +404,13 @@ class TabBarDemo extends State<Graficas> {
                 padding: EdgeInsets.only(right: 10),
                 child: CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(''),
+                  backgroundImage: NetworkImage(imagen),
                   child: PopupMenuButton<MenuItem>(
                     //padding: EdgeInsets.all(10),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: Image.network(
-                        '',
+                        imagen,
                         width: 50,
                       ),
                     ),
