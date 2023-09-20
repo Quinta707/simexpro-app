@@ -12,6 +12,8 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'dart:math';
 
+String imagen = '';
+
 enum MenuItem { item1, item2 }
 
 class GraficasAduanas extends StatefulWidget {
@@ -21,7 +23,7 @@ class GraficasAduanas extends StatefulWidget {
 
 Future<void> Imagen() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //imagen = prefs.getString('image');
+  imagen = prefs.getString('image');
 }
 
 // Función para generar un color aleatorio
@@ -180,14 +182,14 @@ class Graficas extends State<GraficasAduanas> {
     OpteneImportacionesAnio();
     OpteneImportacionesMes();
     OpteneImportacionesSemana();
-    //Imagen();
+    Imagen();
   }
 
   @override
   Widget build(BuildContext context) {
     // Genera una lista de colores aleatorios para el grafico pie
     final List<charts.Color> randomColors = List.generate(
-      RegimenesData.length,
+      AduanasData.length,
       (_) => getRandomColor(),
     );
 
@@ -206,7 +208,8 @@ class Graficas extends State<GraficasAduanas> {
               .toStringAsFixed(1);
           return '${Porcentaje}%';
         },
-        colorFn: (RegimenesAduaneros data, int? index) => getRandomColor(), // Asigna el color desde la lista de colores aleatorios
+        colorFn: (RegimenesAduaneros data, int? index) =>
+            getRandomColor(), // Asigna el color desde la lista de colores aleatorios
         data: RegimenesData, // Utiliza los datos de la API
       )
     ];
@@ -216,7 +219,8 @@ class Graficas extends State<GraficasAduanas> {
         DatosGraficaAduanasIngresos = [
       charts.Series<AduanasIngresos, String>(
         id: 'Barras',
-        domainFn: (AduanasIngresos data, _) => '${data.adua_Nombre} - ${data.cantidad}' ,
+        domainFn: (AduanasIngresos data, _) =>
+            '${data.adua_Nombre} - ${data.cantidad}',
         measureFn: (AduanasIngresos data, _) => data.cantidad,
         labelAccessorFn: (AduanasIngresos data, _) => '${data.porcentaje}%',
         colorFn: (AduanasIngresos data, int? index) => randomColors[
@@ -253,37 +257,7 @@ class Graficas extends State<GraficasAduanas> {
       ),
     );
 
-
-
-
     //GRAFICA DE BARRAS (ADUANAS DE INGRESO CON MAYOR IMPORTACIÓN)
-    final GraficaAduanasIngreso = new charts.BarChart(
-      DatosGraficaAduanasIngresos,
-      animate: true,
-      vertical: true,
-      domainAxis: new charts.OrdinalAxisSpec(
-        renderSpec: new charts.SmallTickRendererSpec(
-          labelStyle: new charts.TextStyleSpec(
-            color: charts.MaterialPalette.black,
-          ),
-          labelRotation: 60,
-        ),
-      ),
-      barRendererDecorator: charts.BarLabelDecorator<String>(
-        labelAnchor: charts.BarLabelAnchor.end,
-        insideLabelStyleSpec: const charts.TextStyleSpec(
-          fontSize: 12, // Tamaño de letra de la etiqueta de porcentaje
-          color: charts
-              .Color.white, // Color de la letra de la etiqueta de porcentaje
-        ),
-        outsideLabelStyleSpec: charts.TextStyleSpec(
-          fontSize: 12, // Tamaño de letra de la etiqueta de porcentaje
-          color: charts
-              .Color.black, // Color de la letra de la etiqueta de porcentaje
-        ),
-      ),
-    );
-
     final pieChart = charts.PieChart(
       DatosGraficaAduanasIngresos,
       animate: true,
@@ -343,13 +317,13 @@ class Graficas extends State<GraficasAduanas> {
                 padding: EdgeInsets.only(right: 10),
                 child: CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(''),
+                  backgroundImage: NetworkImage(imagen),
                   child: PopupMenuButton<MenuItem>(
                     //padding: EdgeInsets.all(10),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: Image.network(
-                        '',
+                        imagen,
                         width: 50,
                       ),
                     ),

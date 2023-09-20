@@ -16,23 +16,32 @@ class NavBarRoots extends StatefulWidget {
   State<NavBarRoots> createState() => _NavBarRootsState();
 }
 
-Future<void> Imagen() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  image = prefs.getString('image');
-}
+
 
 class _NavBarRootsState extends State<NavBarRoots> {
+
   int _selectedIndex = 0;
-  final _screens = [
-    GraficasAduanas(),
-    historialScreen(),
-    TimelineScreen(),
-  ];
+  List<Widget> _screens = [];
 
   @override
   void initState() {
     super.initState();
     Imagen();
+  }
+
+
+  Future<void> Imagen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    image = prefs.getString('image');
+    bool esAduana = prefs.getBool('esAduana');
+
+    setState(() {
+      _screens = [
+        esAduana ? GraficasAduanas() : TapsProduccion(),
+        historialScreen(),
+        TimelineScreen(),
+      ];
+    });
   }
 
   Widget build(BuildContext context) {

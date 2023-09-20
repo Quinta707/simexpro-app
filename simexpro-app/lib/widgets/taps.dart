@@ -14,9 +14,9 @@ import 'dart:math';
 String imagen = '';
 enum MenuItem { item1, item2 }
 
-class Graficas extends StatefulWidget {
+class TapsProduccion extends StatefulWidget {
   @override
-  State<Graficas> createState() => TabBarDemo();
+  State<TapsProduccion> createState() => TabBarDemo();
 }
 
 Future<void> Imagen() async {
@@ -33,7 +33,7 @@ charts.Color getRandomColor() {
   return charts.Color(r: r, g: g, b: b, a: 255);
 }
 
-class TabBarDemo extends State<Graficas> {
+class TabBarDemo extends State<TapsProduccion> {
   num Conteo = 0;
   var ConteoMesPendiente = 0;
   var ConteoMesFinalizado = 0;
@@ -279,7 +279,7 @@ class TabBarDemo extends State<Graficas> {
   Widget build(BuildContext context) {
     // Genera una lista de colores aleatorios para el grafico pie
     final List<charts.Color> randomColors = List.generate(
-      data.length,
+      ClientesData.length,
       (_) => getRandomColor(),
     );
 
@@ -290,8 +290,7 @@ class TabBarDemo extends State<Graficas> {
         domainFn: (BarChartData data, _) => data.modu_Nombre,
         measureFn: (BarChartData data, _) => data.totalProduccionDia,
         labelAccessorFn: (BarChartData data, _) => '${data.porcentaje}%',
-        colorFn: (BarChartData data, int? index) => randomColors[
-            index ?? 0], // Asigna el color desde la lista de colores aleatorios
+        colorFn: (BarChartData data, int? index) => getRandomColor(), // Asigna el color desde la lista de colores aleatorios
         data: data, // Utiliza los datos de la API
       )
     ];

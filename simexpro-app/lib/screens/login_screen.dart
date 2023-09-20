@@ -13,11 +13,9 @@ class loginScreen extends StatefulWidget {
   State<loginScreen> createState() => _loginScreenState();
 }
 
-Future<void> fetchData(BuildContext context, String username, String password) async {
-  final tarea = {
-    'usua_Nombre':      username, 
-    'usua_Contrasenia': password 
-  };
+Future<void> fetchData(
+    BuildContext context, String username, String password) async {
+  final tarea = {'usua_Nombre': username, 'usua_Contrasenia': password};
   final jsonTarea = jsonEncode(tarea);
   final response = await http.post(
     Uri.parse('${apiUrl}Usuarios/Login'),
@@ -29,53 +27,51 @@ Future<void> fetchData(BuildContext context, String username, String password) a
   );
   if (response.statusCode == 200) {
     final decodedJson = jsonDecode(response.body);
-    final data = decodedJson["data"]; 
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-     prefs.setString('username', data['usua_Nombre']);
-     prefs.setString('email', data['empl_CorreoElectronico']);
-     prefs.setString('userfullname', data['emplNombreCompleto']);
-     prefs.setString('rol', data['role_Descripcion']);
-     prefs.setBool('esAduana', data['usua_esAduana']);
-     prefs.setString('image', data['usua_Image']);
+    final data = decodedJson["data"];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', data['usua_Nombre']);
+    prefs.setString('email', data['empl_CorreoElectronico']);
+    prefs.setString('userfullname', data['emplNombreCompleto']);
+    prefs.setString('rol', data['role_Descripcion']);
+    prefs.setBool('esAduana', data['empl_EsAduana']);
+    prefs.setString('image', data['usua_Image']);
     Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => NavBarRoots(),
-    ));
+        ));
   } else {
     CherryToast.error(
       title: Text('El usuario o contraseña son incorrectos',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+          style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
       borderRadius: 5,
     ).show(context);
   }
 }
 
-
 class _loginScreenState extends State<loginScreen> {
   bool passToggle = true;
-  String username = ''; 
+  String username = '';
   String password = '';
   @override
-  
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
         return false;
       },
       child: Material(
-          color: Colors.white,
-          child:  SingleChildScrollView(
-            child: SafeArea(
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage("https://i.ibb.co/0yqp5w1/fondo.png"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                child: Column(
+        color: Colors.white,
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://i.ibb.co/0yqp5w1/fondo.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Column(
                 children: [
                   SizedBox(height: 10),
                   Padding(
@@ -97,12 +93,17 @@ class _loginScreenState extends State<loginScreen> {
                           SizedBox(height: 15),
                           Padding(
                             padding: EdgeInsets.all(18),
-                            child:  Text('INICIO DE SESIÓN',
-                            style: TextStyle( fontWeight: FontWeight.bold, fontSize: 30, color: Color.fromRGBO(148, 82, 249, 1)),
+                            child: Text(
+                              'INICIO DE SESIÓN',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: Color.fromRGBO(148, 82, 249, 1)),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 18, left: 18, bottom: 18),
+                            padding: const EdgeInsets.only(
+                                right: 18, left: 18, bottom: 18),
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
@@ -145,48 +146,54 @@ class _loginScreenState extends State<loginScreen> {
                               ),
                             ),
                           ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 15, right: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end, 
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RecoverPasswordScreen(),
+                          Padding(
+                            padding: EdgeInsets.only(left: 15, right: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            RecoverPasswordScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    "¿Contraseña olvidada?",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal,
+                                      color: Color.fromRGBO(79, 70, 229, 1),
                                     ),
-                                  );
-                                },
-                                child: Text(
-                                  "¿Contraseña olvidada?",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.normal,
-                                    color: Color.fromRGBO(79, 70, 229, 1),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
                           Padding(
                             padding: const EdgeInsets.all(15),
                             child: InkWell(
                               onTap: () {
-                                if (username.isNotEmpty && password.isNotEmpty) {
+                                if (username.isNotEmpty &&
+                                    password.isNotEmpty) {
                                   fetchData(context, username, password);
                                 } else {
                                   CherryToast.warning(
-                                    title: Text('Llene los campos correctamente',
-                                        style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+                                    title: Text(
+                                        'Llene los campos correctamente',
+                                        style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 226, 226, 226))),
                                     borderRadius: 5,
                                   ).show(context);
                                 }
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20), 
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   color: Color.fromRGBO(79, 70, 229, 1),
@@ -203,7 +210,8 @@ class _loginScreenState extends State<loginScreen> {
                                   child: Text(
                                     "Iniciar sesión",
                                     style: TextStyle(
-                                      fontSize: 18, // Modifica el tamaño de la fuente
+                                      fontSize:
+                                          18, // Modifica el tamaño de la fuente
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     ),
@@ -213,17 +221,17 @@ class _loginScreenState extends State<loginScreen> {
                             ),
                           ),
                           SizedBox(height: 15)
-                          ],
-                        ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 200),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 200),
+                ],
               ),
             ),
           ),
         ),
+      ),
     );
   }
 }

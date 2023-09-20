@@ -23,7 +23,7 @@ Future<void> Imagen() async {
 class _SeachBarState extends State<SeachBar> {  
   int _selectedIndex = 0;
   final _screens = [
-    Graficas(),
+    TapsProduccion(),
     historialScreen(),
     TimelineScreen(),
   ];
