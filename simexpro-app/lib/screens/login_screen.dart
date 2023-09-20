@@ -102,8 +102,8 @@ class _loginScreenState extends State<loginScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
-                                right: 18, left: 18, bottom: 18),
+                              padding: const EdgeInsets.only(
+                                  right: 18, left: 18, bottom: 18),
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
