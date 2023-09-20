@@ -138,7 +138,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
             alignment: Alignment.center,
              decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage("https://i.ibb.co/0yqp5w1/fondo.png"),
+                    image:AssetImage("images/fondo.png"),
                     fit: BoxFit.cover,
                   ),
                 ),
