@@ -49,6 +49,7 @@ dependencies:
   floating_search_bar: ^0.3.0
   easy_search_bar: ^2.5.0
   qr_code_scanner: ^1.0.1
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

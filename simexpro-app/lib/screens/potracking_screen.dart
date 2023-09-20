@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 
 import '../widgets/navbar_roots.dart';
@@ -11,7 +12,6 @@ import 'login_screen.dart';
 
 // ignore: must_be_immutable
 class POTrackingScreen extends StatefulWidget {
-  // ignore: prefer_typing_uninitialized_variables
   final data;
   const POTrackingScreen({Key? key, required this.data}) : super(key: key);
 
@@ -50,9 +50,9 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
       elementos.text = "PENDIENTE";
       elementos.image = "pendientefinal.png";
     } else if(widget.data[0]["orco_EstadoOrdenCompra"] == 'C'){
-      elementos.linea1 = Colors.yellow;
-      elementos.linea2 = Colors.yellow;
-      elementos.tag = Colors.yellow[100];
+      elementos.linea1 = Colors.amber;
+      elementos.linea2 = Colors.amber;
+      elementos.tag = Colors.amber[100];
       elementos.text = "EN CURSO";
       elementos.image = "encurso.png";
     } else {
@@ -155,116 +155,142 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
       ),
       backgroundColor: const Color.fromRGBO(99, 74, 158, 1),
       body: 
-          Center(
-          child: Column(
-            children: [
-              Container(
-                height: (MediaQuery.of(context).size.height / 2) + 45,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50)),
-                  color: Colors.white),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 30),
-                    // ClipRRect(
-                    //   borderRadius: BorderRadius.circular(10),
-                    //   child: Text(
-                    //     "Orden de Compra: PRUE123",
-                    //     style: TextStyle(background: Paint()..color = Colors.black12
-                    //                     ..strokeWidth = 17
-                    //                     ..style = PaintingStyle.stroke,)
-                    //   ),  
-                    // ),
-                    Container(
-                      // width: ,
-                      padding: const EdgeInsets.all(12),
-                      decoration: const BoxDecoration(
-                            color: Colors.black12,
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                          ),
-                      child: Text(
-                        "Orden de Compra: ${widget.data[0]["orco_Codigo"]}",
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    GridView.count(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(20),
-                      crossAxisSpacing: 5.0,
-                      crossAxisCount: 3,
-                      childAspectRatio: 17.0,
-                      // height: ,
-                      children: <Widget>[
-                        // visualizarEstado(),
-                        // pendiente?
+          SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  //Carta blanca donde se encuentra el estado y las imágenes
+                  Container(
+                    height: (MediaQuery.of(context).size.height / 2) + 45,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(50),
+                        bottomRight: Radius.circular(50)),
+                      color: Colors.white),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 30),
+                        // ClipRRect(
+                        //   borderRadius: BorderRadius.circular(10),
+                        //   child: Text(
+                        //     "Orden de Compra: PRUE123",
+                        //     style: TextStyle(background: Paint()..color = Colors.black12
+                        //                     ..strokeWidth = 17
+                        //                     ..style = PaintingStyle.stroke,)
+                        //   ),  
+                        // ),
                         Container(
-                          decoration: BoxDecoration(
-                            color: elementos.linea1,
-                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          // width: ,
+                          padding: const EdgeInsets.all(12),
+                          decoration: const BoxDecoration(
+                                color: Colors.black12,
+                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                              ),
+                          child: Text(
+                            "Orden de Compra: ${widget.data[0]["orco_Codigo"]}",
                           ),
                         ),
-
-                        // encurso?
+                        const SizedBox(height: 10),
+                        GridView.count(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.all(20),
+                          crossAxisSpacing: 5.0,
+                          crossAxisCount: 3,
+                          childAspectRatio: 17.0,
+                          // height: ,
+                          children: <Widget>[
+                            // visualizarEstado(),
+                            // pendiente?
+                            Container(
+                              decoration: BoxDecoration(
+                                color: elementos.linea1,
+                                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                              ),
+                            ),
+            
+                            // encurso?
+                            Container(
+                              decoration: BoxDecoration(
+                                color: elementos.linea2,
+                                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                              ),
+                            ),
+                            
+                            Container(
+                              decoration: BoxDecoration(
+                                color: elementos.linea3,
+                                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                              ),
+                            ),
+                          ],
+                        ),   
+                        const SizedBox(height: 15),
                         Container(
+                          // width: ,
+                          padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: elementos.linea2,
-                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                color: elementos.tag,
+                                borderRadius: const BorderRadius.all(Radius.circular(18)),
+                              ),
+                          child: Wrap(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: elementos.linea1,
+                                ),
+                              width: 20.0 / 2,
+                              height: 20.0 / 2,
+                              ),
+                              const SizedBox(width: 7),
+                              Positioned(
+                                // right: 9.0,
+                                child: Text(
+                                  elementos.text,
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        
-                        Container(
-                          decoration: BoxDecoration(
-                            color: elementos.linea3,
-                            borderRadius: const BorderRadius.all(Radius.circular(8)),
-                          ),
-                        ),
+                        const SizedBox(height: 20),
+                        Image.asset(
+                          'images/trackingpos/${elementos.image}',
+                          height: (MediaQuery.of(context).size.height / 4) + 15,),
                       ],
-                    ),   
-                    const SizedBox(height: 15),
-                    Container(
-                      // width: ,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                            color: elementos.tag,
-                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    ),
+                  ),
+            
+                  const SizedBox(height: 15,),  
+            
+                  //Carrusel de ítems
+                  CarouselSlider(
+                      items: [1, 2, 3, 4, 5].map((e) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                      child: Wrap(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: elementos.linea1,
-                            ),
-                           width: 20.0 / 2,
-                           height: 20.0 / 2,
-                          ),
-                          const SizedBox(width: 7),
-                          Positioned(
-                            // right: 9.0,
+                          child: Center(
                             child: Text(
-                              elementos.text,
-                              style: const TextStyle(fontSize: 11),
+                              "text $e",
+                              style: const TextStyle(fontSize: 40),
                             ),
-                          )
-                        ],
+                          ),
+                        );
+                      }).toList(),
+                      options: CarouselOptions(
+                        height: 420,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    Image.asset(
-                      'images/trackingpos/${elementos.image}',
-                      height: (MediaQuery.of(context).size.height / 4) + 15,),
-                  ],
-                ),
+
+                  const SizedBox(height: 20,), 
+                ],
               ),
-                                
-            ],
+            ),
           ),
-        // child: Container(
-          // child: 
-        // ),
-      ),
     );
   }
 }
