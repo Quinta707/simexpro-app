@@ -9,6 +9,7 @@ import 'login_screen.dart';
 
 // ignore: must_be_immutable
 class POTrackingScreen extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final data;
   const POTrackingScreen({Key? key, required this.data}) : super(key: key);
 
@@ -21,10 +22,32 @@ Future<void> imagen() async {
   image = prefs.getString('image');
 }
 
+
 class _POTrackingScreenState extends State<POTrackingScreen> {
-  
-  @override 
+   
+   bool pendiente = false;
+   bool encurso = false;
+   bool terminada = false;
+   bool entregada = false;
+   final estado = Colors.red;
+   
+
+  visualizarEstado(){
+    if(widget.data[0]["orco_EstadoOrdenCompra"] == 'P'){
+      pendiente = true;
+    } else if(widget.data[0]["orco_EstadoOrdenCompra"] == 'C'){
+      pendiente = true;
+      encurso = true;
+    } else {
+      pendiente = true;
+      encurso = true;
+      terminada = true;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    visualizarEstado();
     return Scaffold (
       appBar: AppBar(
         title: const Image(
@@ -154,22 +177,27 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       childAspectRatio: 17.0,
                       // height: ,
                       children: <Widget>[
+                        // visualizarEstado(),
+                        // pendiente?
                         Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          decoration: BoxDecoration(
+                            color: estado,
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
                           ),
                         ),
+
+                        // encurso?
                         Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.black12,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          decoration: BoxDecoration(
+                            color: encurso ? Colors.yellow : Colors.black12,
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
                           ),
                         ),
+                        
                         Container(
-                          decoration: const BoxDecoration(
-                                          color: Colors.black12,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          decoration: BoxDecoration(
+                            color: terminada ? Colors.green : Colors.black12,
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
                           ),
                         ),
                       ],
@@ -179,25 +207,31 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       // width: ,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                            color: Colors.red[100],
+                            color: widget.data[0]["orco_EstadoOrdenCompra"] == 'P'  ? Colors.red[100] 
+                                    : widget.data[0]["orco_EstadoOrdenCompra"] == 'C' ? Colors.yellow[100]
+                                    : Colors.green[100],
                             borderRadius: const BorderRadius.all(Radius.circular(18)),
                           ),
                       child: Wrap(
                         children: [
                           Container(
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.red,
+                              color: widget.data[0]["orco_EstadoOrdenCompra"] == 'P'  ? Colors.red 
+                                    : widget.data[0]["orco_EstadoOrdenCompra"] == 'C' ? Colors.yellow
+                                    : Colors.green,
                             ),
                            width: 20.0 / 2,
                            height: 20.0 / 2,
                           ),
                           const SizedBox(width: 7),
-                          const Positioned(
+                          Positioned(
                             // right: 9.0,
                             child: Text(
-                              "PENDIENTE",
-                              style: TextStyle(fontSize: 11),
+                              widget.data[0]["orco_EstadoOrdenCompra"] == 'P'  ? "PENDIENTE"
+                              : widget.data[0]["orco_EstadoOrdenCompra"] == 'C' ? "EN CURSO"
+                              : "TERMINADA",
+                              style: const TextStyle(fontSize: 11),
                             ),
                           )
                         ],
@@ -205,7 +239,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                     ),
                     const SizedBox(height: 20),
                     Image.asset(
-                      'images/trackingpos/pendientefinal.png',
+                      'images/trackingpos/encurso.png',
                       height: (MediaQuery.of(context).size.height / 4) + 15,),
                   ],
                 ),
