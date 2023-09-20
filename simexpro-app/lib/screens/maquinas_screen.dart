@@ -79,7 +79,7 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
 class _MaquinasScreenState extends State<MaquinasScreen> {
   int _selectedIndex = 0;
   final _screens = [
-    Graficas(),
+    TapsProduccion(),
     historialScreen(),
     TimelineScreen(),
   ];
