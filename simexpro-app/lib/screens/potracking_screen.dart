@@ -153,7 +153,8 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         //   onPressed: () {},
         // ),
       ),
-      backgroundColor: const Color.fromRGBO(99, 74, 158, 1),
+      backgroundColor: const Color.fromARGB(255, 129, 100, 197),
+      // backgroundColor: Colors.white70,
       body: 
           SingleChildScrollView(
             child: Center(
@@ -262,16 +263,29 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                   ),
             
                   const SizedBox(height: 15,),  
+
+                  // const ItemsContainer(),
             
                   //Carrusel de ítems
                   CarouselSlider(
                       items: [1, 2, 3, 4, 5].map((e) {
                         return Container(
                           width: MediaQuery.of(context).size.width,
+                          height: 100,
                           margin: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
                           decoration: BoxDecoration(
-                            color: Colors.amber,
-                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                spreadRadius: 3,
+                                blurRadius: 1
+                                // blurRadius: 1,
+                                // offset: const Offset(0, 3)
+                              )
+                            ]
                           ),
                           child: Center(
                             child: Text(
@@ -291,6 +305,40 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
               ),
             ),
           ),
+    );
+  }
+}
+
+class ItemsContainer extends StatelessWidget {
+  const ItemsContainer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.black
+        ),
+        boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                spreadRadius: 5,
+                                // blurRadius: 1,
+                                // offset: const Offset(0, 3)
+                              )
+                            ]
+      ),
+      child: Column(
+        children: const <Widget>[
+          Text("info 1"),
+          Text("info 2"),
+          Text("info 3"),
+        ]
+      ),
     );
   }
 }
