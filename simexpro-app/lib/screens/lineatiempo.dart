@@ -58,13 +58,28 @@ class Timeline extends StatelessWidget {
         itemBuilder: (context, index) {
           return TimelineTile(
             alignment: TimelineAlign.center,
+            // endChild: isLeftChild ? null : child,
+            // startChild: isLeftChild ? child : null,
             isFirst: index == 0,
             isLast: index == 4,
             indicatorStyle: IndicatorStyle(
-              
-              width: 38,
+              height: 30,
+              drawGap: true,
+              indicator: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle, 
+                  border: Border.fromBorderSide(
+                    BorderSide(
+                      color: Colors.black
+                    ),
+                  ),
+                ),
+                child: Center(
+                  child: Icon(Icons.precision_manufacturing),
+                ),
+              ),
+              width: 30,
               color: Colors.white,
-              iconStyle: IconStyle(iconData: Icons.precision_manufacturing)
             ),
             beforeLineStyle: LineStyle(color: Colors.black, thickness: 1),
             afterLineStyle: LineStyle(color: Colors.black, thickness: 1),
@@ -101,10 +116,10 @@ class Timeline extends StatelessWidget {
                     color: Colors.transparent,
                     child: Tooltip(
                       message: 'auxilio',
-                      child: Text('Descripción del evento $index'),
-                    ),
+                      child: Text('Descripción del evento $index el cual no se si es responsive'),
                   ),
                 ),
+              ),
             ),
           );
         },

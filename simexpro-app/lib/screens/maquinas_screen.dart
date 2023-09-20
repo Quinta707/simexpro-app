@@ -224,8 +224,7 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         backgroundColor: Color.fromRGBO(99, 74, 158, 1),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       ),
                       onPressed: () {
                         searchValue == null || searchValue == ""
@@ -250,9 +249,151 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(15),
+                child: ListView(
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    TimelineTile(
+                      alignment: TimelineAlign.manual,
+                      lineXY: 0.1,
+                      isFirst: true,
+                      indicatorStyle: const IndicatorStyle(
+                        width: 20,
+                        color: Color.fromRGBO(99, 74, 158, 1),
+                        padding: EdgeInsets.all(6),
+                      ),
+                      endChild: const _RightChild(
+                        asset: 'images/maquina.png',
+                        title: '14/9/2023, 6:00:00',
+                        message: 'Dice ahí que algo se desarmó a medio uso, nose',
+                      ),
+                      beforeLineStyle: const LineStyle(
+                        color: Color.fromRGBO(99, 74, 158, 1),
+                      ),
+                    ),
+                    TimelineTile(
+                      alignment: TimelineAlign.manual,
+                      lineXY: 0.1,
+                      indicatorStyle: const IndicatorStyle(
+                        width: 20,
+                        color: Color.fromRGBO(99, 74, 158, 1),
+                        padding: EdgeInsets.all(6),
+                      ),
+                      endChild: const _RightChild(
+                        asset: 'images/maquina.png',
+                        title: '12/9/2023, 6:00:00',
+                        message: 'There i was i can´t deny',
+                      ),
+                      beforeLineStyle: const LineStyle(
+                        color: Color.fromRGBO(99, 74, 158, 1),
+                      ),
+                    ),
+                    TimelineTile(
+                      alignment: TimelineAlign.manual,
+                      lineXY: 0.1,
+                      indicatorStyle: const IndicatorStyle(
+                        width: 20,
+                        color: Color.fromRGBO(99, 74, 158, 1),
+                        padding: EdgeInsets.all(6),
+                      ),
+                      endChild: const _RightChild(
+                        asset: 'images/maquina.png',
+                        title: 'Order Processed',
+                        message: 'Forcing laughter, faking smiles',
+                      ),
+                      beforeLineStyle: const LineStyle(
+                        color: Color.fromRGBO(99, 74, 158, 1),
+                      ),
+                      afterLineStyle: const LineStyle(
+                        color: Color(0xFFDADADA),
+                      ),
+                    ),
+                    TimelineTile(
+                      alignment: TimelineAlign.manual,
+                      lineXY: 0.1,
+                      isLast: true,
+                      indicatorStyle: const IndicatorStyle(
+                        width: 20,
+                        color: Color(0xFFDADADA),
+                        padding: EdgeInsets.all(6),
+                      ),
+                      endChild: const _RightChild(
+                        asset: 'images/maquina.png',
+                        title: 'Ready to Pickup',
+                        message: 'Same old tired lonely place',
+                      ),
+                      beforeLineStyle: const LineStyle(
+                        color: Color(0xFFDADADA),
+                      ),
+                    ),
+                  ],
+                ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+class _RightChild extends StatelessWidget {
+  const _RightChild({
+    required this.asset,
+    required this.title,
+    required this.message,
+  });
+
+  final String asset;
+  final String title;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        children: <Widget>[
+          Opacity(
+            child: Image.asset(asset, height: 50),
+            opacity: 1,
+          ),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ), 
+              ),
+              const SizedBox(height: 6),
+              Padding(
+                padding: EdgeInsets.all(0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    color: Colors.transparent,
+                    child: Tooltip(
+                      message: message,
+                      child: Text(
+                        message,
+                        style: TextStyle(
+                        color: Color(0xFF636564),
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+ 
