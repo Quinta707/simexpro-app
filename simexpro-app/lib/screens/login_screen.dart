@@ -43,7 +43,8 @@ Future<void> fetchData(
   } else {
     CherryToast.error(
       title: Text('El usuario o contraseña son incorrectos',
-          style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+          style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+          textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
   }
@@ -185,8 +186,8 @@ class _loginScreenState extends State<loginScreen> {
                                     title: Text(
                                         'Llene los campos correctamente',
                                         style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 226, 226, 226))),
+                                            color: Color.fromARGB(255, 226, 226, 226)),
+                                            textAlign: TextAlign.justify),
                                     borderRadius: 5,
                                   ).show(context);
                                 }
