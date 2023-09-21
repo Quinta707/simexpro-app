@@ -18,6 +18,7 @@ import 'package:timeline_list/timeline_model.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 List datamaquina = [];
+int valor = 0;
 
 class MaquinasScreen extends StatefulWidget {
   const MaquinasScreen({Key? key}) : super(key: key);
@@ -61,8 +62,6 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
     }
     print(data[i]['maquinaNumeroSerie'].toString());
   }
-  print(numserie);
-  print(filteredlist);
   filteredlist.isEmpty
       ? CherryToast.error(
           title: Text('El número de máquina no existe',
@@ -70,9 +69,13 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
           borderRadius: 5,
         ).show(context)
       : CherryToast.success(
-          title: Text('Trae los datos', style: TextStyle(color: Colors.white)),
+          title: Text('ayer tuve un amor que hoy me abandonó porque no me quería,', style: TextStyle(color: Colors.white)),
           borderRadius: 5,
         ).show(context);
+        valor = 1;
+        setState(){
+
+        }
   datamaquina = data;
 }
 
@@ -193,7 +196,7 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(148, 82, 249, 1),
+                      color: Color.fromRGBO(99, 74, 158, 1),
                     ),
                   ),
                 ),
@@ -249,87 +252,9 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-                child: ListView(
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    TimelineTile(
-                      alignment: TimelineAlign.manual,
-                      lineXY: 0.1,
-                      isFirst: true,
-                      indicatorStyle: const IndicatorStyle(
-                        width: 20,
-                        color: Color.fromRGBO(99, 74, 158, 1),
-                        padding: EdgeInsets.all(6),
-                      ),
-                      endChild: const _RightChild(
-                        asset: 'images/maquina.png',
-                        title: '14/9/2023, 6:00:00',
-                        message: 'Dice ahí que algo se desarmó a medio uso, nose',
-                      ),
-                      beforeLineStyle: const LineStyle(
-                        color: Color.fromRGBO(99, 74, 158, 1),
-                      ),
-                    ),
-                    TimelineTile(
-                      alignment: TimelineAlign.manual,
-                      lineXY: 0.1,
-                      indicatorStyle: const IndicatorStyle(
-                        width: 20,
-                        color: Color.fromRGBO(99, 74, 158, 1),
-                        padding: EdgeInsets.all(6),
-                      ),
-                      endChild: const _RightChild(
-                        asset: 'images/maquina.png',
-                        title: '12/9/2023, 6:00:00',
-                        message: 'There i was i can´t deny',
-                      ),
-                      beforeLineStyle: const LineStyle(
-                        color: Color.fromRGBO(99, 74, 158, 1),
-                      ),
-                    ),
-                    TimelineTile(
-                      alignment: TimelineAlign.manual,
-                      lineXY: 0.1,
-                      indicatorStyle: const IndicatorStyle(
-                        width: 20,
-                        color: Color.fromRGBO(99, 74, 158, 1),
-                        padding: EdgeInsets.all(6),
-                      ),
-                      endChild: const _RightChild(
-                        asset: 'images/maquina.png',
-                        title: 'Order Processed',
-                        message: 'Forcing laughter, faking smiles',
-                      ),
-                      beforeLineStyle: const LineStyle(
-                        color: Color.fromRGBO(99, 74, 158, 1),
-                      ),
-                      afterLineStyle: const LineStyle(
-                        color: Color(0xFFDADADA),
-                      ),
-                    ),
-                    TimelineTile(
-                      alignment: TimelineAlign.manual,
-                      lineXY: 0.1,
-                      isLast: true,
-                      indicatorStyle: const IndicatorStyle(
-                        width: 20,
-                        color: Color(0xFFDADADA),
-                        padding: EdgeInsets.all(6),
-                      ),
-                      endChild: const _RightChild(
-                        asset: 'images/maquina.png',
-                        title: 'Ready to Pickup',
-                        message: 'Same old tired lonely place',
-                      ),
-                      beforeLineStyle: const LineStyle(
-                        color: Color(0xFFDADADA),
-                      ),
-                    ),
-                  ],
-                ),
-            ),
+            valor == 0
+            ? SizedBox(height: 2)
+            : RightChild(),
           ],
         ),
       ),
@@ -337,63 +262,104 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
   }
 }
 
-class _RightChild extends StatelessWidget {
-  const _RightChild({
-    required this.asset,
-    required this.title,
-    required this.message,
-  });
-
-  final String asset;
-  final String title;
-  final String message;
-
+class RightChild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        children: <Widget>[
-          Opacity(
-            child: Image.asset(asset, height: 50),
-            opacity: 1,
-          ),
-          const SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                title,
-                style: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ), 
-              ),
-              const SizedBox(height: 6),
-              Padding(
-                padding: EdgeInsets.all(0),
-                  child: Container(
-                    alignment: Alignment.center,
-                    color: Colors.transparent,
-                    child: Tooltip(
-                      message: message,
-                      child: Text(
-                        message,
-                        style: TextStyle(
-                        color: Color(0xFF636564),
-                        fontSize: 16,
-                      ),
+    return
+    Padding(
+      padding: const EdgeInsets.all(15),
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+              itemCount: datamaquina.length,
+              itemBuilder: (BuildContext context, int index){
+                return TimelineTile(
+                  alignment: TimelineAlign.manual,
+                  lineXY: 0.1,
+                  isFirst: index == 0,
+                  indicatorStyle: IndicatorStyle(
+                    drawGap: true,
+                    height: 40,
+                    width: 40,
+                    color: Color.fromRGBO(99, 74, 158, 1),
+                    padding: EdgeInsets.all(6),
+                    indicator: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle, 
+                            border: Border.fromBorderSide(
+                              BorderSide(
+                                color: Color.fromRGBO(99, 74, 158, 1),
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                          child: Center( 
+                            child: Icon(
+                              Icons.precision_manufacturing_rounded, 
+                              color: Color.fromRGBO(99, 74, 158, 1),
+                            ),
+                          )
+                        )
+                  ),
+                  beforeLineStyle: const LineStyle(
+                    color: Color.fromRGBO(99, 74, 158, 1),
+                    thickness: 2,
+                  ),
+                  afterLineStyle: const LineStyle(
+                    color: Color.fromRGBO(99, 74, 158, 1),
+                    thickness: 2,
+                  ),
+                  startChild: null,
+                  endChild: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: <Widget>[
+                        Opacity(
+                          child: Image.asset('images/maquina.png', height: 50),
+                          opacity: 1,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                datamaquina[0]['mahi_FechaInicio'],
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ), 
+                              ),
+                              const SizedBox(height: 6),
+                              Padding(
+                                padding: EdgeInsets.all(0),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.transparent,
+                                    child: Tooltip(
+                                      message: datamaquina[0]['mahi_Observaciones'],
+                                      child: Text(
+                                        datamaquina[0]['mahi_Observaciones'],
+                                        style: TextStyle(
+                                        color: Color(0xFF636564),
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+                );
+              }
+            ), 
+          );
   }
 }
  
