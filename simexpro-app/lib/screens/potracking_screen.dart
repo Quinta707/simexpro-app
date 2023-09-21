@@ -3,8 +3,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+// import 'package:carousel_slider/carousel_slider.dart';
 import 'package:simexpro/screens/profile_screen.dart';
+import 'package:simexpro/screens/widget/panel_widget.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../widgets/navbar_roots.dart';
 import 'home_screen.dart';
@@ -28,6 +30,7 @@ class Elementos {
   var linea1 = Colors.black12;
   var linea2 = Colors.black12;
   var linea3 = Colors.black12;
+  // ignore: avoid_init_to_null
   var tag = null;
   String text = '';
   String image = '';
@@ -38,6 +41,7 @@ class Elementos {
 class _POTrackingScreenState extends State<POTrackingScreen> {
    
    var elementos = Elementos();
+   final panelController = PanelController();
   //  final elementos = {
   //   final linea1;
   //  };
@@ -67,6 +71,9 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.3;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.70;
+
     visualizarEstado();
     return Scaffold (
       appBar: AppBar(
@@ -153,21 +160,31 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         //   onPressed: () {},
         // ),
       ),
-      backgroundColor: const Color.fromARGB(255, 129, 100, 197),
+      // backgroundColor: const Color.fromARGB(255, 129, 100, 197),
       // backgroundColor: Colors.white70,
-      body: 
+      body: SlidingUpPanel(
+        color: const Color.fromARGB(255, 129, 100, 197),
+        controller: panelController,
+        maxHeight: panelHeightOpen,
+        minHeight: panelHeightClosed,
+        panelBuilder: (controller) => PanelWidget(
+          controller: controller,
+          panelController: panelController,
+        ),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+        body: 
           SingleChildScrollView(
             child: Center(
-              child: Column(
-                children: [
+              // child: Column(
+                // children: [
                   //Carta blanca donde se encuentra el estado y las imágenes
-                  Container(
-                    height: (MediaQuery.of(context).size.height / 2) + 45,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(50),
-                        bottomRight: Radius.circular(50)),
-                      color: Colors.white),
+                  // Container(
+                  //   height: (MediaQuery.of(context).size.height / 2) + 45,
+                  //   decoration: const BoxDecoration(
+                  //     borderRadius: BorderRadius.only(
+                  //       bottomLeft: Radius.circular(50),
+                  //       bottomRight: Radius.circular(50)),
+                  //     color: Colors.white),
                     child: Column(
                       children: [
                         const SizedBox(height: 30),
@@ -258,53 +275,55 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                         Image.asset(
                           'images/trackingpos/${elementos.image}',
                           height: (MediaQuery.of(context).size.height / 4) + 15,),
+
                       ],
                     ),
                   ),
             
-                  const SizedBox(height: 15,),  
+                  // const SizedBox(height: 15,),  
 
                   // const ItemsContainer(),
             
                   //Carrusel de ítems
-                  CarouselSlider(
-                      items: [1, 2, 3, 4, 5].map((e) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 100,
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(25),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                spreadRadius: 3,
-                                blurRadius: 1
-                                // blurRadius: 1,
-                                // offset: const Offset(0, 3)
-                              )
-                            ]
-                          ),
-                          child: Center(
-                            child: Text(
-                              "text $e",
-                              style: const TextStyle(fontSize: 40),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      options: CarouselOptions(
-                        height: 420,
-                      ),
-                    ),
+                  // CarouselSlider(
+                  //     items: [1, 2, 3, 4, 5].map((e) {
+                  //       return Container(
+                  //         width: MediaQuery.of(context).size.width,
+                  //         height: 100,
+                  //         margin: const EdgeInsets.symmetric(horizontal: 5),
+                  //         padding: const EdgeInsets.symmetric(horizontal: 12),
+                  //         decoration: BoxDecoration(
+                  //           color: Colors.white,
+                  //           borderRadius: BorderRadius.circular(25),
+                  //           boxShadow: const [
+                  //             BoxShadow(
+                  //               color: Colors.black12,
+                  //               spreadRadius: 3,
+                  //               blurRadius: 1
+                  //               // blurRadius: 1,
+                  //               // offset: const Offset(0, 3)
+                  //             )
+                  //           ]
+                  //         ),
+                  //         child: Center(
+                  //           child: Text(
+                  //             "text $e",
+                  //             style: const TextStyle(fontSize: 40),
+                  //           ),
+                  //         ),
+                  //       );
+                  //     }).toList(),
+                  //     options: CarouselOptions(
+                  //       height: 420,
+                  //     ),
+                  //   ),
 
-                  const SizedBox(height: 20,), 
-                ],
-              ),
+                  // const SizedBox(height: 20,), 
+                // ],
+              // ),
             ),
-          ),
+          // ),
+      )
     );
   }
 }
