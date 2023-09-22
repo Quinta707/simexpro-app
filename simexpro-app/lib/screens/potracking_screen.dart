@@ -163,7 +163,9 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
       // backgroundColor: const Color.fromARGB(255, 129, 100, 197),
       // backgroundColor: Colors.white70,
       body: SlidingUpPanel(
-        color: Color.fromARGB(255, 134, 111, 189),
+        backdropEnabled: true,
+        // color: Color.fromARGB(255, 134, 111, 189),
+        color: Color.fromARGB(255, 245, 239, 239),
         controller: panelController,
         maxHeight: panelHeightOpen,
         minHeight: panelHeightClosed,
