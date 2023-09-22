@@ -225,33 +225,41 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                   ButtonTheme(
                     height: 20,
                     child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        backgroundColor: Color.fromRGBO(99, 74, 158, 1),
-                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      onPressed: () {
-                        searchValue == null || searchValue == ""
-                            ? CherryToast.warning(
-                                title: Text('Llene los campos correctamente',
-                                    style: TextStyle(color: Colors.white),
-                                    textAlign: TextAlign.justify),
-                                borderRadius: 5,
-                              ).show(context)
-                            : TraerDatos(context, searchValue);
-                      },
-                      icon: Icon(Icons.search),
-                      label: Text(
-                        'Buscar',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                      backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    ),
+                    onPressed: () async {
+                      if (searchValue != null && searchValue != "") {
+                        await TraerDatos(context, searchValue);
+                        if (datamaquina.isNotEmpty) {
+                          setState(() {
+                            valor = 1;
+                          });
+                        }
+                      } else {
+                        CherryToast.warning(
+                          title: Text('Llene los campos correctamente',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.justify),
+                          borderRadius: 5,
+                        ).show(context);
+                      }
+                    },
+                    icon: Icon(Icons.search),
+                    label: Text(
+                      'Buscar',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
+                  ),
+
                   ),
                 ],
               ),
@@ -281,6 +289,7 @@ class RightChild extends StatelessWidget {
               alignment: TimelineAlign.manual,
               lineXY: 0.1,
               isFirst: index == 0,
+              isLast: index == datamaquina.length - 1,
               indicatorStyle: IndicatorStyle(
                 drawGap: true,
                 height: 40,
@@ -329,12 +338,13 @@ class RightChild extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            datamaquina[0]['mahi_FechaInicio'],
+                            datamaquina[index]['mahi_FechaInicio'],
                             style: TextStyle(
                               color: Color.fromARGB(255, 0, 0, 0),
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
                             ), 
+                            textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 6),
                           Padding(
@@ -343,13 +353,14 @@ class RightChild extends StatelessWidget {
                                 alignment: Alignment.center,
                                 color: Colors.transparent,
                                 child: Tooltip(
-                                  message: datamaquina[0]['mahi_Observaciones'],
+                                  message: datamaquina[index]['mahi_Observaciones'],
                                   child: Text(
-                                    datamaquina[0]['mahi_Observaciones'],
+                                    datamaquina[index]['mahi_Observaciones'],
                                     style: TextStyle(
                                     color: Color(0xFF636564),
                                     fontSize: 16,
                                   ),
+                                  textAlign: TextAlign.justify,
                                 ),
                               ),
                             ),
