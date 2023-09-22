@@ -39,12 +39,12 @@ List<dynamic> Lista(List data, String numserie) {
       filtrado.addAll(data as Iterable<String>);
     }
   }
-  print(filtrado);
-  print('abajodefiltrado');
   return filtrado;
 }
 
 Future<void> TraerDatos(BuildContext context, String numserie) async {
+  datamaquina = [];
+  valor = 0;
   final response = await http.get(
     Uri.parse('${apiUrl}MaquinaHistorial/Listar'),
     headers: {
@@ -60,26 +60,27 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
     if (data[i]["maquinaNumeroSerie"].toString() == numserie) {
       filteredlist.add(data[i]);
     }
-    print(data[i]['maquinaNumeroSerie'].toString());
   }
   filteredlist.isEmpty
-      ? CherryToast.error(
+      ? 
+      CherryToast.error(
           title: Text('El número de máquina no existe',
             style: TextStyle(color: Colors.white),
             textAlign: TextAlign.justify),
           borderRadius: 5,
         ).show(context)
+        
       : CherryToast.success(
           title: Text('ayer tuve un amor que hoy me abandonó porque no me quería, fue tanta mi ilusión por hacerla feliz pero todo fue en vano', 
             style: TextStyle(color: Colors.white), 
             textAlign: TextAlign.justify),
           borderRadius: 5,
         ).show(context);
+        datamaquina = data;
         valor = 1;
         setState(){
 
         }
-  datamaquina = data;
 }
 
 class _MaquinasScreenState extends State<MaquinasScreen> {
@@ -238,6 +239,11 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                         if (datamaquina.isNotEmpty) {
                           setState(() {
                             valor = 1;
+                          });
+                        }
+                        else{
+                          setState(() {
+                            valor = 0;
                           });
                         }
                       } else {
