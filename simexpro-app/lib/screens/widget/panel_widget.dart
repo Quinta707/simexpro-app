@@ -149,7 +149,7 @@ class PanelWidget extends StatelessWidget{
                         const SizedBox(width: 6),
                         ConstrainedBox(
                           constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.20,
+                            maxWidth: MediaQuery.of(context).size.width * 0.21,
                           ),
                           // width: MediaQuery.of(context).size.width * 0.20,
                           child: const Text(
@@ -239,7 +239,7 @@ class PanelWidget extends StatelessWidget{
                         const SizedBox(width: 6),
                         ConstrainedBox(
                           constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.20,
+                            maxWidth: MediaQuery.of(context).size.width * 0.21,
                           ),
                           child: const Text(
                             "ESTAMPADO",
