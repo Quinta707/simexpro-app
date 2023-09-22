@@ -147,10 +147,17 @@ class PanelWidget extends StatelessWidget{
                         height: 20.0 / 2,
                         ),
                         const SizedBox(width: 6),
-                        const Text(
-                          "CORTE DE TELA",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 11),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.20,
+                          ),
+                          // width: MediaQuery.of(context).size.width * 0.20,
+                          child: const Text(
+                            "CORTE DE TELA",
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 11),
+                            textAlign: TextAlign.end,
+                          ),
                         ),
                       ],
                     ),
@@ -230,9 +237,16 @@ class PanelWidget extends StatelessWidget{
                         height: 20.0 / 2,
                         ),
                         const SizedBox(width: 6),
-                        const Text(
-                          "ESTAMPADO",
-                          style: TextStyle(fontSize: 11),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.20,
+                          ),
+                          child: const Text(
+                            "ESTAMPADO",
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 11),
+                            textAlign: TextAlign.end,
+                          ),
                         ),
                       ],
                     ),
