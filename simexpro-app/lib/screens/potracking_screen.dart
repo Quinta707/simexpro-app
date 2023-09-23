@@ -165,7 +165,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
       body: SlidingUpPanel(
         backdropEnabled: true,
         // color: Color.fromARGB(255, 134, 111, 189),
-        color: Color.fromARGB(255, 245, 239, 239),
+        color: const Color.fromARGB(255, 134, 111, 189),
         controller: panelController,
         maxHeight: panelHeightOpen,
         minHeight: panelHeightClosed,
@@ -284,13 +284,13 @@ class ItemsContainer extends StatelessWidget {
           color: Colors.black
         ),
         boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                spreadRadius: 5,
-                                // blurRadius: 1,
-                                // offset: const Offset(0, 3)
-                              )
-                            ]
+          BoxShadow(
+            color: Colors.black12,
+            spreadRadius: 5,
+            // blurRadius: 1,
+            // offset: const Offset(0, 3)
+          )
+        ]
       ),
       child: Column(
         children: const <Widget>[

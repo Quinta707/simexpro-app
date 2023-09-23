@@ -259,7 +259,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       Navigator.push(
                         context, 
                         MaterialPageRoute(
-                          builder: (context) => QRScannerScreen(),
+                          builder: (context) => const   QRScannerScreen(),
                         )
                       );
                     },

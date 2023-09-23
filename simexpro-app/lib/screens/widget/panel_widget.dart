@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../itemtracking_screen.dart';
+
 class PanelWidget extends StatelessWidget{
   final ScrollController controller;
   final PanelController panelController;
@@ -100,92 +102,123 @@ class PanelWidget extends StatelessWidget{
 
         //Items
         Container(
-          height: 135,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                // color:  Color.fromARGB(255, 119, 86, 195).withOpacity(0.5),
-                // color:  Colors.deepPurple.withOpacity(0.5),
-                color:  Colors.grey.withOpacity(0.5),
-                spreadRadius: 3,
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              )
-            ],
-          ),
-          child: Stack(
-            // alignment: Alignment.center,
-            children: [
-              const Positioned(
-                top: 23,
-                left: 15,
-                child: Text(
-                  "Código de ítem: 314",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Positioned(
-                width: MediaQuery.of(context).size.width * 0.25,
-                top: 26,
-                right: 17,
-                  child: Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: Wrap(
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.green,
-                          ),
-                        width: 20.0 / 2,
-                        height: 20.0 / 2,
+        height: 135,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.deepPurple.withOpacity(0.5),
+              spreadRadius: 3,
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            )
+          ],
+        ),
+        child: Material(
+          borderRadius: BorderRadius.circular(15),
+          child: InkWell(
+            splashColor: Colors.grey,
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ItemTrackingScreen(),
+                )
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.53, // 60% of the width
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 15, top: 23),
+                      child: Text(
+                        "Código de ítem: 314",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(width: 6),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.21,
-                          ),
-                          // width: MediaQuery.of(context).size.width * 0.20,
-                          child: const Text(
-                            "CORTE DE TELA",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 11),
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
-                      ],
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                      ),
                     ),
                   ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 18, top: 26),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.green,
+                              ),
+                              width: 20.0 / 2,
+                              height: 20.0 / 2,
+                            ),
+                            //Dot and text separator
+                            const SizedBox(width: 6),
+                            const Flexible(
+                              child: Text(
+                                // softWrap: false,
+                                "CORTE DE TELA",
+                                // overflow: TextOverflow.clip,
+                                style: TextStyle(fontSize: 11),
+                                textAlign: TextAlign.end,
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              // const Divider(),
-              Positioned(
-                width: MediaQuery.of(context).size.width,
-                top: 65,
-                left: 15,
-                child: const Text(
-                  "ESTILO: Escotada, TALLA: Extra Extra Smallaaaaaaaaaaapopopowwwww",
-                  // maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 13),
-                )
-              ),
-              const Positioned(
-                top: 87,
-                left: 15,
-                child: Text(
-                  "CANTIDAD: 50",
-                  style: TextStyle(fontSize: 13),
-                )
-              ),
-            ],
+          
+          
+          
+                const Padding(
+                  padding: EdgeInsets.only(left: 15, top: 16, right: 18),
+                  child: Text(
+                    // softWrap: false,
+                    "ESTILO: Escotada, TALLA: Extra Extra Small",
+                    // overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    style: TextStyle(fontSize: 13),
+                  ),
+                ),
+          
+                const Padding(
+                  padding: EdgeInsets.only(left: 15, top: 6, right: 18),
+                  child: Text(
+                    "COLOR: ANARANJADO, CANTIDAD: 50",
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    style: TextStyle(fontSize: 13),
+                  ),
+                ),
+          
+              ],
+            ),
           ),
         ),
+      ),
+
 
         const SizedBox(height: 27),
 
@@ -199,7 +232,7 @@ class PanelWidget extends StatelessWidget{
             boxShadow: [
               BoxShadow(
                 // color:  Color.fromARGB(255, 119, 86, 195).withOpacity(0.5),
-                color:  Colors.grey.withOpacity(0.5),
+                color:  Colors.deepPurple.withOpacity(0.5),
                 spreadRadius: 3,
                 blurRadius: 10,
                 offset: const Offset(0, 3),
