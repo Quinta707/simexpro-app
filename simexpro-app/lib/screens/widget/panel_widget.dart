@@ -120,6 +120,7 @@ class PanelWidget extends StatelessWidget{
           borderRadius: BorderRadius.circular(15),
           child: InkWell(
             splashColor: Colors.grey,
+            borderRadius: BorderRadius.circular(15),
             onTap: (){
               Navigator.push(
                 context,

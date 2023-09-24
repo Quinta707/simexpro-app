@@ -17,7 +17,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
   @override
   Widget build(BuildContext context){
 
-    TabController _tabController = 
+    TabController _TabController = 
     TabController(length: 2, vsync: this);
 
     return Scaffold(
@@ -109,7 +109,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
         children: [
           Container(
             child: TabBar(
-              controller: _tabController,
+              controller: _TabController,
               labelColor: Colors.black,
               unselectedLabelColor: Colors.grey,
               tabs: const [
@@ -122,7 +122,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
             width: double.maxFinite,
             height: 300,
             child: TabBarView(
-              controller: _tabController,
+              controller: _TabController,
               children: const [
                 Text("Hi"),
                 Text("what's up?")
