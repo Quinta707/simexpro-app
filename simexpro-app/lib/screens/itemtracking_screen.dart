@@ -12,10 +12,14 @@ class ItemTrackingScreen extends StatefulWidget {
   State<ItemTrackingScreen> createState() => _ItemTrackingScreenState();
 }
 
-class _ItemTrackingScreenState extends State<ItemTrackingScreen>{
+class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context){
+
+    TabController _tabController = 
+    TabController(length: 2, vsync: this);
+
     return Scaffold(
       appBar: AppBar(
         title: const Image(
@@ -104,16 +108,22 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen>{
       body: Column(
         children: [
           Container(
-            child: const TabBar(
-              tabs: [
+            child: TabBar(
+              controller: _tabController,
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey,
+              tabs: const [
                 Tab(text: "Información general",),
-                Tab(text: "Información de proceso")
+                Tab(text: "Proceso")
               ],
             ),
           ),
           Container(
-            child: const TabBarView(
-              children: [
+            width: double.maxFinite,
+            height: 300,
+            child: TabBarView(
+              controller: _tabController,
+              children: const [
                 Text("Hi"),
                 Text("what's up?")
               ],
