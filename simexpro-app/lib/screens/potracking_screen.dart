@@ -71,7 +71,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final panelHeightClosed = MediaQuery.of(context).size.height * 0.3;
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.16;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.70;
 
     visualizarEstado();
@@ -154,12 +154,8 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
           )
         ],
         backgroundColor: const Color.fromRGBO(17, 24, 39, 1),
-        // leading: IconButton(
-        //   icon: const Icon(Icons.menu),
-        //   tooltip: 'Menú',
-        //   onPressed: () {},
-        // ),
       ),
+
       // backgroundColor: const Color.fromARGB(255, 129, 100, 197),
       // backgroundColor: Colors.white70,
       body: SlidingUpPanel(
@@ -179,7 +175,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
             child: Center(
               child: Column(
                 children: [
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   Container(
                     // width: ,
                     padding: const EdgeInsets.all(12),
@@ -191,7 +187,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       "Orden de Compra: ${widget.data[0]["orco_Codigo"]}",
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 5),
                   GridView.count(
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(20),
@@ -225,7 +221,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       ),
                     ],
                   ),   
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 5),
                   Container(
                     // width: ,
                     padding: const EdgeInsets.all(12),
@@ -254,11 +250,143 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 18),
                   Image.asset(
                     'images/trackingpos/${elementos.image}',
-                    height: (MediaQuery.of(context).size.height / 4) + 15,),
+                    height: (MediaQuery.of(context).size.height / 4) + 10,),
 
+                
+                  // Row(
+                  //   children: const [
+                  //     //Encabezados
+                  //     Text(
+                  //       "Cliente:",
+                  //       style: TextStyle(
+                  //         color: Colors.grey,
+                  //       ),
+                  //     ),
+                  //     Text("RTN:"),
+
+                  //     //Info real
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 5),
+
+                  SizedBox(
+                    height: 200,
+                    child: GridView.count(
+                      // shrinkWrap: true,
+                      padding: const EdgeInsets.all(20),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.0,
+                      // mainAxisSpacing: 1,
+                      childAspectRatio: 3/1,
+                      children: const [
+                        // Text(
+                        //   "Cliente: \nTiendas Carrión",
+                        //   style: TextStyle(
+                        //     color: Colors.grey,
+                        //   ),
+                        // ),
+                        Text.rich(
+                          TextSpan(
+                            text: "Cliente:",
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: "\nTiendas Carrión",
+                                       style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                              )
+                              
+                            ]
+                          )
+                        ),
+                        Text.rich(
+                          TextSpan(
+                            text: "RTN:",
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: "\n0512-2003-007569",
+                                       style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                              )
+                              
+                            ]
+                          )
+                        ),
+                        Text.rich(
+                          TextSpan(
+                            text: "Fecha de emisión:",
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: "\n8/9/2023",
+                                       style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                              )
+                            ]
+                          )
+                        ),
+                        Text.rich(
+                          TextSpan(
+                            text: "Fecha límite:",
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: "\n30/9/2023",
+                                       style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                              )
+                            ]
+                          )
+                        ),
+                        Text.rich(
+                          TextSpan(
+                            text: "Embalaje general:",
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: "\nBultos",
+                                       style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                              )
+                            ]
+                          )
+                        ),
+                        Text.rich(
+                          TextSpan(
+                            text: "Dirección de entrega:",
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: "\nMullberry street, so good to see you.",
+                                       style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                              ),
+                            ]
+                          )
+                        ),
+                        // Text("RTN:"),
+                        // Text("RTN:"),
+                        // Text("RTN:"),
+                        // Text("RTN:"),
+                        // Text("RTN:"),
+                      ],),
+                  )
                 ],
               ),
             ),
@@ -269,36 +397,36 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
   }
 }
 
-class ItemsContainer extends StatelessWidget {
-  const ItemsContainer({
-    super.key,
-  });
+// class ItemsContainer extends StatelessWidget {
+//   const ItemsContainer({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.black
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            spreadRadius: 5,
-            // blurRadius: 1,
-            // offset: const Offset(0, 3)
-          )
-        ]
-      ),
-      child: Column(
-        children: const <Widget>[
-          Text("info 1"),
-          Text("info 2"),
-          Text("info 3"),
-        ]
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: MediaQuery.of(context).size.width,
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         border: Border.all(
+//           color: Colors.black
+//         ),
+//         boxShadow: const [
+//           BoxShadow(
+//             color: Colors.black12,
+//             spreadRadius: 5,
+//             // blurRadius: 1,
+//             // offset: const Offset(0, 3)
+//           )
+//         ]
+//       ),
+//       child: Column(
+//         children: const <Widget>[
+//           Text("info 1"),
+//           Text("info 2"),
+//           Text("info 3"),
+//         ]
+//       ),
+//     );
+//   }
+// }
