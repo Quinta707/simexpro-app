@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,17 +39,21 @@ Future<void> TraerDatos(String codigopo, context) async {
     },
   );
   final decodedJson = jsonDecode(response.body);
-  final data = decodedJson["data"]; 
-  print(codigopo);
+  final data = decodedJson["data"];
 
   if (data.length > 0) {
     print('data after search $data');
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => POTrackingScreen(),
+        builder: (context) => POTrackingScreen(data: data),
       )
     );
+  } else{
+    CherryToast.warning(
+        title: const Text('El código ingresado no es válido',
+            style: TextStyle(color: Colors.white)))
+    .show(context);
   }
 }
 
@@ -59,13 +64,22 @@ class _OrdersScreenState extends State<OrdersScreen> {
     historialScreen(),
     TimelineScreen(),
   ];
-  String searchValue = '';
   @override
   void initState() {
     super.initState();
     Imagen();
   }
+
+    String searchValue = '';
+
+    void updatedText (val){
+      setState((){
+        searchValue = val;
+      });
+    }
+
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Image(
@@ -126,39 +140,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     value: MenuItem.item2,
                     child: Row(
                       children: [
-                          TextField(
-                            onChanged: (value) {
-                              setState(() {
-                                searchValue = value;
-                              });
-                            },
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              label: Text("Ingrese el código de P.O"),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                              ),
-                              backgroundColor: Color.fromRGBO(99, 74, 158, 1),
-                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                            ),
-                            onPressed: (){
-                              CherryToast.success(title: Text('Trae los datoss', style: TextStyle(color: Colors.white)), borderRadius: 5,).show(context);
-                              TraerDatos(context as String, searchValue);
-                            }, 
-                            icon: Icon(Icons.search), 
-                            label: Text('Buscar',
-                              style: TextStyle(
-                                    fontSize: 18, 
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                            ),
-                          ),
+                        Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.logout,
+                              color: Color.fromRGBO(87, 69, 223, 1),
+                            )),
+                        const Text(
+                          'Cerrar Sesión',
+                          style: TextStyle(fontSize: 15),
+                        ),
                       ],
                     ),
                   ),
@@ -200,9 +191,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 children: [
                   TextField(
                     onChanged: (value) {
-                      setState(() {
-                        (value);
-                      });
+                      updatedText(value);
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -270,7 +259,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       Navigator.push(
                         context, 
                         MaterialPageRoute(
-                          builder: (context) => QRScannerScreen(),
+                          builder: (context) => const   QRScannerScreen(),
                         )
                       );
                     },
