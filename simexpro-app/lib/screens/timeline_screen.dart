@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:simexpro/screens/lineatiempo.dart';
 import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/orders_screen.dart';
+import 'package:simexpro/screens/prueba.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
 
 class TimelineScreen extends StatelessWidget {
@@ -34,7 +36,7 @@ class TimelineScreen extends StatelessWidget {
                 ));
               },
               child: CircleAvatar(
-                backgroundImage: NetworkImage('https://i.ibb.co/VYPzhv8/MAQUINAS.png'),
+                backgroundImage: AssetImage('images/logoMaquinas.png'),
                 radius: 90,
               ),
             ),
@@ -57,7 +59,7 @@ class TimelineScreen extends StatelessWidget {
                 ));
               },
               child: CircleAvatar(
-                backgroundImage: NetworkImage('https://i.ibb.co/vVz8MdF/ORDEN-1.png'),
+                backgroundImage: AssetImage('images/logoOrdenes.png'),
                 radius: 90,
               ),
             ),

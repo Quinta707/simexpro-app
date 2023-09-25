@@ -11,17 +11,17 @@ import 'dart:convert';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'dart:math';
-
+String imagen = '';
 enum MenuItem { item1, item2 }
 
-class Graficas extends StatefulWidget {
+class TapsProduccion extends StatefulWidget {
   @override
-  State<Graficas> createState() => TabBarDemo();
+  State<TapsProduccion> createState() => TabBarDemo();
 }
 
 Future<void> Imagen() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //imagen = prefs.getString('image');
+  imagen = prefs.getString('image');
 }
 
 // Función para generar un color aleatorio
@@ -33,9 +33,9 @@ charts.Color getRandomColor() {
   return charts.Color(r: r, g: g, b: b, a: 255);
 }
 
-class TabBarDemo extends State<Graficas> {
+class TabBarDemo extends State<TapsProduccion> {
   num Conteo = 0;
-  var ConteoMesPendiente = 0; 
+  var ConteoMesPendiente = 0;
   var ConteoMesFinalizado = 0;
   var ConteoSemanaPendiente = 0;
   var ConteoSemanaFinalizado = 0;
@@ -43,6 +43,8 @@ class TabBarDemo extends State<Graficas> {
   num GananciasSemanales = 0;
   num GananciasMensuales = 0;
   num GananciasAnio = 0;
+
+  String MesActual = "";
 
   List<BarChartData> data = [];
   List<Clientes> ClientesData = [];
@@ -61,7 +63,7 @@ class TabBarDemo extends State<Graficas> {
         final Map<String, dynamic> responseData = json.decode(response.body);
         final List<dynamic> jsonData = responseData['data'];
 
-        setState(() { 
+        setState(() {
           data = jsonData
               .map((item) => BarChartData(item['modu_Nombre'],
                   item['totalProduccionDia'], item['porcentajeProduccion']))
@@ -227,6 +229,7 @@ class TabBarDemo extends State<Graficas> {
 
         setState(() {
           GananciasMensuales = conteo;
+          MesActual = item['mes'];
         });
       }
     } catch (error) {
@@ -269,15 +272,14 @@ class TabBarDemo extends State<Graficas> {
     OpteneGananciasAnio();
     OpteneGananciasMes();
     OpteneGananciasSemana();
-    //Imagen();
+    Imagen();
   }
 
   @override
   Widget build(BuildContext context) {
-
     // Genera una lista de colores aleatorios para el grafico pie
     final List<charts.Color> randomColors = List.generate(
-      data.length,
+      ClientesData.length,
       (_) => getRandomColor(),
     );
 
@@ -288,8 +290,7 @@ class TabBarDemo extends State<Graficas> {
         domainFn: (BarChartData data, _) => data.modu_Nombre,
         measureFn: (BarChartData data, _) => data.totalProduccionDia,
         labelAccessorFn: (BarChartData data, _) => '${data.porcentaje}%',
-        colorFn: (BarChartData data, int? index) => randomColors[
-            index ?? 0], // Asigna el color desde la lista de colores aleatorios
+        colorFn: (BarChartData data, int? index) => getRandomColor(), // Asigna el color desde la lista de colores aleatorios
         data: data, // Utiliza los datos de la API
       )
     ];
@@ -298,7 +299,7 @@ class TabBarDemo extends State<Graficas> {
     final List<charts.Series<Clientes, String>> ClientesGrafica = [
       charts.Series<Clientes, String>(
         id: 'Barras',
-        domainFn: (Clientes data, _) => data.cliente_Nombre,
+        domainFn: (Clientes data, _) => '${data.cliente_Nombre} - ${data.Cantidad_Ingresos}',
         measureFn: (Clientes data, _) => data.Cantidad_Ingresos,
         labelAccessorFn: (Clientes data, _) {
           final porcentaje = (data.Cantidad_Ingresos /
@@ -313,8 +314,6 @@ class TabBarDemo extends State<Graficas> {
         data: ClientesData, // Utiliza los datos de la API
       )
     ];
-
-
 
     //GRAFICA DE BARRAS (MODULOS MAS PRODUCTIVOS)
     final chart = new charts.BarChart(
@@ -350,9 +349,9 @@ class TabBarDemo extends State<Graficas> {
       animate: true,
       behaviors: [
         charts.DatumLegend(
-          outsideJustification: charts.OutsideJustification.endDrawArea,
+          outsideJustification: charts.OutsideJustification.start,
           horizontalFirst: false,
-          desiredMaxRows: 2,
+          desiredMaxRows: 10,
           cellPadding: EdgeInsets.only(right: 4.0, bottom: 4.0),
           entryTextStyle: charts.TextStyleSpec(
             color: charts.MaterialPalette.black,
@@ -404,13 +403,13 @@ class TabBarDemo extends State<Graficas> {
                 padding: EdgeInsets.only(right: 10),
                 child: CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(''),
+                  backgroundImage: NetworkImage(imagen),
                   child: PopupMenuButton<MenuItem>(
                     //padding: EdgeInsets.all(10),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: Image.network(
-                        '',
+                        imagen,
                         width: 50,
                       ),
                     ),
@@ -496,9 +495,8 @@ class TabBarDemo extends State<Graficas> {
                     children: [
                       ListTile(
                         title: Text(
-                          'Modulos Eficientes',
+                          'MODULOS EFICIENTES',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
                             fontSize: 18.0,
                           ),
                           textAlign: TextAlign.center,
@@ -525,9 +523,8 @@ class TabBarDemo extends State<Graficas> {
                     children: [
                       ListTile(
                         title: Text(
-                          'Clientes Rentables: Líderes de Ingresos',
+                          'CLIENTES RENTABLES: LÍDERES DE INGRESOS',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
                             fontSize: 18.0,
                           ),
                           textAlign: TextAlign.center,
@@ -547,767 +544,823 @@ class TabBarDemo extends State<Graficas> {
                   ),
                 ),
               ),
-              Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 15),
-                    Container(
-                      width: 385,
-                      height: 111,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      decoration: BoxDecoration(
-                        //color: Color.fromRGBO(232, 252, 232, 1),
-                        image: DecorationImage(
-                          image: AssetImage(
-                              'images/MaquinaCosturera.png'), // Reemplaza con la ruta de tu imagen
-                          fit: BoxFit
-                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                        border:
-                            Border.all(color: Color.fromARGB(255, 83, 83, 83)),
-                      ),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
+              SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 15),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
                           children: [
-                            ListTile(
-                              title: Text(
-                                'ÓRDENES FINALIZADAS EN ${DateTime.now().year}',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
-                                    color: Color.fromARGB(255, 255, 255, 255)),
-                              ),
-                            ),
-                            const Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
+                            Expanded(
                               child: Divider(
-                                color: Colors.white,
-                                thickness: 3,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                thickness: 2,
                                 height: 20,
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(5),
-                                      alignment: Alignment.bottomRight,
-                                      decoration: const BoxDecoration(
-                                        color:
-                                            Color.fromARGB(255, 255, 255, 255),
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    SizedBox(width: 5),
-                                    Text(
-                                      Conteo == 1
-                                          ? ' ${Conteo} Órden Completada'
-                                          : '${Conteo} Órdenes Completadas',
-                                      style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 255, 255, 255),
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                "ESTADISTICAS",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color.fromARGB(255, 0, 0, 0),
                                 ),
-                              ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                color: Color.fromARGB(255, 6, 5, 5),
+                                thickness: 2,
+                                height: 20,
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    SizedBox(height: 15),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
+                       SizedBox(height: 15),
+                      Container(
+                        width: 385,
+                        height: 111,
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        decoration: BoxDecoration(
+                          //color: Color.fromRGBO(232, 252, 232, 1),
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'images/MaquinaCosturera.png'), // Reemplaza con la ruta de tu imagen
+                            fit: BoxFit
+                                .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                          border: Border.all(
+                              color: Color.fromARGB(255, 83, 83, 83)),
+                        ),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  'ÓRDENES FINALIZADAS EN ${DateTime.now().year}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17,
+                                      color:
+                                          Color.fromARGB(255, 255, 255, 255)),
+                                ),
+                              ),
+                              const Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Divider(
+                                  color: Colors.white,
+                                  thickness: 3,
+                                  height: 20,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(5),
+                                        alignment: Alignment.bottomRight,
+                                        decoration: const BoxDecoration(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        Conteo == 1
+                                            ? ' ${Conteo} Órden Completada'
+                                            : '${Conteo} Órdenes Completadas',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                thickness: 2,
+                                height: 20,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                "ESTE MES",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                color: Color.fromARGB(255, 6, 5, 5),
+                                thickness: 2,
+                                height: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Row(
                         children: [
                           Expanded(
-                            child: Divider(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              thickness: 2,
-                              height: 20,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              "ESTE MES",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Color.fromARGB(255, 0, 0, 0),
+                            child: Container(
+                              width: 165,
+                              height: 110,
+                              margin: EdgeInsets.only(left: 10),
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                //color: Color.fromRGBO(255, 175, 175, 1),
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 83, 83, 83)),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'images/Listado.png'), // Reemplaza con la ruta de tu imagen
+                                  fit: BoxFit
+                                      .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                                ),
+                              ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: Column(
+                                  children: [
+                                    const ListTile(
+                                      title: Text(
+                                        "ÓRDENES PENDIENTES DEL MES",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255)),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child: Divider(
+                                        color: Colors.white,
+                                        thickness: 2,
+                                        height: 20,
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              ConteoMesPendiente == 1
+                                                  ? ' ${ConteoMesPendiente} Órden Pendiente'
+                                                  : '${ConteoMesPendiente} Órdenes Pendientes',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                color: Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
+                          SizedBox(width: 10),
                           Expanded(
-                            child: Divider(
-                              color: Color.fromARGB(255, 6, 5, 5),
-                              thickness: 2,
-                              height: 20,
+                            child: Container(
+                              width: 165,
+                              height: 110,
+                              margin: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                //color: Color.fromRGBO(208, 255, 213, 1),
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 83, 83, 83)),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'images/Listado.png'), // Reemplaza con la ruta de tu imagen
+                                  fit: BoxFit
+                                      .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                                ),
+                              ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: Column(
+                                  children: [
+                                    const ListTile(
+                                      title: Text(
+                                        "ÓRDENES FINALIZADAS DEL MES",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255)),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Divider(
+                                        color: Colors.white,
+                                        thickness: 2,
+                                        height: 20,
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              ConteoMesFinalizado == 1
+                                                  ? ' ${ConteoMesFinalizado} Órden Completada'
+                                                  : '${ConteoMesFinalizado} Órdenes Completadas',
+                                              style: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            width: 165,
-                            height: 110,
-                            margin: EdgeInsets.only(left: 10),
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              //color: Color.fromRGBO(255, 175, 175, 1),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  spreadRadius: 2,
+                      SizedBox(height: 15),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                thickness: 2,
+                                height: 20,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                "ESTA SEMANA",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color.fromARGB(255, 0, 0, 0),
                                 ),
-                              ],
-                              border: Border.all(
-                                  color: Color.fromARGB(255, 83, 83, 83)),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'images/Listado.png'), // Reemplaza con la ruta de tu imagen
-                                fit: BoxFit
-                                    .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                               ),
                             ),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                children: [
-                                  const ListTile(
-                                    title: Text(
-                                      "ÓRDENES PENDIENTES DEL MES",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255)),
-                                    ),
-                                  ),
-                                  const Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
-                                    child: Divider(
-                                      color: Colors.white,
-                                      thickness: 2,
-                                      height: 20,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            ConteoMesPendiente == 1
-                                                ? ' ${ConteoMesPendiente} Órden Pendiente'
-                                                : '${ConteoMesPendiente} Órdenes Pendientes',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                            Expanded(
+                              child: Divider(
+                                color: Color.fromARGB(255, 6, 5, 5),
+                                thickness: 2,
+                                height: 20,
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Container(
-                            width: 165,
-                            height: 110,
-                            margin: EdgeInsets.only(right: 10),
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              //color: Color.fromRGBO(208, 255, 213, 1),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  spreadRadius: 2,
-                                ),
-                              ],
-                              border: Border.all(
-                                  color: Color.fromARGB(255, 83, 83, 83)),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'images/Listado.png'), // Reemplaza con la ruta de tu imagen
-                                fit: BoxFit
-                                    .cover, // Ajusta la forma en que la imagen se adapta al contenedor
-                              ),
-                            ),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                children: [
-                                  const ListTile(
-                                    title: Text(
-                                      "ÓRDENES FINALIZADAS DEL MES",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255)),
-                                    ),
-                                  ),
-                                  const Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: Divider(
-                                      color: Colors.white,
-                                      thickness: 2,
-                                      height: 20,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            ConteoMesFinalizado == 1
-                                                ? ' ${ConteoMesFinalizado} Órden Completada'
-                                                : '${ConteoMesFinalizado} Órdenes Completadas',
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 15),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
+                      ),
+                      SizedBox(height: 15),
+                      Row(
                         children: [
                           Expanded(
-                            child: Divider(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              thickness: 2,
-                              height: 20,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              "ESTA SEMANA",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Color.fromARGB(255, 0, 0, 0),
+                            child: Container(
+                              width: 165,
+                              height: 110,
+                              margin: EdgeInsets.only(left: 10),
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                //color: Color.fromRGBO(255, 175, 175, 1),
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 83, 83, 83)),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'images/Cajas.png'), // Reemplaza con la ruta de tu imagen
+                                  fit: BoxFit
+                                      .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                                ),
+                              ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: Column(
+                                  children: [
+                                    const ListTile(
+                                      title: Text(
+                                        "ÓRDENES PENDIENTES DE LA SEMANA",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255)),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child: Divider(
+                                        color: Colors.white,
+                                        thickness: 2,
+                                        height: 20,
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              ConteoMesPendiente == 1
+                                                  ? ' ${ConteoSemanaPendiente} Órden Pendiente'
+                                                  : '${ConteoSemanaPendiente} Órdenes Pendientes',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                color: Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
+                          SizedBox(width: 10),
                           Expanded(
-                            child: Divider(
-                              color: Color.fromARGB(255, 6, 5, 5),
-                              thickness: 2,
-                              height: 20,
+                            child: Container(
+                              width: 167,
+                              height: 110,
+                              margin: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                //color: Color.fromRGBO(208, 255, 213, 1),
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 83, 83, 83)),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'images/Cajas.png'), // Reemplaza con la ruta de tu imagen
+                                  fit: BoxFit
+                                      .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                                ),
+                              ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: Column(
+                                  children: [
+                                    const ListTile(
+                                      title: Text(
+                                        "ÓRDENES FINALIZADAS DE LA SEMANA",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255)),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Divider(
+                                        color: Colors.white,
+                                        thickness: 2,
+                                        height: 20,
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              ConteoMesFinalizado == 1
+                                                  ? ' ${ConteoSemanaFinalizado} Órden Completada'
+                                                  : '${ConteoSemanaFinalizado} Órdenes Completadas',
+                                              style: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            width: 165,
-                            height: 110,
-                            margin: EdgeInsets.only(left: 10),
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              //color: Color.fromRGBO(255, 175, 175, 1),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  spreadRadius: 2,
-                                ),
-                              ],
-                              border: Border.all(
-                                  color: Color.fromARGB(255, 83, 83, 83)),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'images/Cajas.png'),// Reemplaza con la ruta de tu imagen
-                                fit: BoxFit
-                                    .cover, // Ajusta la forma en que la imagen se adapta al contenedor
-                              ),
-                            ),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                children: [
-                                  const ListTile(
-                                    title: Text(
-                                      "ÓRDENES PENDIENTES DE LA SEMANA",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255)),
-                                    ),
-                                  ),
-                                  const Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
-                                    child: Divider(
-                                      color: Colors.white,
-                                      thickness: 2,
-                                      height: 20,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            ConteoMesPendiente == 1
-                                                ? ' ${ConteoSemanaPendiente} Órden Pendiente'
-                                                : '${ConteoSemanaPendiente} Órdenes Pendientes',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Container(
-                            width: 167,
-                            height: 110,
-                            margin: EdgeInsets.only(right: 10),
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              //color: Color.fromRGBO(208, 255, 213, 1),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  spreadRadius: 2,
-                                ),
-                              ],
-                              border: Border.all(
-                                  color: Color.fromARGB(255, 83, 83, 83)),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'images/Cajas.png'), // Reemplaza con la ruta de tu imagen
-                                fit: BoxFit
-                                    .cover, // Ajusta la forma en que la imagen se adapta al contenedor
-                              ),
-                            ),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                children: [
-                                  const ListTile(
-                                    title: Text(
-                                      "ÓRDENES FINALIZADAS DE LA SEMANA",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255)),
-                                    ),
-                                  ),
-                                  const Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: Divider(
-                                      color: Colors.white,
-                                      thickness: 2,
-                                      height: 20,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            ConteoMesFinalizado == 1
-                                                ? ' ${ConteoSemanaFinalizado} Órden Completada'
-                                                : '${ConteoSemanaFinalizado} Órdenes Completadas',
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      SizedBox(height: 15),
+                    ],
+                  ),
                 ),
               ),
-              Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 15),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              thickness: 2,
-                              height: 20,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              "NUESTRAS GANACIAS",
-                              style: TextStyle(
-                                fontSize: 20,
+              SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 15),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
                                 color: Color.fromARGB(255, 0, 0, 0),
+                                thickness: 2,
+                                height: 20,
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              color: Color.fromARGB(255, 6, 5, 5),
-                              thickness: 2,
-                              height: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Container(
-                      width: 385,
-                      height: 120,
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                              'images/FondoBlanco.png'), // Reemplaza con la ruta de tu imagen
-                          fit: BoxFit
-                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
-                        ),
-                        //color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Lado izquierdo: Texto
-                          Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(7.0),
-                              child: Container(
-                                alignment: Alignment
-                                    .center, // Centrar el contenido en la columna
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment
-                                      .center, // Centrar el texto horizontalmente
-                                  children: [
-                                    const Text(
-                                      "GANANCIAS DEL AÑO ",
-                                      textAlign: TextAlign
-                                          .center, // Alinea el texto al centro
-                                      style: TextStyle(
-                                        //fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Divider(
-                                        color: Color.fromARGB(255, 255, 106, 0),
-                                        thickness: 3,
-                                        height: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${GananciasAnio} .LPS',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    ),
-                                  ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                "NUESTRAS GANACIAS",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color.fromARGB(255, 0, 0, 0),
                                 ),
                               ),
                             ),
+                            Expanded(
+                              child: Divider(
+                                color: Color.fromARGB(255, 6, 5, 5),
+                                thickness: 2,
+                                height: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        width: 385,
+                        height: 145,
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'images/Hilos.png'), // Reemplaza con la ruta de tu imagen
+                            fit: BoxFit
+                                .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                           ),
+                          //color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Lado izquierdo: Texto
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(7.0),
+                                child: Container(
+                                  alignment: Alignment
+                                      .center, // Centrar el contenido en la columna
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .center, // Centrar el texto horizontalmente
+                                    children: [
+                                      Text(
+                                        "GANANCIAS  DEL \n  ${DateTime.now().year}",
+                                        textAlign: TextAlign
+                                            .center, // Alinea el texto al centro
+                                        style: TextStyle(
+                                          //fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 249, 249, 249),
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Divider(
+                                          color:
+                                              Color.fromARGB(255, 255, 106, 0),
+                                          thickness: 3,
+                                          height: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${GananciasAnio} .LPS',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 241, 240, 240),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
 
-                          // Lado derecho: Imagen
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'images/Grafica1.png'), // Reemplaza con la ruta de tu imagen
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Container(
-                      width: 385,
-                      height: 122,
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                              'images/FondoBlanco.png'), // Reemplaza con la ruta de tu imagen
-                          fit: BoxFit
-                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
-                        ),
-                        //color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Lado izquierdo: Texto
-                          Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                            // Lado derecho: Imagen
+                            Expanded(
+                              flex: 1,
                               child: Container(
-                                alignment: Alignment.center,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      "GANANCIAS DEL MES",
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Divider(
-                                        color: Color.fromARGB(255, 255, 106, 0),
-                                        thickness: 3,
-                                        height: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${GananciasMensuales} .LPS',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    ),
-                                  ],
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        'images/sastre.png'), // Reemplaza con la ruta de tu imagen
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          // Lado derecho: Imagen
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'images/Grafica2.png'), // Reemplaza con la ruta de tu imagen
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Container(
-                      width: 385,
-                      height: 122,
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                              'images/FondoBlanco.png'), // Reemplaza con la ruta de tu imagen
-                          fit: BoxFit
-                              .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                          ],
                         ),
-                        //color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            spreadRadius: 2,
-                          ),
-                        ],
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Lado izquierdo: Texto
-                          Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                      SizedBox(height: 15),
+                      Container(
+                        width: 385,
+                        height: 145,
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'images/Hilos.png'), // Reemplaza con la ruta de tu imagen
+                            fit: BoxFit
+                                .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                          ),
+                          //color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Lado izquierdo: Texto
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "GANANCIAS DE ${MesActual.toUpperCase()}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 249, 249, 249),
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Divider(
+                                          color:
+                                              Color.fromARGB(255, 255, 106, 0),
+                                          thickness: 3,
+                                          height: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${GananciasMensuales} .LPS',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 255, 253, 253),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Lado derecho: Imagen
+                            Expanded(
+                              flex: 1,
                               child: Container(
-                                alignment: Alignment.center,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      "GANANCIA SEMANAL",
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Divider(
-                                        color: Color.fromARGB(255, 255, 106, 0),
-                                        thickness: 3,
-                                        height: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${GananciasSemanales} .LPS',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Color.fromARGB(255, 46, 46, 46),
-                                      ),
-                                    ),
-                                  ],
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        'images/costurera.png'), // Reemplaza con la ruta de tu imagen
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          // Lado derecho: Imagen
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'images/Grafica3.png'), // Reemplaza con la ruta de tu imagen
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 15),
+                      Container(
+                        width: 385,
+                        height: 145,
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'images/Hilos.png'), // Reemplaza con la ruta de tu imagen
+                            fit: BoxFit
+                                .cover, // Ajusta la forma en que la imagen se adapta al contenedor
+                          ),
+                          //color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Lado izquierdo: Texto
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        "GANANCIA DE LA SEMANA",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Divider(
+                                          color:
+                                              Color.fromARGB(255, 255, 106, 0),
+                                          thickness: 3,
+                                          height: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${GananciasSemanales} .LPS',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Lado derecho: Imagen
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        'images/ropa.png'), // Reemplaza con la ruta de tu imagen
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                    ],
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),

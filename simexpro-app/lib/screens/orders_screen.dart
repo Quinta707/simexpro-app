@@ -60,7 +60,7 @@ Future<void> TraerDatos(String codigopo, context) async {
 class _OrdersScreenState extends State<OrdersScreen> {
   int _selectedIndex = 0;
   final _screens = [
-    Graficas(),
+    TapsProduccion(),
     historialScreen(),
     TimelineScreen(),
   ];

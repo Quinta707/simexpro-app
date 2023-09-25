@@ -7,7 +7,7 @@ import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/widgets/taps.dart';
-//import 'package:simexpro/widgets/taps_Aduana.dart';
+import 'package:simexpro/widgets/taps_Aduana.dart';
 
 enum MenuItem { item1, item2 }
 
@@ -16,23 +16,32 @@ class NavBarRoots extends StatefulWidget {
   State<NavBarRoots> createState() => _NavBarRootsState();
 }
 
-Future<void> Imagen() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  image = prefs.getString('image');
-}
+
 
 class _NavBarRootsState extends State<NavBarRoots> {
+
   int _selectedIndex = 0;
-  final _screens = [
-    Graficas(),
-    historialScreen(),
-    TimelineScreen(),
-  ];
+  List<Widget> _screens = [];
 
   @override
   void initState() {
     super.initState();
     Imagen();
+  }
+
+
+  Future<void> Imagen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    image = prefs.getString('image');
+    bool esAduana = prefs.getBool('esAduana');
+
+    setState(() {
+      _screens = [
+        esAduana ? GraficasAduanas() : TapsProduccion(),
+        historialScreen(),
+        TimelineScreen(),
+      ];
+    });
   }
 
   Widget build(BuildContext context) {
