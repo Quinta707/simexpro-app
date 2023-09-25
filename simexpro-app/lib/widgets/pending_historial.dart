@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 
-class Upcominghistorial extends StatelessWidget {
+class Pendinghistorial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -12,8 +12,7 @@ class Upcominghistorial extends StatelessWidget {
         children: [
           SizedBox(height: 0),
           Container(
-            padding: EdgeInsets.symmetric(
-                horizontal: 0),
+            padding: EdgeInsets.symmetric(horizontal: 0),
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Buscar',
@@ -24,8 +23,8 @@ class Upcominghistorial extends StatelessWidget {
               ),
             ),
           ),
-      
           SizedBox(height: 15),
+          
           Container(
             padding: EdgeInsets.symmetric(vertical: 5),
             decoration: BoxDecoration(
@@ -53,7 +52,8 @@ class Upcominghistorial extends StatelessWidget {
                     subtitle: Text("En ensamblaje"),
                     trailing: CircleAvatar(
                       radius: 25,
-                      backgroundImage: NetworkImage("https://i.ibb.co/6DytYZx/ENSAMBLADO.png"),
+                      backgroundImage: NetworkImage(
+                          "https://i.ibb.co/ypw0Ng3/icono.png"),
                     ),
                   ),
                   Padding(
@@ -102,13 +102,13 @@ class Upcominghistorial extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              color: Colors.yellow,
+                              color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "En proceso",
+                            "Pendiente",
                             style: TextStyle(
                               color: Colors.black54,
                             ),
@@ -177,7 +177,8 @@ class Upcominghistorial extends StatelessWidget {
                     subtitle: Text("En corte"),
                     trailing: CircleAvatar(
                       radius: 25,
-                      backgroundImage: NetworkImage("https://i.ibb.co/QHgCx80/CORTE-DE-TELA.png"),
+                      backgroundImage: NetworkImage(
+                          "https://i.ibb.co/ypw0Ng3/icono.png"),
                     ),
                   ),
                   Padding(
@@ -226,13 +227,13 @@ class Upcominghistorial extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              color: Colors.yellow,
+                              color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "En proceso",
+                            "Pendiente",
                             style: TextStyle(
                               color: Colors.black54,
                             ),
