@@ -61,16 +61,17 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
       filteredlist.add(data[i]);
     }
   }
-  filteredlist.isEmpty
-      ? 
+  if(filteredlist.isEmpty)
+      {
       CherryToast.error(
           title: Text('El número de máquina no existe',
             style: TextStyle(color: Colors.white),
             textAlign: TextAlign.justify),
           borderRadius: 5,
-        ).show(context)
-        
-      : CherryToast.success(
+        ).show(context);
+        valor = 0;
+      } 
+      else{ CherryToast.success(
           title: Text('ayer tuve un amor que hoy me abandonó porque no me quería, fue tanta mi ilusión por hacerla feliz pero todo fue en vano', 
             style: TextStyle(color: Colors.white), 
             textAlign: TextAlign.justify),
@@ -81,6 +82,7 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
         setState(){
 
         }
+      }
 }
 
 class _MaquinasScreenState extends State<MaquinasScreen> {
