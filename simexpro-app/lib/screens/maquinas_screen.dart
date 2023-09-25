@@ -79,9 +79,7 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
         ).show(context);
         datamaquina = data;
         valor = 1;
-        setState(){
-
-        }
+        setState(){}
       }
 }
 
@@ -190,23 +188,42 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.all(15),
+              child: Container(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => TimelineScreen(),
+                  ));
+                },
+              ),
+              ), 
+            ),
             Padding(
               padding: const EdgeInsets.all(15),
-              child: Container(
-                alignment: Alignment.center,
-                child: Center(
-                  child: Text(
-                    "Días inactivos de las máquinas",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(99, 74, 158, 1),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: Center(
+                      child: Text(
+                        "Días inactivos de las máquinas",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromRGBO(99, 74, 158, 1),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                ],
+              ), 
             ),
             //SizedBox(height: 15),
             Padding(
