@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simexpro/screens/profile_screen.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 import '../widgets/navbar_roots.dart';
 import 'home_screen.dart';
@@ -118,14 +119,25 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
               ],
             ),
           ),
-          Container(
+          SizedBox(
             width: double.maxFinite,
-            height: 300,
+            height: MediaQuery.of(context).size.height * 0.83,
             child: TabBarView(
               controller: _TabController,
-              children: const [
-                Text("Hi"),
-                Text("what's up?")
+              children: [
+                const Text("Hi"),
+                ListView(
+                  children: [
+                    TimelineTile(
+                      isFirst: true,
+                    ),
+                    TimelineTile(),
+                    TimelineTile(),
+                    TimelineTile(
+                      isLast: true,
+                    ),
+                  ],
+                ),
               ],
             ),
           )
