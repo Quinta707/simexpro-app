@@ -134,42 +134,46 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                         isFirst: true,
                         beforeLineStyle: const LineStyle(
                           color: Colors.black87,
-                          thickness: 1
+                          thickness: 2,
                         ),
                         indicatorStyle: const IndicatorStyle(
                           drawGap: true,
-                          color: Colors.green
+                          color: Colors.green,
+                          width: 30
                         ),
                       ),
                       TimelineTile(
                         beforeLineStyle: const LineStyle(
                           color: Colors.black87,
-                          thickness: 1
+                          thickness: 2
                         ),
                         indicatorStyle: const IndicatorStyle(
                           drawGap: true,
-                          color: Colors.yellow
+                          color: Colors.yellow,
+                          width: 30
                         ),
                       ),
                       TimelineTile(
                         beforeLineStyle: const LineStyle(
                           color: Colors.black87,
-                          thickness: 1
+                          thickness: 2
                         ),
                         indicatorStyle: const IndicatorStyle(
                           drawGap: true,
-                          color: Colors.purpleAccent
+                          color: Colors.purpleAccent,
+                          width: 30
                         ),
                       ),
                       TimelineTile(
                         isLast: true,
                         beforeLineStyle: const LineStyle(
                           color: Colors.black87,
-                          thickness: 1
+                          thickness: 2
                         ),
                         indicatorStyle: const IndicatorStyle(
                           drawGap: true,
-                          color: Colors.pink
+                          color: Colors.pink,
+                          width: 30
                         ),
                       ),
                     ],
