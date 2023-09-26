@@ -40,15 +40,7 @@ Future<void> fetchData(
         MaterialPageRoute(
           builder: (context) => NavBarRoots(),
         ));
-  } else if(response.statusCode == 203) {
-    print(response.statusCode);
-    CherryToast.error(
-      title: Text('No se pudo conectar con el servidor',
-          style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
-          textAlign: TextAlign.justify),
-      borderRadius: 5,
-    ).show(context);
-  }
+  } 
   else{
     print(response.statusCode);
     CherryToast.error(
@@ -87,8 +79,8 @@ class _loginScreenState extends State<loginScreen> {
                   SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: Image.network(
-                      "https://i.ibb.co/vk2tjx1/SIMEXPRO-V3-PNG.png",
+                    child: Image.asset(
+                      "images/SIMEXPRO-V3-PNG.png",
                       height: 230,
                     ),
                   ),
