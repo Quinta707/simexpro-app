@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/utils/user_preferences.dart';
 import 'package:simexpro/widgets/appbar_widget.dart';
@@ -13,15 +14,15 @@ String NombreEmpleado = '';
 String CorreoElectoinico = '';
 String Rol = '';
 
-
-
-
 class ProfileScreen extends StatefulWidget {
   @override
   State<ProfileScreen> createState() => PerfilUsuario();
 }
 
 class PerfilUsuario extends State<ProfileScreen> {
+  bool isTextFieldVisible =
+      false; // Variable para controlar la visibilidad del campo de entrada
+
   void initState() {
     super.initState();
     Imagen();
@@ -29,13 +30,15 @@ class PerfilUsuario extends State<ProfileScreen> {
 
   Future<void> Imagen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     imagen = prefs.getString('image');
     NombreUsuario = prefs.getString('username');
     NombreEmpleado = prefs.getString('userfullname');
     CorreoElectoinico = prefs.getString('email');
-    Rol = prefs.getString('rol');
+    Rol = prefs.getString('rol') != null ? prefs.getString('rol') : "Sin Rol";
 
-    setState(() {}); // Esto fuerza una reconstrucción de la pantalla con la nueva imagen
+    setState(
+        () {}); // Esto fuerza una reconstrucción de la pantalla con la nueva imagen
   }
 
   @override
@@ -55,6 +58,10 @@ class PerfilUsuario extends State<ProfileScreen> {
           buildName(user),
           const SizedBox(height: 20),
           buildAbout(user),
+          const SizedBox(height: 20),
+          buildButton(user),
+          const SizedBox(height: 20),
+          changuePassword(user),
           const SizedBox(height: 20),
         ],
       ),
@@ -132,9 +139,45 @@ class PerfilUsuario extends State<ProfileScreen> {
 
   Widget buildButton(User user) => Column(
         children: [
-          Text(
-            user.username,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+          Container(
+            width: 200.0, // Ajusta el ancho del botón
+            height: 30.0, // Ajusta la altura del botón
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isTextFieldVisible =
+                      true; // Mostrar el campo de entrada al presionar el botón
+                });
+              },
+              child: Text('Cambiar Contraseña'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Color.fromRGBO(99, 74, 158, 1.0)),
+              ),
+            ),
+          )
+
+          // Otros widgets que puedas tener después del botón
+        ],
+      );
+
+  Widget changuePassword(User user) => Column(
+        children: [
+          Visibility(
+            visible: isTextFieldVisible,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 18, left: 18, bottom: 18),
+              child: TextField(
+                onChanged: (value) {
+                  setState(() {});
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  label: Text("Usuario"),
+                  prefixIcon: Icon(Icons.person),
+                ),
+              ),
+            ),
           ),
         ],
       );
