@@ -126,17 +126,54 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
               controller: _TabController,
               children: [
                 const Text("Hi"),
-                ListView(
-                  children: [
-                    TimelineTile(
-                      isFirst: true,
-                    ),
-                    TimelineTile(),
-                    TimelineTile(),
-                    TimelineTile(
-                      isLast: true,
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                  child: ListView(
+                    children: [
+                      TimelineTile(
+                        isFirst: true,
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.black87,
+                          thickness: 1
+                        ),
+                        indicatorStyle: const IndicatorStyle(
+                          drawGap: true,
+                          color: Colors.green
+                        ),
+                      ),
+                      TimelineTile(
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.black87,
+                          thickness: 1
+                        ),
+                        indicatorStyle: const IndicatorStyle(
+                          drawGap: true,
+                          color: Colors.yellow
+                        ),
+                      ),
+                      TimelineTile(
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.black87,
+                          thickness: 1
+                        ),
+                        indicatorStyle: const IndicatorStyle(
+                          drawGap: true,
+                          color: Colors.purpleAccent
+                        ),
+                      ),
+                      TimelineTile(
+                        isLast: true,
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.black87,
+                          thickness: 1
+                        ),
+                        indicatorStyle: const IndicatorStyle(
+                          drawGap: true,
+                          color: Colors.pink
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
