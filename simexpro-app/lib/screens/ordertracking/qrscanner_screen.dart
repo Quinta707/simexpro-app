@@ -84,7 +84,8 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     setState(() => this.controller = controller);
 
     controller.scannedDataStream.listen((barcode) => {
-          if (this.barcode != null && barcode.code != this.barcode!.code)
+         print('barcode ${barcode.code}, this barcode ${this.barcode!.code}'),
+          if (barcode.code.toString() != this.barcode!.code.toString())
             {TraerDatos(barcode.code.toString(), context)},
           this.barcode = barcode,
         });
