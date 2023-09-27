@@ -15,6 +15,7 @@ import 'package:simexpro/api.dart';
 import 'package:timeline_list/timeline.dart';
 import 'package:timeline_list/timeline_model.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:intl/intl.dart';
 
 List datamaquina = [];
 List datamaquina2 = [];
@@ -427,6 +428,7 @@ class RightChild extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
+                                //dateFormat.format(new DateTime.fromMillisecondsSinceEpoch(datamaquina[index]['mahi_FechaInicio'])),
                                 datamaquina[index]['mahi_FechaInicio'],
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 0, 0, 0),
