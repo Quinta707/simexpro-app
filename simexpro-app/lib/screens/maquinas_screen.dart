@@ -56,7 +56,6 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
   final decodedJson = jsonDecode(response.body);
   final data = decodedJson["data"];
   List<Map> filteredlist = [];
-  print(numserie);
   for (var i = 0; i < data.length; i++) {
     if (data[i]["maquinaNumeroSerie"].toString() == numserie) {
       filteredlist.add(data[i]);
@@ -69,7 +68,6 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
       'Content-Type': 'application/json',
     },
   );
-  print(filteredlist);
   final decodedJson2 = jsonDecode(response2.body);
   final data2 = decodedJson2["data"];
   List<Map> filteredlist2 = [];
@@ -79,7 +77,6 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
       filteredlist2.add(data2[i]);
     }
   }
-  print(filteredlist2);
   if(filteredlist2.isEmpty){
     CherryToast.error(
           title: Text('El número de serie no existe',
