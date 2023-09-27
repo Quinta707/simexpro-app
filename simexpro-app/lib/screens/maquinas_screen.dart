@@ -6,7 +6,6 @@ import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
-import 'package:simexpro/screens/prueba.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
 import 'package:simexpro/widgets/taps.dart';
@@ -18,6 +17,7 @@ import 'package:timeline_list/timeline_model.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 List datamaquina = [];
+List datamaquina2 = [];
 int valor = 0;
 
 class MaquinasScreen extends StatefulWidget {
@@ -44,6 +44,7 @@ List<dynamic> Lista(List data, String numserie) {
 
 Future<void> TraerDatos(BuildContext context, String numserie) async {
   datamaquina = [];
+  datamaquina2 = [];
   valor = 0;
   final response = await http.get(
     Uri.parse('${apiUrl}MaquinaHistorial/Listar'),
@@ -61,40 +62,62 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
       filteredlist.add(data[i]);
     }
   }
-  if(filteredlist.isEmpty)
-      {
-      CherryToast.error(
-          title: Text('El número de máquina no existe',
+  final response2 = await http.get(
+    Uri.parse('${apiUrl}Maquinas/Listar'),
+    headers: {
+      'XApiKey': apiKey,
+      'Content-Type': 'application/json',
+    },
+  );
+  print(filteredlist);
+  final decodedJson2 = jsonDecode(response2.body);
+  final data2 = decodedJson2["data"];
+  List<Map> filteredlist2 = [];
+  for (var i = 0; i < data2.length; i++) {
+
+    if (data2[i]["maqu_NumeroSerie"].toString() == numserie) {
+      filteredlist2.add(data2[i]);
+    }
+  }
+  print(filteredlist2);
+  if(filteredlist2.isEmpty){
+    CherryToast.error(
+          title: Text('El número de serie no existe',
+            style: TextStyle(color: Colors.white),
+            textAlign: TextAlign.justify),
+          borderRadius: 5,
+        ).show(context);
+    valor = 0;
+  }
+  else{
+    if(filteredlist.isEmpty){
+      CherryToast.warning(
+          title: Text('La máquina no tiene registros de averío.',
             style: TextStyle(color: Colors.white),
             textAlign: TextAlign.justify),
           borderRadius: 5,
         ).show(context);
         valor = 0;
-      } 
-      else{ CherryToast.success(
-          title: Text('ayer tuve un amor que hoy me abandonó porque no me quería, fue tanta mi ilusión por hacerla feliz pero todo fue en vano', 
-            style: TextStyle(color: Colors.white), 
-            textAlign: TextAlign.justify),
-          borderRadius: 5,
-        ).show(context);
-        datamaquina = data;
-        valor = 1;
-        setState(){
-
-        }
-      }
+    } 
+    else{ CherryToast.success(
+        title: Text('ayer tuve un amor que hoy me abandonó porque no me quería, fue tanta mi ilusión por hacerla feliz pero todo fue en vano', 
+          style: TextStyle(color: Colors.white), 
+          textAlign: TextAlign.justify),
+        borderRadius: 5,
+      ).show(context);
+      datamaquina = filteredlist;
+      datamaquina2 = data2;
+      valor = 1;
+    }
+  }
 }
 
+
 class _MaquinasScreenState extends State<MaquinasScreen> {
-  int _selectedIndex = 0;
-  final _screens = [
-    TapsProduccion(),
-    historialScreen(),
-    TimelineScreen(),
-  ];
   String searchValue = '';
   @override
   void initState() {
+    valor = 0;
     super.initState();
     Imagen();
   }
@@ -104,7 +127,7 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
       appBar: AppBar(
         title: const Image(
           height: 35,
-          image: NetworkImage('https://i.ibb.co/HgdBM0r/slogan.png'),
+          image: AssetImage('images/slogan.png'),
         ),
         centerTitle: true,
         actions: <Widget>[
@@ -181,32 +204,38 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
         backgroundColor: Color.fromRGBO(17, 24, 39, 1),
         //elevation: 50.0,
         leading: IconButton(
-          icon: const Icon(Icons.menu),
+          icon: const Icon(Icons.arrow_back),
           tooltip: 'Menú',
-          onPressed: () {},
+          onPressed: () {
+            valor = 0;
+            Navigator.pop(context);
+          },
         ),
         //systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(15),
-              child: Container(
-                alignment: Alignment.center,
-                child: Center(
-                  child: Text(
-                    "Días inactivos de las máquinas",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(99, 74, 158, 1),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: Center(
+                      child: Text(
+                        "Días inactivos de las máquinas",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromRGBO(99, 74, 158, 1),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                ],
+              ), 
             ),
             //SizedBox(height: 15),
             Padding(
@@ -266,8 +295,7 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                         color: Colors.white,
                       ),
                     ),
-                  ),
-
+                   ),
                   ),
                 ],
               ),
@@ -288,99 +316,156 @@ class RightChild extends StatelessWidget {
     return
     Padding(
       padding: const EdgeInsets.all(15),
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-          itemCount: datamaquina.length,
-          itemBuilder: (BuildContext context, int index){
-            return TimelineTile(
-              alignment: TimelineAlign.manual,
-              lineXY: 0.1,
-              isFirst: index == 0,
-              isLast: index == datamaquina.length - 1,
-              indicatorStyle: IndicatorStyle(
-                drawGap: true,
-                height: 40,
-                width: 40,
-                color: Color.fromRGBO(99, 74, 158, 1),
-                padding: EdgeInsets.all(6),
-                indicator: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle, 
-                        border: Border.fromBorderSide(
-                          BorderSide(
-                            color: Color.fromRGBO(99, 74, 158, 1),
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                      child: Center( 
-                        child: Icon(
-                          Icons.precision_manufacturing_rounded, 
-                          color: Color.fromRGBO(99, 74, 158, 1),
-                        ),
-                      )
-                    )
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.center,
+            child:  Padding(
+              padding: EdgeInsets.all(5), 
+              child: Row(
+                children: [
+                  Container(
+                    width: 110,
+                    alignment: Alignment.center,
+                    child: Text('No. Serie: ', style: TextStyle(color: Color.fromRGBO(99, 74, 158, 1), fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.start),
+                  ),
+                  Container(
+                    width: 110,
+                    alignment: Alignment.center,
+                    child: Text('Modelo: ', style: TextStyle(color: Color.fromRGBO(99, 74, 158, 1), fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
+                  ),
+                  Container(
+                    width: 110,
+                    alignment: Alignment.center,
+                    child: Text('Módulo: ', style: TextStyle(color: Color.fromRGBO(99, 74, 158, 1), fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.end),
+                  ),
+                ],
               ),
-              beforeLineStyle: const LineStyle(
-                color: Color.fromRGBO(99, 74, 158, 1),
-                thickness: 2,
-              ),
-              afterLineStyle: const LineStyle(
-                color: Color.fromRGBO(99, 74, 158, 1),
-                thickness: 2,
-              ),
-              startChild: null,
-              endChild: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: <Widget>[
-                    Opacity(
-                      child: Image.asset('images/maquina.png', height: 50),
-                      opacity: 1,
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            datamaquina[index]['mahi_FechaInicio'],
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ), 
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 6),
-                          Padding(
-                            padding: EdgeInsets.all(0),
-                              child: Container(
-                                alignment: Alignment.center,
-                                color: Colors.transparent,
-                                child: Tooltip(
-                                  message: datamaquina[index]['mahi_Observaciones'],
-                                  child: Text(
-                                    datamaquina[index]['mahi_Observaciones'],
-                                    style: TextStyle(
-                                    color: Color(0xFF636564),
-                                    fontSize: 16,
-                                  ),
-                                  textAlign: TextAlign.justify,
-                                ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5), 
+            child: Row(
+              children: [
+                Container(
+                    width: 110,
+                    alignment: Alignment.center,
+                    child: Text(datamaquina[0]['maquinaNumeroSerie'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.start),
+                ),
+                Container(
+                    width: 110,
+                    alignment: Alignment.center,
+                    child: Text(datamaquina2[0]['mmaq_Nombre'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.center),
+                ),
+                Container(
+                    width: 110,
+                    alignment: Alignment.center,
+                    child: Text(datamaquina2[0]['modu_Nombre'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.end),
+                ),
+              ],
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(left: 10, right: 10),
+          child: Divider(
+              color: Color.fromRGBO(99, 74, 158, 1),
+              thickness: 2,
+            ),
+          ),
+            ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+              itemCount: datamaquina.length,
+              itemBuilder: (BuildContext context, int index){
+                return TimelineTile(
+                  alignment: TimelineAlign.manual,
+                  lineXY: 0.1,
+                  isFirst: index == 0,
+                  isLast: index == datamaquina.length - 1,
+                  indicatorStyle: IndicatorStyle(
+                    drawGap: true,
+                    height: 40,
+                    width: 40,
+                    color: Color.fromRGBO(99, 74, 158, 1),
+                    padding: EdgeInsets.all(6),
+                    indicator: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle, 
+                            border: Border.fromBorderSide(
+                              BorderSide(
+                                color: Color.fromRGBO(99, 74, 158, 1),
+                                width: 2,
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                          child: Center( 
+                            child: Icon(
+                              Icons.precision_manufacturing_rounded, 
+                              color: Color.fromRGBO(99, 74, 158, 1),
+                            ),
+                          )
+                        )
+                  ),
+                  beforeLineStyle: const LineStyle(
+                    color: Color.fromRGBO(99, 74, 158, 1),
+                    thickness: 2,
+                  ),
+                  afterLineStyle: const LineStyle(
+                    color: Color.fromRGBO(99, 74, 158, 1),
+                    thickness: 2,
+                  ),
+                  startChild: null,
+                  endChild: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: <Widget>[
+                        Opacity(
+                          child: Image.asset('images/maquina.png', height: 50),
+                          opacity: 1,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                datamaquina[index]['mahi_FechaInicio'],
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ), 
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 6),
+                              Padding(
+                                padding: EdgeInsets.all(0),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.transparent,
+                                    child: Tooltip(
+                                      message: datamaquina[index]['mahi_Observaciones'],
+                                      child: Text(
+                                        datamaquina[index]['mahi_Observaciones'],
+                                        style: TextStyle(
+                                        color: Color(0xFF636564),
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            );
-          }
+                  ),
+                );
+              }
+            ), 
+          ],
         ), 
       );
   }

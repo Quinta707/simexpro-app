@@ -40,7 +40,9 @@ Future<void> fetchData(
         MaterialPageRoute(
           builder: (context) => NavBarRoots(),
         ));
-  } else {
+  } 
+  else{
+    print(response.statusCode);
     CherryToast.error(
       title: Text('El usuario o contraseña son incorrectos',
           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
@@ -77,8 +79,8 @@ class _loginScreenState extends State<loginScreen> {
                   SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: Image.network(
-                      "https://i.ibb.co/vk2tjx1/SIMEXPRO-V3-PNG.png",
+                    child: Image.asset(
+                      "images/SIMEXPRO-V3-PNG.png",
                       height: 230,
                     ),
                   ),
