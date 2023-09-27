@@ -9,6 +9,8 @@ import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:simexpro/widgets/taps_Aduana.dart';
 
+import '../screens/ordertracking/orders_screen.dart';
+
 enum MenuItem { item1, item2 }
 
 class NavBarRoots extends StatefulWidget {
@@ -40,6 +42,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
         esAduana ? GraficasAduanas() : TapsProduccion(),
         historialScreen(),
         TimelineScreen(),
+        const OrdersScreen(),
       ];
     });
   }

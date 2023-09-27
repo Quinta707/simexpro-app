@@ -8,9 +8,9 @@ import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/widgets/panel_widget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../widgets/navbar_roots.dart';
-import 'home_screen.dart';
-import 'login_screen.dart';
+import '../../widgets/navbar_roots.dart';
+import '../home_screen.dart';
+import '../login_screen.dart';
 
 // ignore: must_be_immutable
 class POTrackingScreen extends StatefulWidget {
@@ -396,37 +396,3 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
     );
   }
 }
-
-// class ItemsContainer extends StatelessWidget {
-//   const ItemsContainer({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: MediaQuery.of(context).size.width,
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         border: Border.all(
-//           color: Colors.black
-//         ),
-//         boxShadow: const [
-//           BoxShadow(
-//             color: Colors.black12,
-//             spreadRadius: 5,
-//             // blurRadius: 1,
-//             // offset: const Offset(0, 3)
-//           )
-//         ]
-//       ),
-//       child: Column(
-//         children: const <Widget>[
-//           Text("info 1"),
-//           Text("info 2"),
-//           Text("info 3"),
-//         ]
-//       ),
-//     );
-//   }
-// }

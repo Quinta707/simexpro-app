@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
-import '../widgets/navbar_roots.dart';
-import 'home_screen.dart';
-import 'login_screen.dart';
+import '../../widgets/navbar_roots.dart';
+import '../home_screen.dart';
+import '../login_screen.dart';
 
 class ItemTrackingScreen extends StatefulWidget {
   const ItemTrackingScreen({Key? key}) : super(key: key);
