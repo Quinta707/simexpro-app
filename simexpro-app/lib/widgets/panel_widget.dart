@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../itemtracking_screen.dart';
+import '../screens/ordertracking/itemtracking_screen.dart';
 
 class PanelWidget extends StatelessWidget{
   final ScrollController controller;
