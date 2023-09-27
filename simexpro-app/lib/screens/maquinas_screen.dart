@@ -96,12 +96,13 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
         ).show(context);
         valor = 0;
     } 
-    else{ CherryToast.success(
-        title: Text('ayer tuve un amor que hoy me abandonó porque no me quería, fue tanta mi ilusión por hacerla feliz pero todo fue en vano', 
-          style: TextStyle(color: Colors.white), 
-          textAlign: TextAlign.justify),
-        borderRadius: 5,
-      ).show(context);
+    else{ 
+      // CherryToast.success(
+      //   title: Text('ayer tuve un amor que hoy me abandonó porque no me quería, fue tanta mi ilusión por hacerla feliz pero todo fue en vano', 
+      //     style: TextStyle(color: Colors.white), 
+      //     textAlign: TextAlign.justify),
+      //   borderRadius: 5,
+      // ).show(context);
       datamaquina = filteredlist;
       datamaquina2 = data2;
       valor = 1;
@@ -259,7 +260,7 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       backgroundColor: Color.fromRGBO(99, 74, 158, 1),
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                     ),
                     onPressed: () async {
                       if (searchValue != null && searchValue != "") {
@@ -321,53 +322,53 @@ class RightChild extends StatelessWidget {
               padding: EdgeInsets.all(5), 
               child: Row(
                 children: [
+                    Container(
+                      width: 110,
+                      alignment: Alignment.center,
+                      child: Text('No. Serie: ', style: TextStyle(color: Color.fromRGBO(99, 74, 158, 1), fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.start),
+                    ),
+                    Container(
+                      width: 110,
+                      alignment: Alignment.center,
+                      child: Text('Modelo: ', style: TextStyle(color: Color.fromRGBO(99, 74, 158, 1), fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
+                    ),
+                    Container(
+                      width: 110,
+                      alignment: Alignment.center,
+                      child: Text('Módulo: ', style: TextStyle(color: Color.fromRGBO(99, 74, 158, 1), fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.end),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(5), 
+              child: Row(
+                children: [
                   Container(
-                    width: 110,
-                    alignment: Alignment.center,
-                    child: Text('No. Serie: ', style: TextStyle(color: Color.fromRGBO(99, 74, 158, 1), fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.start),
+                      width: 110,
+                      alignment: Alignment.center,
+                      child: Text(datamaquina[0]['maquinaNumeroSerie'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.start),
                   ),
                   Container(
-                    width: 110,
-                    alignment: Alignment.center,
-                    child: Text('Modelo: ', style: TextStyle(color: Color.fromRGBO(99, 74, 158, 1), fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
+                      width: 110,
+                      alignment: Alignment.center,
+                      child: Text(datamaquina2[0]['mmaq_Nombre'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.center),
                   ),
                   Container(
-                    width: 110,
-                    alignment: Alignment.center,
-                    child: Text('Módulo: ', style: TextStyle(color: Color.fromRGBO(99, 74, 158, 1), fontSize: 18, fontWeight: FontWeight.w500), textAlign: TextAlign.end),
+                      width: 110,
+                      alignment: Alignment.center,
+                      child: Text(datamaquina2[0]['modu_Nombre'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.end),
                   ),
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(5), 
-            child: Row(
-              children: [
-                Container(
-                    width: 110,
-                    alignment: Alignment.center,
-                    child: Text(datamaquina[0]['maquinaNumeroSerie'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.start),
-                ),
-                Container(
-                    width: 110,
-                    alignment: Alignment.center,
-                    child: Text(datamaquina2[0]['mmaq_Nombre'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.center),
-                ),
-                Container(
-                    width: 110,
-                    alignment: Alignment.center,
-                    child: Text(datamaquina2[0]['modu_Nombre'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300), textAlign: TextAlign.end),
-                ),
-              ],
+            Padding(padding: EdgeInsets.only(left: 10, right: 10),
+            child: Divider(
+                color: Color.fromRGBO(99, 74, 158, 1),
+                thickness: 2,
+              ),
             ),
-          ),
-          Padding(padding: EdgeInsets.only(left: 10, right: 10),
-          child: Divider(
-              color: Color.fromRGBO(99, 74, 158, 1),
-              thickness: 2,
-            ),
-          ),
             ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,

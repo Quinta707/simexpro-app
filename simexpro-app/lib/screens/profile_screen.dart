@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:simexpro/screens/home_screen.dart';
+import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/utils/user_preferences.dart';
 import 'package:simexpro/widgets/appbar_widget.dart';
+import 'package:simexpro/widgets/navbar_roots.dart';
 import 'package:simexpro/widgets/profile_widget.dart';
 import 'package:simexpro/model/user.dart';
 import 'package:simexpro/widgets/button_widget.dart';
@@ -45,15 +47,103 @@ class PerfilUsuario extends State<ProfileScreen> {
     const user = UserPreferences.myUser;
 
     return Scaffold(
-      appBar: buildAppBar(context),
+      appBar: AppBar(
+        title: const Image(
+          height: 35,
+          image: AssetImage('images/slogan.png'),
+        ),
+        centerTitle: true,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(image),
+              child: PopupMenuButton<MenuItem>(
+                //padding: EdgeInsets.all(10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.network(
+                    image,
+                    width: 50,
+                  ),
+                ),
+                onSelected: (value) {
+                  if (value == MenuItem.item1) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(),
+                        ));
+                  }
+                  if (value == MenuItem.item2) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => loginScreen(),
+                        ));
+                  }
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem<MenuItem>(
+                    value: MenuItem.item1,
+                    child: Row(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.person_2_outlined,
+                              color: Color.fromRGBO(87, 69, 223, 1),
+                            )),
+                        const Text(
+                          'Mi Perfil',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<MenuItem>(
+                    value: MenuItem.item2,
+                    child: Row(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.logout,
+                              color: Color.fromRGBO(87, 69, 223, 1),
+                            )),
+                        const Text(
+                          'Cerrar Sesión',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+        backgroundColor: Color.fromRGBO(17, 24, 39, 1),
+        //elevation: 50.0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: 'Regresar',
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        //systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
+          const SizedBox(height: 30),
           ProfileWidget(
             imagePath: image,
             onClicked: () async {},
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 10),
           buildName(user),
           const SizedBox(height: 20),
           buildAbout(user),
@@ -71,7 +161,7 @@ class PerfilUsuario extends State<ProfileScreen> {
         children: [
           Text(
             NombreUsuario,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
           ),
         ],
       );
@@ -139,8 +229,6 @@ class PerfilUsuario extends State<ProfileScreen> {
   Widget buildButton(User user) => Column(
         children: [
           Container(
-            width: 200.0, // Ajusta el ancho del botón
-            height: 30.0, // Ajusta la altura del botón
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -148,15 +236,16 @@ class PerfilUsuario extends State<ProfileScreen> {
                       true; // Mostrar el campo de entrada al presionar el botón
                 });
               },
-              child: Text('Cambiar Contraseña'),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    Color.fromRGBO(99, 74, 158, 1.0)),
+              child: Text('Cambiar Contraseña', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               ),
             ),
           )
-
-          // Otros widgets que puedas tener después del botón
         ],
       );
 
