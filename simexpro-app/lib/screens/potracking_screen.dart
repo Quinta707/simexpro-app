@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:carousel_slider/carousel_slider.dart';
 import 'package:simexpro/screens/profile_screen.dart';
-import 'package:simexpro/screens/widget/panel_widget.dart';
+import 'package:simexpro/widgets/panel_widget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../widgets/navbar_roots.dart';
