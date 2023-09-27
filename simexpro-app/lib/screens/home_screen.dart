@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simexpro/widgets/listadoPruebaApi.dart';
 
 String image = '';
 Future<void>Imagen() async{
@@ -49,7 +48,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 25,),
-              PruebaApi(),
             ],
           ),
         ),
