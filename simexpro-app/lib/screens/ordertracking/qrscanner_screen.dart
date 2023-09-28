@@ -63,7 +63,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8), color: Colors.white24),
       child: Text(
-        barcode != null ? 'Result: ${barcode!.code}' : 'Scan a code',
+        barcode != null ? 'Código: ${barcode!.code}' : 'Escanee el código',
         maxLines: 3,
         style: TextStyle(color: Colors.white),
       ));
@@ -84,8 +84,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     setState(() => this.controller = controller);
 
     controller.scannedDataStream.listen((barcode) => {
-         print('barcode ${barcode.code}, this barcode ${this.barcode!.code}'),
-          if (barcode.code.toString() != this.barcode!.code.toString())
+          if (barcode.code != this.barcode?.code)
             {TraerDatos(barcode.code.toString(), context)},
           this.barcode = barcode,
         });

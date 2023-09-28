@@ -51,7 +51,7 @@ Future<void> TraerDatos(String codigopo, context) async {
     );
   } else{
     CherryToast.warning(
-        title: const Text('El código ingresado no es válido',
+        title: const Text('El código no es válido',
             style: TextStyle(color: Colors.white)))
     .show(context);
   }

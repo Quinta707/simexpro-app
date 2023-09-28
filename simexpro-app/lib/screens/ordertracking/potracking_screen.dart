@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 // import 'package:carousel_slider/carousel_slider.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/widgets/panel_widget.dart';
@@ -42,9 +42,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
    
    var elementos = Elementos();
    final panelController = PanelController();
-  //  final elementos = {
-  //   final linea1;
-  //  };
+   final format = DateFormat('dd-MM-yyyy');
    
 
   visualizarEstado(){
@@ -156,11 +154,9 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         backgroundColor: const Color.fromRGBO(17, 24, 39, 1),
       ),
 
-      // backgroundColor: const Color.fromARGB(255, 129, 100, 197),
-      // backgroundColor: Colors.white70,
+            //SlidingUpPanel is the draggable panel for the items
       body: SlidingUpPanel(
         backdropEnabled: true,
-        // color: Color.fromARGB(255, 134, 111, 189),
         color: const Color.fromARGB(255, 134, 111, 189),
         controller: panelController,
         maxHeight: panelHeightOpen,
@@ -170,6 +166,8 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
           panelController: panelController,
         ),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+
+        //The "header" code
         body: 
           SingleChildScrollView(
             child: Center(
@@ -194,10 +192,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                     crossAxisSpacing: 5.0,
                     crossAxisCount: 3,
                     childAspectRatio: 17.0,
-                    // height: ,
                     children: <Widget>[
-                      // visualizarEstado(),
-                      // pendiente?
                       Container(
                         decoration: BoxDecoration(
                           color: elementos.linea1,
@@ -205,7 +200,6 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                         ),
                       ),
       
-                      // encurso?
                       Container(
                         decoration: BoxDecoration(
                           color: elementos.linea2,
@@ -221,9 +215,10 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       ),
                     ],
                   ),   
+
                   const SizedBox(height: 5),
+
                   Container(
-                    // width: ,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                           color: elementos.tag,
@@ -253,24 +248,8 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                   const SizedBox(height: 18),
                   Image.asset(
                     'images/trackingpos/${elementos.image}',
-                    height: (MediaQuery.of(context).size.height / 4) + 10,),
-
-                
-                  // Row(
-                  //   children: const [
-                  //     //Encabezados
-                  //     Text(
-                  //       "Cliente:",
-                  //       style: TextStyle(
-                  //         color: Colors.grey,
-                  //       ),
-                  //     ),
-                  //     Text("RTN:"),
-
-                  //     //Info real
-                  //   ],
-                  // ),
-                  // const SizedBox(height: 5),
+                    height: (MediaQuery.of(context).size.height / 4) + 10,
+                  ),
 
                   SizedBox(
                     height: 200,
@@ -281,7 +260,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       crossAxisSpacing: 10.0,
                       // mainAxisSpacing: 1,
                       childAspectRatio: 3/1,
-                      children: const [
+                      children: [
                         // Text(
                         //   "Cliente: \nTiendas Carrión",
                         //   style: TextStyle(
@@ -291,12 +270,12 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                         Text.rich(
                           TextSpan(
                             text: "Cliente:",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.grey,
                             ),
                             children: <TextSpan>[
-                              TextSpan(text: "\nTiendas Carrión",
-                                       style: TextStyle(
+                              TextSpan(text: "\n${widget.data[0]["clie_Nombre_O_Razon_Social"]}",
+                                       style: const TextStyle(
                                         color: Colors.black,
                                       ),
                               )
@@ -307,11 +286,11 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                         Text.rich(
                           TextSpan(
                             text: "RTN:",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.grey,
                             ),
                             children: <TextSpan>[
-                              TextSpan(text: "\n0512-2003-007569",
+                              TextSpan(text: "\n${widget.data[0]["clie_RTN"]}",
                                        style: TextStyle(
                                         color: Colors.black,
                                       ),
@@ -327,7 +306,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                               color: Colors.grey,
                             ),
                             children: <TextSpan>[
-                              TextSpan(text: "\n8/9/2023",
+                              TextSpan(text: "\n${widget.data[0]["orco_FechaEmision"]}",
                                        style: TextStyle(
                                         color: Colors.black,
                                       ),
@@ -342,7 +321,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                               color: Colors.grey,
                             ),
                             children: <TextSpan>[
-                              TextSpan(text: "\n30/9/2023",
+                              TextSpan(text: "\n${format.format(DateTime.tryParse(widget.data[0]["orco_FechaLimite"]))}",
                                        style: TextStyle(
                                         color: Colors.black,
                                       ),
