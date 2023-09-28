@@ -112,7 +112,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               ),
                             ]
                            ),
-                          ),
+                          ),  
                       Padding(
                           padding: const EdgeInsets.all(18),
                           child: TextField(
