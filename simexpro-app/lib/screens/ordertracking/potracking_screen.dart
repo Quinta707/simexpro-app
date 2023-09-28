@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 // import 'package:carousel_slider/carousel_slider.dart';
@@ -8,6 +9,7 @@ import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/widgets/panel_widget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../../widgets/headersinfo_widget.dart';
 import '../../widgets/navbar_roots.dart';
 import '../home_screen.dart';
 import '../login_screen.dart';
@@ -15,7 +17,13 @@ import '../login_screen.dart';
 // ignore: must_be_immutable
 class POTrackingScreen extends StatefulWidget {
   final data;
-  const POTrackingScreen({Key? key, required this.data}) : super(key: key);
+  final detalles;
+  
+  const POTrackingScreen({
+    Key? key, 
+    required this.data,
+    required this.detalles
+  }) : super(key: key);
 
   @override
   State<POTrackingScreen> createState() => _POTrackingScreenState();
@@ -154,7 +162,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         backgroundColor: const Color.fromRGBO(17, 24, 39, 1),
       ),
 
-            //SlidingUpPanel is the draggable panel for the items
+            //SlidingUpPanel es el panel inferior para los detalles de la PO
       body: SlidingUpPanel(
         backdropEnabled: true,
         color: const Color.fromARGB(255, 134, 111, 189),
@@ -167,7 +175,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         ),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
 
-        //The "header" code
+        //Diseño del "header"
         body: 
           SingleChildScrollView(
             child: Center(
@@ -261,109 +269,32 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       // mainAxisSpacing: 1,
                       childAspectRatio: 3/1,
                       children: [
-                        // Text(
-                        //   "Cliente: \nTiendas Carrión",
-                        //   style: TextStyle(
-                        //     color: Colors.grey,
-                        //   ),
-                        // ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Cliente:",
-                            style: const TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\n${widget.data[0]["clie_Nombre_O_Razon_Social"]}",
-                                       style: const TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              )
-                              
-                            ]
-                          )
+
+                        HeadersInfoWidget(
+                          title: "Cliente:", 
+                          text: widget.data[0]["clie_Nombre_O_Razon_Social"]
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "RTN:",
-                            style: const TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\n${widget.data[0]["clie_RTN"]}",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              )
-                              
-                            ]
-                          )
+                        HeadersInfoWidget(
+                          title: "RTN:", 
+                          text: widget.data[0]["clie_RTN"]
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Fecha de emisión:",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\n${widget.data[0]["orco_FechaEmision"]}",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              )
-                            ]
-                          )
+                        HeadersInfoWidget(
+                          title: "Fecha de emisión:", 
+                          text: format.format(DateTime.tryParse(widget.data[0]["orco_FechaEmision"]) as DateTime)
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Fecha límite:",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\n${format.format(DateTime.tryParse(widget.data[0]["orco_FechaLimite"]))}",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              )
-                            ]
-                          )
+                        HeadersInfoWidget(
+                          title: "Fecha límite:", 
+                          text: format.format(DateTime.tryParse(widget.data[0]["orco_FechaLimite"]) as DateTime)
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Embalaje general:",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\nBultos",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              )
-                            ]
-                          )
+                        HeadersInfoWidget(
+                          title: "Embalaje general:", 
+                          text: widget.data[0]["tiem_Descripcion"]
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Dirección de entrega:",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\nMullberry street, so good to see you.",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              ),
-                            ]
-                          )
+                        HeadersInfoWidget(
+                          title: "Dirección de entrega:", 
+                          text: widget.data[0]["orco_DireccionEntrega"]
                         ),
-                        // Text("RTN:"),
-                        // Text("RTN:"),
-                        // Text("RTN:"),
-                        // Text("RTN:"),
-                        // Text("RTN:"),
+
                       ],),
                   )
                 ],

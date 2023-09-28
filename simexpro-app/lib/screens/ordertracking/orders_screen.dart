@@ -43,10 +43,22 @@ Future<void> TraerDatos(String codigopo, context) async {
 
   if (data.length > 0) {
     print('data after search $data');
+
+    final detalles = await http.get(
+      Uri.parse(
+          '${apiUrl}OrdenCompraDetalles/DibujarDetalles?orco_Codigo=$codigopo'
+      ),
+      headers: {
+        'XApiKey': apiKey,
+        'Content-Type': 'application/json',
+      },
+    );
+    print('data after search detalles $detalles');
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => POTrackingScreen(data: data),
+        builder: (context) => POTrackingScreen(data: data, detalles: detalles,),
       )
     );
   } else{
