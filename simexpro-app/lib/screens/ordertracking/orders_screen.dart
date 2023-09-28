@@ -44,7 +44,7 @@ Future<void> TraerDatos(String codigopo, context) async {
   if (data.length > 0) {
     print('data after search $data');
 
-    final detalles = await http.get(
+    final response2 = await http.get(
       Uri.parse(
           '${apiUrl}OrdenCompraDetalles/DibujarDetalles?orco_Codigo=$codigopo'
       ),
@@ -53,6 +53,10 @@ Future<void> TraerDatos(String codigopo, context) async {
         'Content-Type': 'application/json',
       },
     );
+
+    final decodedJson2 = jsonDecode(response2.body);
+    final detalles = decodedJson2["data"];
+
     print('data after search detalles $detalles');
 
     Navigator.push(

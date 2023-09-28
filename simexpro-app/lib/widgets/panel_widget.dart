@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -6,11 +8,13 @@ import '../screens/ordertracking/itemtracking_screen.dart';
 class PanelWidget extends StatelessWidget{
   final ScrollController controller;
   final PanelController panelController;
+  final detalles;
 
   const PanelWidget({
     Key? key,
     required this.controller,
     required this.panelController,
+    required this.detalles
   }) : super(key: key);
 
   @override

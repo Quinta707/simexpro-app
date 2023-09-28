@@ -172,6 +172,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         panelBuilder: (controller) => PanelWidget(
           controller: controller,
           panelController: panelController,
+          detalles: widget.detalles,
         ),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
 
