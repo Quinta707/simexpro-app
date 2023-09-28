@@ -229,7 +229,7 @@ class TabBarDemo extends State<TapsProduccion> {
 
         setState(() {
           GananciasMensuales = conteo;
-          MesActual = item['mes'];
+          MesActual = item['mes'] == null ? "" : item['mes'];
         });
       }
     } catch (error) {
