@@ -172,14 +172,7 @@ class PerfilUsuario extends State<ProfileScreen> {
                     width: 50,
                   ),
                 ),
-                onSelected: (value) {
-                  if (value == MenuItem.item1) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileScreen(),
-                        ));
-                  }
+               onSelected: (value) {
                   if (value == MenuItem.item2) {
                     Navigator.push(
                         context,
@@ -189,23 +182,6 @@ class PerfilUsuario extends State<ProfileScreen> {
                   }
                 },
                 itemBuilder: (context) => [
-                  PopupMenuItem<MenuItem>(
-                    value: MenuItem.item1,
-                    child: Row(
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(
-                              Icons.person_2_outlined,
-                              color: Color.fromRGBO(87, 69, 223, 1),
-                            )),
-                        const Text(
-                          'Mi Perfil',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ],
-                    ),
-                  ),
                   PopupMenuItem<MenuItem>(
                     value: MenuItem.item2,
                     child: Row(
