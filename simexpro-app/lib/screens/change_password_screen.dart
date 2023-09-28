@@ -22,7 +22,8 @@ class ChangePasswordScreen extends StatefulWidget {
 Future<void> delayFunction(BuildContext context) async {
    CherryToast.success(
       title: Text('Su contraseña ha sido reestablecida',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
   await Future.delayed(Duration(seconds: 3));
@@ -55,7 +56,8 @@ Future<void> ValidarClaves(BuildContext context, String newpassword) async {
   } else {
     CherryToast.error(
       title: Text('Algo salió mal. Inténtelo nuevamente',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
   }
@@ -76,7 +78,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
              alignment: Alignment.center,
              decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage("https://i.ibb.co/0yqp5w1/fondo.png"),
+                    image:AssetImage("images/fondo.png"),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -153,14 +155,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 } else{
                                   CherryToast.error(
                                   title: Text('Las contraseñas no coinciden',
-                                      style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+                                      style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+                                      textAlign: TextAlign.justify),
                                   borderRadius: 5,
                                 ).show(context);
                                 }
                               } else {
                                 CherryToast.warning(
                                   title: Text('Llene los campos correctamente',
-                                      style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+                                      style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+                                      textAlign: TextAlign.justify),
                                   borderRadius: 5,
                                 ).show(context);
                               }

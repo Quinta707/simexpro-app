@@ -40,10 +40,13 @@ Future<void> fetchData(
         MaterialPageRoute(
           builder: (context) => NavBarRoots(),
         ));
-  } else {
+  } 
+  else{
+    print(response.statusCode);
     CherryToast.error(
       title: Text('El usuario o contraseña son incorrectos',
-          style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+          style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+          textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
   }
@@ -67,7 +70,7 @@ class _loginScreenState extends State<loginScreen> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage("https://i.ibb.co/0yqp5w1/fondo.png"),
+                  image: AssetImage("images/fondo.png"),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -76,8 +79,8 @@ class _loginScreenState extends State<loginScreen> {
                   SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: Image.network(
-                      "https://i.ibb.co/vk2tjx1/SIMEXPRO-V3-PNG.png",
+                    child: Image.asset(
+                      "images/SIMEXPRO-V3-PNG.png",
                       height: 230,
                     ),
                   ),
@@ -102,8 +105,8 @@ class _loginScreenState extends State<loginScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
-                                right: 18, left: 18, bottom: 18),
+                              padding: const EdgeInsets.only(
+                                  right: 18, left: 18, bottom: 18),
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
@@ -185,8 +188,8 @@ class _loginScreenState extends State<loginScreen> {
                                     title: Text(
                                         'Llene los campos correctamente',
                                         style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 226, 226, 226))),
+                                            color: Color.fromARGB(255, 226, 226, 226)),
+                                            textAlign: TextAlign.justify),
                                     borderRadius: 5,
                                   ).show(context);
                                 }

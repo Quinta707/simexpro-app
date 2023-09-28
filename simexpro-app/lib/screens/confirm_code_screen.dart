@@ -30,7 +30,8 @@ Future<void> ValidarCodigo(BuildContext context, String code) async {
   } else {
     CherryToast.error(
       title: Text('El código no es correcto',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
   }
@@ -69,7 +70,8 @@ Future<void> ObtenerCodigoVerificacion(BuildContext context) async {
 
        CherryToast.error(
       title: Text('El código no pudo ser generado',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
         borderRadius: 5,
       ).show(context);
     }
@@ -77,13 +79,15 @@ Future<void> ObtenerCodigoVerificacion(BuildContext context) async {
   } else if(response.statusCode == 404){
     CherryToast.error(
       title: Text('El usuario no existe o no está disponible',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
   } else {
     CherryToast.error(
       title: Text('Algo salió mal. Inténtelo nuevamente',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
   }
@@ -111,14 +115,16 @@ Future<void> EnviarEmail(BuildContext context, String username, String email, St
   if (response.statusCode == 200) {
    CherryToast.success(
       title: Text('Se ha enviado un nuevo código a tu correo',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
     
   } else {
     CherryToast.error(
       title: Text('Algo salió mal. Contacte un administrador',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
     print(response);
@@ -138,7 +144,7 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
             alignment: Alignment.center,
              decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage("https://i.ibb.co/0yqp5w1/fondo.png"),
+                    image:AssetImage("images/fondo.png"),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -200,7 +206,8 @@ class _ConfirmCodeScreenState extends State<ConfirmCodeScreen> {
                             } else {
                               CherryToast.warning(
                                 title: Text('Llene los campos correctamente',
-                                    style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+                                    style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+                                    textAlign: TextAlign.justify),
                                 borderRadius: 5,
                               ).show(context);
                             }

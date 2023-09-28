@@ -66,7 +66,8 @@ Future<void> ObtenerCodigoVerificacion(BuildContext context, String username) as
 
        CherryToast.error(
       title: Text('El código no pudo ser generado',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
         borderRadius: 5,
       ).show(context);
     }
@@ -74,13 +75,15 @@ Future<void> ObtenerCodigoVerificacion(BuildContext context, String username) as
   } else if(response.statusCode == 404){
     CherryToast.error(
       title: Text('El usuario no existe o no está disponible',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
   } else {
     CherryToast.error(
       title: Text('Algo salió mal. Inténtelo nuevamente',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
   }
@@ -115,7 +118,8 @@ Future<void> EnviarEmail(BuildContext context, String username, String email, St
   } else {
     CherryToast.error(
       title: Text('Algo salió mal. Contacte un administrador',
-           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+           style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+           textAlign: TextAlign.justify),
       borderRadius: 5,
     ).show(context);
     print(response);
@@ -136,7 +140,7 @@ class _RecoverPasswordScreenState extends State<RecoverPasswordScreen> {
             alignment: Alignment.center,
              decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage("https://i.ibb.co/0yqp5w1/fondo.png"),
+                    image:AssetImage("images/fondo.png"),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -198,7 +202,8 @@ class _RecoverPasswordScreenState extends State<RecoverPasswordScreen> {
                           } else {
                             CherryToast.warning(
                               title: Text('Llene los campos correctamente',
-                                  style: TextStyle(color: Color.fromARGB(255, 226, 226, 226))),
+                                  style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+                                  textAlign: TextAlign.justify),
                               borderRadius: 5,
                             ).show(context);
                           }

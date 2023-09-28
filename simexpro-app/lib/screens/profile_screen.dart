@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/utils/user_preferences.dart';
 import 'package:simexpro/widgets/appbar_widget.dart';
@@ -177,6 +176,7 @@ class PerfilUsuario extends State<ProfileScreen> {
                   prefixIcon: Icon(Icons.person),
                 ),
               ),
+              
             ),
           ),
         ],
