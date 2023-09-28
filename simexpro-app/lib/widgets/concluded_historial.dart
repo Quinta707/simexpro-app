@@ -205,7 +205,7 @@ class _ConcludedhistorialState extends State<Concludedhistorial> {
                   width: 100,
                   height: 25,
                   child: Image.network(
-                    "https://i.ibb.co/9T4ST2V/pendiente.png",
+                    "https://i.ibb.co/7GtzvVv/completada.png",
                     fit: BoxFit
                         .contain, // Ajusta la imagen para que cubra el espacio
                   ),
@@ -257,13 +257,13 @@ class _ConcludedhistorialState extends State<Concludedhistorial> {
                       Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: Colors.green,
                           shape: BoxShape.circle,
                         ),
                       ),
                       SizedBox(width: 5),
                       Text(
-                        "Pendiente",
+                        "Completada",
                         style: TextStyle(
                           color: Colors.black54,
                         ),
