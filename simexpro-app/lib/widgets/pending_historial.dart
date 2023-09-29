@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
 import 'package:simexpro/screens/historial_detalles_screen.dart';
+import 'package:simexpro/widgets/upcoming_historial.dart';
 
 class OrderData {
   final int id;
@@ -41,12 +42,12 @@ class OrderData {
   }
 }
 
-class Upcominghistorial extends StatefulWidget {
+class Pendinghistorial extends StatefulWidget {
   @override
-  _UpcominghistorialState createState() => _UpcominghistorialState();
+  _PendinghistorialState createState() => _PendinghistorialState();
 }
 
-class _UpcominghistorialState extends State<Upcominghistorial> {
+class _PendinghistorialState extends State<Pendinghistorial> {
   List<OrderData> orders = [];
   List<OrderData> filteredOrders = [];
 
@@ -77,7 +78,7 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
       final dataList = decodedJson["data"] as List<dynamic>;
 
       final orders = dataList
-          .where((data) => data['orco_EstadoOrdenCompra'] == 'C')
+          .where((data) => data['orco_EstadoOrdenCompra'] == 'P')
           .map((data) {
         String fechaEmision = data['orco_FechaEmision'];
         String fechaLimite = data['orco_FechaLimite'];
@@ -138,15 +139,13 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
             ),
           ),
           SizedBox(height: 16),
-          ListView.builder(
+                 ListView.builder(
             shrinkWrap: true,
             itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
             itemBuilder: (context, index) {
               if (filteredOrders.isNotEmpty) {
-                // Muestra la tarjeta de pedido si hay datos
                 return buildCard(filteredOrders[index]);
               } else {
-                // Muestra la imagen predeterminada con el tamaño deseado
                 return Center(
                   child: Image.network(
                     "https://i.ibb.co/9sgcf39/image.png",
@@ -206,7 +205,7 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
                   width: 100,
                   height: 25,
                   child: Image.network(
-                    "https://i.ibb.co/GVHnGxg/encurso.png",
+                    "https://i.ibb.co/9T4ST2V/pendiente.png",
                     fit: BoxFit
                         .contain, // Ajusta la imagen para que cubra el espacio
                   ),
@@ -258,13 +257,13 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
                       Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.yellow,
+                          color: Colors.red,
                           shape: BoxShape.circle,
                         ),
                       ),
                       SizedBox(width: 5),
                       Text(
-                        "En Curso",
+                        "Pendiente",
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -278,18 +277,11 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InkWell(
-                    onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('ordercodigo', order.codigo);
-                      prefs.setString('orderid',
-                          order.id.toString());
-
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Historial_detalles_Screen(),
-                        ),
+                            builder: (context) => Historial_detalles_Screen()),
                       );
                     },
                     child: Container(

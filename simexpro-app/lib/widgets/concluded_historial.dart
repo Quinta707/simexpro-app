@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
-import 'package:simexpro/screens/historial_detalles_screen.dart';
 
 class OrderData {
   final int id;
@@ -41,12 +40,12 @@ class OrderData {
   }
 }
 
-class Upcominghistorial extends StatefulWidget {
+class Concludedhistorial extends StatefulWidget {
   @override
-  _UpcominghistorialState createState() => _UpcominghistorialState();
+  _ConcludedhistorialState createState() => _ConcludedhistorialState();
 }
 
-class _UpcominghistorialState extends State<Upcominghistorial> {
+class _ConcludedhistorialState extends State<Concludedhistorial> {
   List<OrderData> orders = [];
   List<OrderData> filteredOrders = [];
 
@@ -77,7 +76,7 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
       final dataList = decodedJson["data"] as List<dynamic>;
 
       final orders = dataList
-          .where((data) => data['orco_EstadoOrdenCompra'] == 'C')
+          .where((data) => data['orco_EstadoOrdenCompra'] == 'T')
           .map((data) {
         String fechaEmision = data['orco_FechaEmision'];
         String fechaLimite = data['orco_FechaLimite'];
@@ -138,7 +137,7 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
             ),
           ),
           SizedBox(height: 16),
-          ListView.builder(
+                 ListView.builder(
             shrinkWrap: true,
             itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
             itemBuilder: (context, index) {
@@ -206,7 +205,7 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
                   width: 100,
                   height: 25,
                   child: Image.network(
-                    "https://i.ibb.co/GVHnGxg/encurso.png",
+                    "https://i.ibb.co/7GtzvVv/completada.png",
                     fit: BoxFit
                         .contain, // Ajusta la imagen para que cubra el espacio
                   ),
@@ -258,13 +257,13 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
                       Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.yellow,
+                          color: Colors.green,
                           shape: BoxShape.circle,
                         ),
                       ),
                       SizedBox(width: 5),
                       Text(
-                        "En Curso",
+                        "Completada",
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -278,20 +277,7 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InkWell(
-                    onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('ordercodigo', order.codigo);
-                      prefs.setString('orderid',
-                          order.id.toString());
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Historial_detalles_Screen(),
-                        ),
-                      );
-                    },
+                    onTap: () {},
                     child: Container(
                       width: 150,
                       padding: EdgeInsets.symmetric(vertical: 12),
