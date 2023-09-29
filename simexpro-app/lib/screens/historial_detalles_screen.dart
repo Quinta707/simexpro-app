@@ -62,30 +62,15 @@ class ItemData {
   final int codeId;
   final int orcoId;
   final int codeCantidadPrenda;
-  final int estiId;
   final String estiDescripcion;
   final String codeFechaProcActual;
   final String tallNombre;
-  final int tallId;
   final String codeSexo;
-  final int colrId;
   final String colrNombre;
   final String codeEspecificacionEmbalaje;
-  final int usuaUsuarioCreacion;
-  final String usuarioCreacionNombre;
-  final String codeFechaCreacion;
-  final int usuaUsuarioModificacion;
-  final String usuarioModificacionNombre;
-  final String codeFechaModificacion;
-  final bool codeEstado;
   final String orcoCodigo;
-  final String clieNombreORazonSocial;
   final bool orcoEstadoFinalizado;
   final String orcoEstadoOrdenCompra;
-  final int procActual;
-  final int procComienza;
-  final int ordenProduccion;
-  final int faexId;
   final String fechaExportacion;
   final int cantidadExportada;
   final int fedeCajas;
@@ -94,31 +79,16 @@ class ItemData {
   ItemData({
     required this.codeId,
     required this.orcoId,
+    required this.orcoCodigo,
     required this.codeCantidadPrenda,
-    required this.estiId,
     required this.estiDescripcion,
     required this.codeFechaProcActual,
     required this.tallNombre,
-    required this.tallId,
     required this.codeSexo,
-    required this.colrId,
     required this.colrNombre,
     required this.codeEspecificacionEmbalaje,
-    required this.usuaUsuarioCreacion,
-    required this.usuarioCreacionNombre,
-    required this.codeFechaCreacion,
-    required this.usuaUsuarioModificacion,
-    required this.usuarioModificacionNombre,
-    required this.codeFechaModificacion,
-    required this.codeEstado,
-    required this.orcoCodigo,
-    required this.clieNombreORazonSocial,
     required this.orcoEstadoFinalizado,
     required this.orcoEstadoOrdenCompra,
-    required this.procActual,
-    required this.procComienza,
-    required this.ordenProduccion,
-    required this.faexId,
     required this.fechaExportacion,
     required this.cantidadExportada,
     required this.fedeCajas,
@@ -130,30 +100,15 @@ class ItemData {
       'code_Id': codeId,
       'orco_Id': orcoId,
       'code_CantidadPrenda': codeCantidadPrenda,
-      'esti_Id': estiId,
       'esti_Descripcion': estiDescripcion,
       'code_FechaProcActual': codeFechaProcActual,
       'tall_Nombre': tallNombre,
-      'tall_Id': tallId,
       'code_Sexo': codeSexo,
-      'colr_Id': colrId,
       'colr_Nombre': colrNombre,
       'code_EspecificacionEmbalaje': codeEspecificacionEmbalaje,
-      'usua_UsuarioCreacion': usuaUsuarioCreacion,
-      'usuarioCreacionNombre': usuarioCreacionNombre,
-      'code_FechaCreacion': codeFechaCreacion,
-      'usua_UsuarioModificacion': usuaUsuarioModificacion,
-      'usuarioModificacionNombre': usuarioModificacionNombre,
-      'code_FechaModificacion': codeFechaModificacion,
-      'code_Estado': codeEstado,
       'orco_Codigo': orcoCodigo,
-      'clie_Nombre_O_Razon_Social': clieNombreORazonSocial,
       'orco_EstadoFinalizado': orcoEstadoFinalizado,
       'orco_EstadoOrdenCompra': orcoEstadoOrdenCompra,
-      'proc_Actual': procActual,
-      'proc_Comienza': procComienza,
-      'ordenProduccion': ordenProduccion,
-      'faex_Id': faexId,
       'fechaExportacion': fechaExportacion,
       'cantidadExportada': cantidadExportada,
       'fede_Cajas': fedeCajas,
@@ -258,8 +213,7 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
     var orderid = prefs.getString('orderid');
 
     final responsedetalles = await http.get(
-      Uri.parse(
-          '${apiUrl}OrdenCompraDetalles/Listar?orco_Id=$orderid'),
+      Uri.parse('${apiUrl}OrdenCompraDetalles/Listar?orco_Id=$orderid'),
       headers: {
         'XApiKey': apiKey,
         'Content-Type': 'application/json',
@@ -279,45 +233,44 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
         }
 
         return ItemData(
-          codeId: data['code_Id'],
-          orcoId: data['orco_Id'],
-          codeCantidadPrenda: data['code_CantidadPrenda'],
-          estiId: data['esti_Id'],
-          estiDescripcion: data['esti_Descripcion'],
+          codeId:
+              data['code_Id'] ?? 0, // Provide a default value (e.g., 0) if null
+          orcoId: data['orco_Id'] ?? 0,
+          codeCantidadPrenda: data['code_CantidadPrenda'] ?? 0,
+          estiDescripcion: data['esti_Descripcion'] ?? "",
           codeFechaProcActual: codeFechaprocactual,
-          tallNombre: data['tall_Nombre'],
-          tallId: data['tall_Id'],
-          codeSexo: data['code_Sexo'],
-          colrId: data['colr_Id'],
-          colrNombre: data['colr_Nombre'],
-          codeEspecificacionEmbalaje: data['code_EspecificacionEmbalaje'],
-          usuaUsuarioCreacion: data['usua_UsuarioCreacion'],
-          usuarioCreacionNombre: data['usuarioCreacionNombre'],
-          codeFechaCreacion: data['code_FechaCreacion'],
-          usuaUsuarioModificacion: data['usua_UsuarioModificacion'],
-          usuarioModificacionNombre: data['usuarioModificacionNombre'],
-          codeFechaModificacion: data['code_FechaModificacion'],
-          codeEstado: data['code_Estado'],
-          orcoCodigo: data['orco_Codigo'],
-          clieNombreORazonSocial: data['clie_Nombre_O_Razon_Social'],
-          orcoEstadoFinalizado: data['orco_EstadoFinalizado'],
-          orcoEstadoOrdenCompra: data['orco_EstadoOrdenCompra'],
-          procActual: data['proc_Actual'],
-          procComienza: data['proc_Comienza'],
-          ordenProduccion: data['ordenProduccion'],
-          faexId: data['faex_Id'],
-          fechaExportacion: data['fechaExportacion'],
-          cantidadExportada: data['cantidadExportada'],
-          fedeCajas: data['fede_Cajas'],
-          fedeTotalDetalle: data['fede_TotalDetalle'],
+          tallNombre: data['tall_Nombre'] ?? "",
+          codeSexo: data['code_Sexo'] ?? "",
+          colrNombre: data['colr_Nombre'] ?? "",
+          codeEspecificacionEmbalaje: data['code_EspecificacionEmbalaje'] ?? "",
+          orcoCodigo: data['orco_Codigo'] ?? "",
+          orcoEstadoFinalizado: data['orco_EstadoFinalizado'] ??
+              false, // Provide a default value (e.g., false) if null
+          orcoEstadoOrdenCompra: data['orco_EstadoOrdenCompra'] ?? "",
+          fechaExportacion: data['fechaExportacion'] ?? "",
+          cantidadExportada: data['cantidadExportada'] ?? 0,
+          fedeCajas: data['fede_Cajas'] ?? 0,
+          fedeTotalDetalle: data['fede_TotalDetalle'] ?? 0,
         );
       }).toList();
 
+      // Almacena los detalles en el arreglo 'detalles'
+      setState(() {
+        detalles = ordersdetalles;
+        // Luego, filtra los detalles si es necesario
+        filteredOrders = detalles;
+      });
+
+      for (var element in ordersdetalles) {
+        print(element.colrNombre);
+      }
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString(
           'ordersdetalles',
           jsonEncode(
               ordersdetalles.map((detalle) => detalle.toJson()).toList()));
+
+      print("Filtered Orders Length: ${filteredOrders.length}");
 
       return ordersdetalles;
     } else {
@@ -412,7 +365,7 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
         ],
         backgroundColor: Color.fromRGBO(17, 24, 39, 1),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(height: 20),
@@ -442,11 +395,11 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
               shrinkWrap: true,
               itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
               itemBuilder: (context, index) {
+                // Verifies if filteredOrders is not empty and if the index is valid
                 if (filteredOrders.isNotEmpty) {
-                  // Muestra la tarjeta de detalles si hay datos
                   return buildCard(filteredOrders[index]);
                 } else {
-                  // Muestra un mensaje de que no hay detalles disponibles
+                  // Displays a message when filteredOrders is empty
                   return Center(
                     child: Text("No hay detalles disponibles"),
                   );
@@ -473,8 +426,8 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
     });
   }
 
-  Widget buildCard(ItemData itemDetalles) {
-    bool isExpanded = false; // Inicialmente, la tarjeta no está expandida
+  Widget buildCard(ItemData ordersdetalles) {
+//    bool isExpanded = true;
 
     return Card(
       margin: EdgeInsets.only(bottom: 16.0),
@@ -483,13 +436,14 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
         children: [
           ListTile(
             title: Text(
-              "Orden #${itemDetalles.orcoCodigo}", // Usa la propiedad orcoCodigo de ItemData
+              "Orden #${ordersdetalles.orcoCodigo}",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            subtitle: Text(itemDetalles
-                .clieNombreORazonSocial), // Usa la propiedad clieNombreORazonSocial de ItemData
+            subtitle: Text(
+              ordersdetalles.estiDescripcion,
+            ),
             trailing: SizedBox(
               width: 100,
               height: 25,
@@ -512,8 +466,7 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
               color: Colors.black54,
             ),
             title: Text(
-              itemDetalles
-                  .codeFechaProcActual, // Usa la propiedad codeFechaProcActual de ItemData
+              "Fecha de Proceso: ${ordersdetalles.codeFechaProcActual}",
               style: TextStyle(
                 color: Colors.black54,
               ),
@@ -525,8 +478,7 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
               color: Colors.black54,
             ),
             title: Text(
-              itemDetalles
-                  .codeFechaCreacion, // Usa la propiedad codeFechaCreacion de ItemData
+              "Fecha de Exportación: ${ordersdetalles.fechaExportacion}",
               style: TextStyle(
                 color: Colors.black54,
               ),
@@ -541,7 +493,7 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
               ),
             ),
             title: Text(
-              "En Curso",
+              ordersdetalles.orcoEstadoOrdenCompra,
               style: TextStyle(
                 color: Colors.black54,
               ),
@@ -556,7 +508,7 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
                   onTap: () async {
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
-                    prefs.setString('userData', itemDetalles.orcoCodigo);
+                    prefs.setString('a', ordersdetalles.colrNombre);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -583,7 +535,7 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
                     ),
                   ),
                 ),
-                IconButton(
+                /*IconButton(
                   icon:
                       Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
                   onPressed: () {
@@ -591,11 +543,11 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
                       isExpanded = !isExpanded;
                     });
                   },
-                ),
+                ),*/
               ],
             ),
           ),
-          if (isExpanded) // Mostrar información adicional cuando está expandida
+          /*if (isExpanded) // Show additional information when expanded
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Text(
@@ -604,7 +556,7 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
                   color: Colors.black54,
                 ),
               ),
-            ),
+            ),*/
         ],
       ),
     );
