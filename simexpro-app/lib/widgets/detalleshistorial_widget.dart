@@ -231,14 +231,7 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
               ),
             ),
             subtitle: Text(detalle.estiDescripcion),
-            trailing: SizedBox(
-              width: 100,
-              height: 25,
-              child: Image.network(
-                "https://i.ibb.co/GVHnGxg/encurso.png",
-                fit: BoxFit.contain,
-              ),
-            ),
+            
           ),
           children: [
             Divider(),
