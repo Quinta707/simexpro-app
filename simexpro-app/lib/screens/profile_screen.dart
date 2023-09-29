@@ -3,7 +3,6 @@ import 'package:simexpro/screens/change_password_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/utils/user_preferences.dart';
-import 'package:simexpro/widgets/appbar_widget.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
 import 'package:simexpro/widgets/profile_widget.dart';
 import 'package:simexpro/model/user.dart';
@@ -14,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:simexpro/api.dart';
 import 'package:simexpro/widgets/navbar_roots.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'login_screen.dart';
 

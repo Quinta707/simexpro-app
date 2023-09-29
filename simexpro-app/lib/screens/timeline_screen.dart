@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:simexpro/screens/lineatiempo.dart';
 import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/ordertracking/orders_screen.dart';
-import 'package:simexpro/screens/prueba.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
 
 class TimelineScreen extends StatelessWidget {
