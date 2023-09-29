@@ -12,6 +12,7 @@ import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/screens/qrscanner_screen.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
+import 'package:simexpro/widgets/detalleshistorial_widget.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:http/http.dart' as http;
 
@@ -58,64 +59,6 @@ class OrderData {
   }
 }
 
-class ItemData {
-  final int codeId;
-  final int orcoId;
-  final int codeCantidadPrenda;
-  final String estiDescripcion;
-  final String codeFechaProcActual;
-  final String tallNombre;
-  final String codeSexo;
-  final String colrNombre;
-  final String codeEspecificacionEmbalaje;
-  final String orcoCodigo;
-  final bool orcoEstadoFinalizado;
-  final String orcoEstadoOrdenCompra;
-  final String fechaExportacion;
-  final int cantidadExportada;
-  final int fedeCajas;
-  final int fedeTotalDetalle;
-
-  ItemData({
-    required this.codeId,
-    required this.orcoId,
-    required this.orcoCodigo,
-    required this.codeCantidadPrenda,
-    required this.estiDescripcion,
-    required this.codeFechaProcActual,
-    required this.tallNombre,
-    required this.codeSexo,
-    required this.colrNombre,
-    required this.codeEspecificacionEmbalaje,
-    required this.orcoEstadoFinalizado,
-    required this.orcoEstadoOrdenCompra,
-    required this.fechaExportacion,
-    required this.cantidadExportada,
-    required this.fedeCajas,
-    required this.fedeTotalDetalle,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'code_Id': codeId,
-      'orco_Id': orcoId,
-      'code_CantidadPrenda': codeCantidadPrenda,
-      'esti_Descripcion': estiDescripcion,
-      'code_FechaProcActual': codeFechaProcActual,
-      'tall_Nombre': tallNombre,
-      'code_Sexo': codeSexo,
-      'colr_Nombre': colrNombre,
-      'code_EspecificacionEmbalaje': codeEspecificacionEmbalaje,
-      'orco_Codigo': orcoCodigo,
-      'orco_EstadoFinalizado': orcoEstadoFinalizado,
-      'orco_EstadoOrdenCompra': orcoEstadoOrdenCompra,
-      'fechaExportacion': fechaExportacion,
-      'cantidadExportada': cantidadExportada,
-      'fede_Cajas': fedeCajas,
-      'fede_TotalDetalle': fedeTotalDetalle,
-    };
-  }
-}
 
 Future<void> Imagen() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -132,8 +75,6 @@ class Historial_detalles_Screen extends StatefulWidget {
 
 class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
   List<OrderData> orders = [];
-  List<ItemData> detalles = [];
-  List<ItemData> filteredOrders = [];
 
   TextEditingController searchController = TextEditingController();
 
@@ -143,12 +84,6 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
     fetchData().then((result) {
       setState(() {
         orders = result;
-      });
-    });
-    fetchDataDetalles().then((resultdetalles) {
-      setState(() {
-        detalles = resultdetalles;
-        filteredOrders = detalles;
       });
     });
   }
@@ -203,76 +138,6 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
           jsonEncode(orders.map((order) => order.toJson()).toList()));
 
       return orders;
-    } else {
-      throw Exception('Failed to load data');
-    }
-  }
-
-  Future<List<ItemData>> fetchDataDetalles() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var orderid = prefs.getString('orderid');
-
-    final responsedetalles = await http.get(
-      Uri.parse('${apiUrl}OrdenCompraDetalles/Listar?orco_Id=$orderid'),
-      headers: {
-        'XApiKey': apiKey,
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (responsedetalles.statusCode == 200) {
-      final decodedJson = jsonDecode(responsedetalles.body);
-      final dataList = decodedJson["data"] as List<dynamic>;
-
-      final ordersdetalles = dataList.map((data) {
-        String codeFechaprocactual = data['code_FechaProcActual'];
-        int indexOfT1 = codeFechaprocactual.indexOf('T');
-
-        if (indexOfT1 >= 0) {
-          codeFechaprocactual = codeFechaprocactual.substring(0, indexOfT1);
-        }
-
-        return ItemData(
-          codeId:
-              data['code_Id'] ?? 0, // Provide a default value (e.g., 0) if null
-          orcoId: data['orco_Id'] ?? 0,
-          codeCantidadPrenda: data['code_CantidadPrenda'] ?? 0,
-          estiDescripcion: data['esti_Descripcion'] ?? "",
-          codeFechaProcActual: codeFechaprocactual,
-          tallNombre: data['tall_Nombre'] ?? "",
-          codeSexo: data['code_Sexo'] ?? "",
-          colrNombre: data['colr_Nombre'] ?? "",
-          codeEspecificacionEmbalaje: data['code_EspecificacionEmbalaje'] ?? "",
-          orcoCodigo: data['orco_Codigo'] ?? "",
-          orcoEstadoFinalizado: data['orco_EstadoFinalizado'] ??
-              false, // Provide a default value (e.g., false) if null
-          orcoEstadoOrdenCompra: data['orco_EstadoOrdenCompra'] ?? "",
-          fechaExportacion: data['fechaExportacion'] ?? "",
-          cantidadExportada: data['cantidadExportada'] ?? 0,
-          fedeCajas: data['fede_Cajas'] ?? 0,
-          fedeTotalDetalle: data['fede_TotalDetalle'] ?? 0,
-        );
-      }).toList();
-
-      // Almacena los detalles en el arreglo 'detalles'
-      setState(() {
-        detalles = ordersdetalles;
-        // Luego, filtra los detalles si es necesario
-        filteredOrders = detalles;
-      });
-
-      for (var element in ordersdetalles) {
-        print(element.colrNombre);
-      }
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString(
-          'ordersdetalles',
-          jsonEncode(
-              ordersdetalles.map((detalle) => detalle.toJson()).toList()));
-
-      print("Filtered Orders Length: ${filteredOrders.length}");
-
-      return ordersdetalles;
     } else {
       throw Exception('Failed to load data');
     }
@@ -369,202 +234,23 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
         child: Column(
           children: [
             SizedBox(height: 20),
-            //titulo
+            //encabezado
 
             if (orders.isNotEmpty) buildEncabezado(orders[0]),
-            //barra de busqueda
-            SizedBox(height: 0),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 14),
-              child: TextField(
-                controller: searchController,
-                onChanged: onSearchTextChanged,
-                decoration: InputDecoration(
-                  hintText: 'Buscar',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-            ),
+           
 
             //cards
             SizedBox(height: 16),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
-              itemBuilder: (context, index) {
-                // Verifies if filteredOrders is not empty and if the index is valid
-                if (filteredOrders.isNotEmpty) {
-                  return buildCard(filteredOrders[index]);
-                } else {
-                  // Displays a message when filteredOrders is empty
-                  return Center(
-                    child: Text("No hay detalles disponibles"),
-                  );
-                }
-              },
-            )
+            
+            Detalleshistorial(),
           ],
         ),
       ),
     );
   }
 
-  void onSearchTextChanged(String searchText) {
-    setState(() {
-      filteredOrders = detalles
-          .where((detalle) =>
-              detalle.estiDescripcion
-                  .toLowerCase()
-                  .contains(searchText.toLowerCase()) ||
-              detalle.colrNombre
-                  .toLowerCase()
-                  .contains(searchText.toLowerCase()))
-          .toList();
-    });
-  }
-
-  Widget buildCard(ItemData ordersdetalles) {
-//    bool isExpanded = true;
-
-    return Card(
-      margin: EdgeInsets.only(bottom: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            title: Text(
-              "Orden #${ordersdetalles.orcoCodigo}",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            subtitle: Text(
-              ordersdetalles.estiDescripcion,
-            ),
-            trailing: SizedBox(
-              width: 100,
-              height: 25,
-              child: Image.network(
-                "https://i.ibb.co/GVHnGxg/encurso.png",
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Divider(
-              thickness: 1,
-              height: 20,
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.calendar_month_outlined,
-              color: Colors.black54,
-            ),
-            title: Text(
-              "Fecha de Proceso: ${ordersdetalles.codeFechaProcActual}",
-              style: TextStyle(
-                color: Colors.black54,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.calendar_month,
-              color: Colors.black54,
-            ),
-            title: Text(
-              "Fecha de Exportación: ${ordersdetalles.fechaExportacion}",
-              style: TextStyle(
-                color: Colors.black54,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Colors.yellow,
-                shape: BoxShape.circle,
-              ),
-            ),
-            title: Text(
-              ordersdetalles.orcoEstadoOrdenCompra,
-              style: TextStyle(
-                color: Colors.black54,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InkWell(
-                  onTap: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.setString('a', ordersdetalles.colrNombre);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Historial_detalles_Screen(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    width: 150,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(87, 69, 223, 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Ver detalles",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                /*IconButton(
-                  icon:
-                      Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
-                  onPressed: () {
-                    setState(() {
-                      isExpanded = !isExpanded;
-                    });
-                  },
-                ),*/
-              ],
-            ),
-          ),
-          /*if (isExpanded) // Show additional information when expanded
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Text(
-                "Información adicional aquí",
-                style: TextStyle(
-                  color: Colors.black54,
-                ),
-              ),
-            ),*/
-        ],
-      ),
-    );
-  }
 
   Widget buildEncabezado(OrderData order) {
-    bool isExpanded = false; // Initially, the card is not expanded
-
     return Column(
       children: [
         Padding(
