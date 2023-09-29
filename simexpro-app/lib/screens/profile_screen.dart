@@ -190,7 +190,7 @@ class PerfilUsuario extends State<ProfileScreen> {
                             padding: const EdgeInsets.only(right: 8.0),
                             child: Icon(
                               Icons.logout,
-                              color: Color.fromRGBO(87, 69, 223, 1),
+                              color: Color.fromRGBO(99, 74, 158, 1),
                             )),
                         const Text(
                           'Cerrar Sesión',
@@ -261,7 +261,7 @@ class PerfilUsuario extends State<ProfileScreen> {
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(
                       Icons.person_outline,
-                      color: Color.fromRGBO(87, 69, 223, 1),
+                      color: Color.fromRGBO(99, 74, 158, 1),
                       size: 28.0,
                     ),
                     title: Text(
@@ -274,30 +274,12 @@ class PerfilUsuario extends State<ProfileScreen> {
                       style: TextStyle(fontSize: 16, height: 1.4),
                     ),
                   ),
-                  Divider(height: 8), // Agrega una línea divisoria más pequeña
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(
-                      Icons.markunread,
-                      color: Color.fromRGBO(87, 69, 223, 1),
-                      size: 24.0,
-                    ),
-                    title: Text(
-                      'Correo Electrónico',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      CorreoElectoinico,
-                      style: TextStyle(fontSize: 16, height: 1.4),
-                    ),
-                  ),
                   Divider(height: 8),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: Icon(
-                      Icons.manage_accounts,
-                      color: Color.fromRGBO(87, 69, 223, 1),
+                      Icons.work,
+                      color: Color.fromRGBO(99, 74, 158, 1),
                       size: 24.0,
                     ),
                     title: Text(
@@ -307,6 +289,24 @@ class PerfilUsuario extends State<ProfileScreen> {
                     ),
                     subtitle: Text(
                       Rol,
+                      style: TextStyle(fontSize: 16, height: 1.4),
+                    ),
+                  ),
+                  Divider(height: 8), // Agrega una línea divisoria más pequeña
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(
+                      Icons.markunread_outlined,
+                      color: Color.fromRGBO(99, 74, 158, 1),
+                      size: 24.0,
+                    ),
+                    title: Text(
+                      'Correo Electrónico',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      CorreoElectoinico,
                       style: TextStyle(fontSize: 16, height: 1.4),
                     ),
                   ),
@@ -323,9 +323,7 @@ class PerfilUsuario extends State<ProfileScreen> {
         children: [
           Visibility(
             visible: !isTextFieldVisible,
-            child: Container(
-              width: 200.0, // Ajusta el ancho del botón
-              height: 30.0, // Ajusta la altura del botón
+            child: Container(// Ajusta la altura del botón
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -333,11 +331,14 @@ class PerfilUsuario extends State<ProfileScreen> {
                     isOldPasswordVisisble = true;
                   });
                 },
-                child: Text('Cambiar Contraseña'),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromRGBO(99, 74, 158, 1.0)),
-                ),
+                child: Text('Cambiar Contraseña', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),),
+                style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+                    ),
               ),
             ),
           )
@@ -371,7 +372,7 @@ class PerfilUsuario extends State<ProfileScreen> {
                     Expanded(
                       child: Container(
                         width: 165,
-                        height: 40,
+                        height: 50,
                         margin: EdgeInsets.only(left: 20, right: 5),
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: SizedBox(
@@ -395,11 +396,13 @@ class PerfilUsuario extends State<ProfileScreen> {
                                   }
                                 });
                               },
-                              child: Text('Validar'),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Color.fromRGBO(99, 74, 158, 1.0)),
+                              child: Text('Validar', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                               ),
                             ),
                           ),
@@ -409,7 +412,7 @@ class PerfilUsuario extends State<ProfileScreen> {
                     Expanded(
                       child: Container(
                         width: 165,
-                        height: 40,
+                        height: 50,
                         margin: EdgeInsets.only(left: 5, right: 20),
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: SizedBox(
@@ -426,11 +429,12 @@ class PerfilUsuario extends State<ProfileScreen> {
                                   VerifyNewPassword = "";
                                 });
                               },
-                              child: Text('Cancelar'),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Color.fromRGBO(87, 87, 87, 1)),
+                              child: Text('Cancelar', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: Color.fromRGBO(87, 87, 87, 1),
                               ),
                             ),
                           ),
@@ -495,7 +499,7 @@ class PerfilUsuario extends State<ProfileScreen> {
                       Expanded(
                         child: Container(
                           width: 165,
-                          height: 40,
+                          height: 50,
                           margin: EdgeInsets.only(left: 20, right: 5),
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: SizedBox(
@@ -538,18 +542,20 @@ class PerfilUsuario extends State<ProfileScreen> {
                                         });
                                       }
                                     : null, // Deshabilitar el botón si newpasswordIsValid es false
-                                child: Text('Guardar contraseña'),
-                                style:  newpasswordIsValid ? ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    Color.fromRGBO(99, 74, 158, 1.0),
+                                child: Text('Guardar contraseña', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                                style:  newpasswordIsValid ? ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                                  )
+                                 : 
+                                 ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                ) : ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    Color.fromRGBO(87, 87, 87, 1),
-                                  ),
-                                )
+                                  backgroundColor: Color.fromRGBO(87, 87, 87, 1),
+                                ),
                               ),
                             ),
                           ),
@@ -558,7 +564,7 @@ class PerfilUsuario extends State<ProfileScreen> {
                       Expanded(
                         child: Container(
                           width: 165,
-                          height: 40,
+                          height: 50,
                           margin: EdgeInsets.only(left: 5, right: 20),
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: SizedBox(
@@ -575,11 +581,12 @@ class PerfilUsuario extends State<ProfileScreen> {
                                     VerifyNewPassword = "";
                                   });
                                 },
-                                child: Text('Cancelar'),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Color.fromRGBO(87, 87, 87, 1)),
+                                child: Text('Cancelar', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: Color.fromRGBO(87, 87, 87, 1),
                                 ),
                               ),
                             ),
