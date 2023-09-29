@@ -16,6 +16,7 @@ class PanelWidget extends StatelessWidget{
     required this.panelController,
     required this.detalles
   }) : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -171,9 +172,11 @@ class PanelWidget extends StatelessWidget{
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Container(
-                                          decoration: const BoxDecoration(
+                                          decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: Colors.green,
+                                            color: detalles[index]["proc_IdActual"] == 0 ? 
+                                                   Colors.redAccent : detalles[index]["proc_IdActual"] > 0 ? 
+                                                                        HexColor(detalles[index]["proc_CodigoHtml"]) : Colors.greenAccent,
                                           ),
                                           width: 20.0 / 2,
                                           height: 20.0 / 2,
@@ -183,7 +186,11 @@ class PanelWidget extends StatelessWidget{
                                         Flexible(
                                           child: Text(
                                             // softWrap: false,
-                                            detalles[index]["proc_Descripcion"].toUpperCase(),
+                                            detalles[index]["proc_IdActual"] == 0 ? 
+                                                   "PENDIENTE" : detalles[index]["proc_IdActual"] > 0 ? 
+                                                                        detalles[index]["proc_Descripcion"].toUpperCase() 
+                                                                        : "TERMINADO",
+                                            // detalles[index]["proc_Descripcion"].toUpperCase(),
                                             // overflow: TextOverflow.clip,
                                             style: const TextStyle(fontSize: 11),
                                             textAlign: TextAlign.end,
@@ -218,7 +225,7 @@ class PanelWidget extends StatelessWidget{
                             Padding(
                               padding: const EdgeInsets.only(left: 15, top: 6, right: 18),
                               child: Text(
-                                "COLOR: ANARANJADO, CANTIDAD: ${detalles[index]["code_CantidadPrenda"]}",
+                                "COLOR: ${detalles[index]["colr_Nombre"]}, CANTIDAD: ${detalles[index]["code_CantidadPrenda"]}",
                                 maxLines: 1,
                                 overflow: TextOverflow.fade,
                                 softWrap: false,
@@ -243,3 +250,15 @@ class PanelWidget extends StatelessWidget{
     ),
   );
 } 
+
+class HexColor extends Color {
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF$hexColor";
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+}
