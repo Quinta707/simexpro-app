@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:simexpro/toastconfig/toastconfig.dart';
 
 class ProfileWidget extends StatelessWidget {
   final String imagePath;
@@ -19,18 +20,22 @@ class ProfileWidget extends StatelessWidget {
     return Center(
       child: Stack(
         children: [
-          buildImage(),
+          buildImage(context),
           Positioned(
             bottom: 0,
             right: 4,
-            child: buildEditIcon(color),
+            child: buildEditIcon(color, context),
           ),
         ],
       ),
     );
   }
 
-  Widget buildImage() {
+  Future<void> CambiarFoto(context) async {
+    CherryToast.info(title: Text('hola', style: TextStyle(color: Colors.white),)).show(context);
+  }
+
+  Widget buildImage(context) {
     final image = NetworkImage(imagePath);
 
     return ClipOval(
@@ -39,25 +44,28 @@ class ProfileWidget extends StatelessWidget {
         child: Ink.image(
           image: image,
           fit: BoxFit.cover,
-          width: 128,
-          height: 128,
-          child: InkWell(onTap: onClicked),
+          width: 170,
+          height: 170,
+          child: InkWell(onTap: () {CambiarFoto(context);}),
         ),
       ),
     );
   }
 
-  Widget buildEditIcon(Color color) => buildCircle(
+  Widget buildEditIcon(Color color, BuildContext context) => buildCircle(
         color: Colors.white,
         all: 3,
         child: buildCircle(
           color: color,
           all: 8,
-          child: Icon(
+          child: InkWell(
+            child: Icon(
             Icons.edit,
             color: Colors.white,
             size: 20,
           ),
+          onTap: () {CambiarFoto(context);},
+          ) 
         ),
       );
 

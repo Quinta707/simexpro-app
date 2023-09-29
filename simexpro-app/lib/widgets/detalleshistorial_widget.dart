@@ -6,49 +6,73 @@ import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
 import 'package:simexpro/screens/historial_detalles_screen.dart';
 
-class OrderData {
-  final int id;
-  final String codigo;
-  final String fechaEmision;
-  final String fechaLimite;
-  final String estadoOrdenCompra;
-  final String nombreCliente;
-  final String direccionEntrega;
-  final String metodoPago;
+class DetalleData {
+  final int codeId;
+  final int orcoId;
+  final int codeCantidadPrenda;
+  final String estiDescripcion;
+  final String codeFechaProcActual;
+  final String tallNombre;
+  final String codeSexo;
+  final String colrNombre;
+  final String codeEspecificacionEmbalaje;
+  final String orcoCodigo;
+  final bool orcoEstadoFinalizado;
+  final String orcoEstadoOrdenCompra;
+  final String fechaExportacion;
+  final int cantidadExportada;
+  final int fedeCajas;
+  final int fedeTotalDetalle;
 
-  OrderData({
-    required this.id,
-    required this.codigo,
-    required this.fechaEmision,
-    required this.fechaLimite,
-    required this.estadoOrdenCompra,
-    required this.nombreCliente,
-    required this.direccionEntrega,
-    required this.metodoPago,
+  DetalleData({
+    required this.codeId,
+    required this.orcoId,
+    required this.orcoCodigo,
+    required this.codeCantidadPrenda,
+    required this.estiDescripcion,
+    required this.codeFechaProcActual,
+    required this.tallNombre,
+    required this.codeSexo,
+    required this.colrNombre,
+    required this.codeEspecificacionEmbalaje,
+    required this.orcoEstadoFinalizado,
+    required this.orcoEstadoOrdenCompra,
+    required this.fechaExportacion,
+    required this.cantidadExportada,
+    required this.fedeCajas,
+    required this.fedeTotalDetalle,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'codigo': codigo,
-      'fechaEmision': fechaEmision,
-      'fechaLimite': fechaLimite,
-      'estadoOrdenCompra': estadoOrdenCompra,
-      'nombreCliente': nombreCliente,
-      'direccionEntrega': direccionEntrega,
-      'metodoPago': metodoPago,
+      'code_Id': codeId,
+      'orco_Id': orcoId,
+      'code_CantidadPrenda': codeCantidadPrenda,
+      'esti_Descripcion': estiDescripcion,
+      'code_FechaProcActual': codeFechaProcActual,
+      'tall_Nombre': tallNombre,
+      'code_Sexo': codeSexo,
+      'colr_Nombre': colrNombre,
+      'code_EspecificacionEmbalaje': codeEspecificacionEmbalaje,
+      'orco_Codigo': orcoCodigo,
+      'orco_EstadoFinalizado': orcoEstadoFinalizado,
+      'orco_EstadoOrdenCompra': orcoEstadoOrdenCompra,
+      'fechaExportacion': fechaExportacion,
+      'cantidadExportada': cantidadExportada,
+      'fede_Cajas': fedeCajas,
+      'fede_TotalDetalle': fedeTotalDetalle,
     };
   }
 }
 
-class Upcominghistorial extends StatefulWidget {
+class Detalleshistorial extends StatefulWidget {
   @override
-  _UpcominghistorialState createState() => _UpcominghistorialState();
+  _DetalleshistorialState createState() => _DetalleshistorialState();
 }
 
-class _UpcominghistorialState extends State<Upcominghistorial> {
-  List<OrderData> orders = [];
-  List<OrderData> filteredOrders = [];
+class _DetalleshistorialState extends State<Detalleshistorial> {
+  List<DetalleData> detalles = [];
+  List<DetalleData> filtereddetalles = [];
 
   TextEditingController searchController = TextEditingController();
 
@@ -57,59 +81,59 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
     super.initState();
     fetchData().then((result) {
       setState(() {
-        orders = result;
-        filteredOrders = orders;
+        detalles = result;
+        filtereddetalles = detalles;
       });
     });
   }
 
-  Future<List<OrderData>> fetchData() async {
-    final response = await http.get(
-      Uri.parse('${apiUrl}OrdenCompra/Listar'),
+  Future<List<DetalleData>> fetchData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var orderid = prefs.getString('orderid');
+
+    final responsedetalles = await http.get(
+      Uri.parse('${apiUrl}OrdenCompraDetalles/Listar?orco_Id=3'),
       headers: {
         'XApiKey': apiKey,
         'Content-Type': 'application/json',
       },
     );
 
-    if (response.statusCode == 200) {
-      final decodedJson = jsonDecode(response.body);
+    if (responsedetalles.statusCode == 200) {
+      final decodedJson = jsonDecode(responsedetalles.body);
       final dataList = decodedJson["data"] as List<dynamic>;
 
-      final orders = dataList
-          .where((data) => data['orco_EstadoOrdenCompra'] == 'C')
-          .map((data) {
-        String fechaEmision = data['orco_FechaEmision'];
-        String fechaLimite = data['orco_FechaLimite'];
-
-        int indexOfT1 = fechaEmision.indexOf('T');
-        int indexOfT2 = fechaLimite.indexOf('T');
+      final ordersdetalles = dataList.map((data) {
+        String codeFechaprocactual = data['code_FechaProcActual'];
+        int indexOfT1 = codeFechaprocactual.indexOf('T');
 
         if (indexOfT1 >= 0) {
-          fechaEmision = fechaEmision.substring(0, indexOfT1);
+          codeFechaprocactual = codeFechaprocactual.substring(0, indexOfT1);
         }
 
-        if (indexOfT2 >= 0) {
-          fechaLimite = fechaLimite.substring(0, indexOfT2);
-        }
+        return DetalleData(
+          codeId: data['code_Id'] ?? 0,
+          orcoId: data['orco_Id'] ?? 0,
 
-        return OrderData(
-          id: data['orco_Id'],
-          codigo: data['orco_Codigo'],
-          fechaEmision: fechaEmision,
-          fechaLimite: fechaLimite,
-          estadoOrdenCompra: data['orco_EstadoOrdenCompra'],
-          nombreCliente: data['clie_Nombre_O_Razon_Social'],
-          direccionEntrega: data['orco_DireccionEntrega'],
-          metodoPago: data['fopa_Descripcion'],
+          codeCantidadPrenda: data['code_CantidadPrenda'] ?? 0,
+          estiDescripcion: data['esti_Descripcion'] ?? "",
+          codeFechaProcActual: codeFechaprocactual,
+          tallNombre: data['tall_Nombre'] ?? "",
+          codeSexo: data['code_Sexo'] ?? "",
+          colrNombre: data['colr_Nombre'] ?? "",
+          codeEspecificacionEmbalaje: data['code_EspecificacionEmbalaje'] ?? "",
+          orcoCodigo: data['orco_Codigo'] ?? "",
+          orcoEstadoFinalizado: data['orco_EstadoFinalizado'] ?? false,
+          orcoEstadoOrdenCompra: data['orco_EstadoOrdenCompra'] ?? "",
+          fechaExportacion: data['fechaExportacion'] ?? "",
+          cantidadExportada: data['cantidadExportada'] ?? 0,
+          fedeCajas: data['fede_Cajas'] ?? 0,
+          fedeTotalDetalle: data['fede_TotalDetalle'] ?? 0,
         );
       }).toList();
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('userData',
-          jsonEncode(orders.map((order) => order.toJson()).toList()));
 
-      return orders;
+      return detalles;
     } else {
       throw Exception('Failed to load data');
     }
@@ -140,11 +164,12 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
           SizedBox(height: 16),
           ListView.builder(
             shrinkWrap: true,
-            itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
+            itemCount:
+                filtereddetalles.isNotEmpty ? filtereddetalles.length : 1,
             itemBuilder: (context, index) {
-              if (filteredOrders.isNotEmpty) {
+              if (filtereddetalles.isNotEmpty) {
                 // Muestra la tarjeta de pedido si hay datos
-                return buildCard(filteredOrders[index]);
+                return buildCard(filtereddetalles[index]);
               } else {
                 // Muestra la imagen predeterminada con el tamaño deseado
                 return Center(
@@ -165,17 +190,17 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
 
   void onSearchTextChanged(String searchText) {
     setState(() {
-      filteredOrders = orders
-          .where((order) =>
-              order.codigo.toLowerCase().contains(searchText.toLowerCase()) ||
-              order.nombreCliente
+      filtereddetalles = detalles
+          .where((detalle) =>
+              detalle.colrNombre.toLowerCase().contains(searchText.toLowerCase()) ||
+              detalle.estiDescripcion
                   .toLowerCase()
                   .contains(searchText.toLowerCase()))
           .toList();
     });
   }
 
-  Widget buildCard(OrderData order) {
+  Widget buildCard(DetalleData detalle) {
     return Container(
         margin: EdgeInsets.only(bottom: 16.0),
         padding: EdgeInsets.symmetric(vertical: 5),
@@ -196,12 +221,12 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
             children: [
               ListTile(
                 title: Text(
-                  "Orden #${order.codigo}",
+                  "Orden #${detalle.colrNombre}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Text(order.nombreCliente),
+                subtitle: Text(detalle.colrNombre),
                 trailing: SizedBox(
                   width: 100,
                   height: 25,
@@ -231,7 +256,7 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.fechaEmision,
+                        detalle.colrNombre,
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -246,7 +271,7 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.fechaLimite,
+                        detalle.colrNombre,
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -278,20 +303,7 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InkWell(
-                    onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('ordercodigo', order.codigo);
-                      prefs.setString('orderid',
-                          order.id.toString());
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Historial_detalles_Screen(),
-                        ),
-                      );
-                    },
+                    onTap: () async {},
                     child: Container(
                       width: 150,
                       padding: EdgeInsets.symmetric(vertical: 12),
