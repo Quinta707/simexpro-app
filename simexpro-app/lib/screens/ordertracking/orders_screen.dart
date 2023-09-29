@@ -7,15 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
-import 'package:simexpro/screens/potracking_screen.dart';
+import 'package:simexpro/screens/ordertracking/potracking_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
-import 'package:simexpro/screens/qrscanner_screen.dart';
+import 'package:simexpro/screens/ordertracking/qrscanner_screen.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:http/http.dart' as http;
 
-import '../api.dart';
+import '../../api.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);
@@ -43,15 +43,31 @@ Future<void> TraerDatos(String codigopo, context) async {
 
   if (data.length > 0) {
     print('data after search $data');
+
+    final response2 = await http.get(
+      Uri.parse(
+          '${apiUrl}OrdenCompraDetalles/DibujarDetalles?orco_Codigo=$codigopo'
+      ),
+      headers: {
+        'XApiKey': apiKey,
+        'Content-Type': 'application/json',
+      },
+    );
+
+    final decodedJson2 = jsonDecode(response2.body);
+    final detalles = decodedJson2["data"];
+
+    print('data after search detalles $detalles');
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => POTrackingScreen(data: data),
+        builder: (context) => POTrackingScreen(data: data, detalles: detalles,),
       )
     );
   } else{
     CherryToast.warning(
-        title: const Text('El código ingresado no es válido',
+        title: const Text('El código no es válido',
             style: TextStyle(color: Colors.white)))
     .show(context);
   }
@@ -159,12 +175,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           )
         ],
         backgroundColor: Color.fromRGBO(17, 24, 39, 1),
-        //elevation: 50.0,
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          tooltip: 'Menú',
-          onPressed: () {},
-        ),
+        //elevation: 50.0
         //systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: Center(

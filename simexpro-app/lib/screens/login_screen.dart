@@ -15,40 +15,51 @@ class loginScreen extends StatefulWidget {
 
 Future<void> fetchData(
     BuildContext context, String username, String password) async {
-  final tarea = {'usua_Nombre': username, 'usua_Contrasenia': password};
-  final jsonTarea = jsonEncode(tarea);
-  final response = await http.post(
-    Uri.parse('${apiUrl}Usuarios/Login'),
-    headers: {
-      'XApiKey': apiKey,
-      'Content-Type': 'application/json',
-    },
-    body: jsonTarea,
-  );
-  if (response.statusCode == 200) {
-    final decodedJson = jsonDecode(response.body);
-    final data = decodedJson["data"];
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('username', data['usua_Nombre']);
-    prefs.setString('email', data['empl_CorreoElectronico']);
-    prefs.setString('userfullname', data['emplNombreCompleto']);
-    prefs.setString('rol', data['role_Descripcion']);
-    prefs.setBool('esAduana', data['empl_EsAduana']);
-    prefs.setString('image', data['usua_Image']);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NavBarRoots(),
-        ));
-  } 
-  else{
-    print(response.statusCode);
-    CherryToast.error(
-      title: Text('El usuario o contraseña son incorrectos',
-          style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
-          textAlign: TextAlign.justify),
-      borderRadius: 5,
-    ).show(context);
+  
+  try {
+    final tarea = {'usua_Nombre': username, 'usua_Contrasenia': password};
+    final jsonTarea = jsonEncode(tarea);
+    final response = await http.post(
+      Uri.parse('${apiUrl}Usuarios/Login'),
+      headers: {
+        'XApiKey': apiKey,
+        'Content-Type': 'application/json',
+      },
+      body: jsonTarea,
+    );
+    if (response.statusCode == 200) {
+      print(response);
+      final decodedJson = jsonDecode(response.body);
+      final data = decodedJson["data"];
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('username', data['usua_Nombre']);
+      prefs.setString('email', data['empl_CorreoElectronico']);
+      prefs.setString('userfullname', data['emplNombreCompleto']);
+      prefs.setString('rol', data['role_Descripcion']);
+      prefs.setBool('esAduana', data['empl_EsAduana']);
+      prefs.setString('image', data['usua_Image']);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NavBarRoots(),
+          ));
+    } else {
+      CherryToast.error(
+        title: Text('El usuario o contraseña son incorrectos',
+            style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+            textAlign: TextAlign.justify),
+        borderRadius: 5,
+      ).show(context);
+    }
+  } catch (e) {
+    if (e.toString().contains('Failed host lookup')) {
+      CherryToast.error(
+        title: Text('No se pudo conectar al servidor',
+            style: TextStyle(color: Color.fromARGB(255, 226, 226, 226)),
+            textAlign: TextAlign.justify),
+        borderRadius: 5,
+      ).show(context);
+    }
   }
 }
 
@@ -105,8 +116,8 @@ class _loginScreenState extends State<loginScreen> {
                             ),
                           ),
                           Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 18, left: 18, bottom: 18),
+                            padding: const EdgeInsets.only(
+                                right: 18, left: 18, bottom: 18),
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
@@ -188,8 +199,9 @@ class _loginScreenState extends State<loginScreen> {
                                     title: Text(
                                         'Llene los campos correctamente',
                                         style: TextStyle(
-                                            color: Color.fromARGB(255, 226, 226, 226)),
-                                            textAlign: TextAlign.justify),
+                                            color: Color.fromARGB(
+                                                255, 226, 226, 226)),
+                                        textAlign: TextAlign.justify),
                                     borderRadius: 5,
                                   ).show(context);
                                 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:simexpro/screens/profile_screen.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
-import '../widgets/navbar_roots.dart';
-import 'home_screen.dart';
-import 'login_screen.dart';
+import '../../widgets/navbar_roots.dart';
+import '../home_screen.dart';
+import '../login_screen.dart';
 
 class ItemTrackingScreen extends StatefulWidget {
   const ItemTrackingScreen({Key? key}) : super(key: key);
@@ -118,14 +119,66 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
               ],
             ),
           ),
-          Container(
+          SizedBox(
             width: double.maxFinite,
-            height: 300,
+            height: MediaQuery.of(context).size.height * 0.83,
             child: TabBarView(
               controller: _TabController,
-              children: const [
-                Text("Hi"),
-                Text("what's up?")
+              children: [
+                const Text("Hi"),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                  child: ListView(
+                    children: [
+                      TimelineTile(
+                        isFirst: true,
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.black87,
+                          thickness: 2,
+                        ),
+                        indicatorStyle: const IndicatorStyle(
+                          drawGap: true,
+                          color: Colors.green,
+                          width: 30
+                        ),
+                      ),
+                      TimelineTile(
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.black87,
+                          thickness: 2
+                        ),
+                        indicatorStyle: const IndicatorStyle(
+                          drawGap: true,
+                          color: Colors.yellow,
+                          width: 30
+                        ),
+                      ),
+                      TimelineTile(
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.black87,
+                          thickness: 2
+                        ),
+                        indicatorStyle: const IndicatorStyle(
+                          drawGap: true,
+                          color: Colors.purpleAccent,
+                          width: 30
+                        ),
+                      ),
+                      TimelineTile(
+                        isLast: true,
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.black87,
+                          thickness: 2
+                        ),
+                        indicatorStyle: const IndicatorStyle(
+                          drawGap: true,
+                          color: Colors.pink,
+                          width: 30
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           )

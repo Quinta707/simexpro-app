@@ -1,21 +1,29 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'dart:io';
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 // import 'package:carousel_slider/carousel_slider.dart';
 import 'package:simexpro/screens/profile_screen.dart';
-import 'package:simexpro/screens/widget/panel_widget.dart';
+import 'package:simexpro/widgets/panel_widget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../widgets/navbar_roots.dart';
-import 'home_screen.dart';
-import 'login_screen.dart';
+import '../../widgets/headersinfo_widget.dart';
+import '../../widgets/navbar_roots.dart';
+import '../home_screen.dart';
+import '../login_screen.dart';
 
 // ignore: must_be_immutable
 class POTrackingScreen extends StatefulWidget {
   final data;
-  const POTrackingScreen({Key? key, required this.data}) : super(key: key);
+  final detalles;
+  
+  const POTrackingScreen({
+    Key? key, 
+    required this.data,
+    required this.detalles
+  }) : super(key: key);
 
   @override
   State<POTrackingScreen> createState() => _POTrackingScreenState();
@@ -42,9 +50,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
    
    var elementos = Elementos();
    final panelController = PanelController();
-  //  final elementos = {
-  //   final linea1;
-  //  };
+   final format = DateFormat('dd-MM-yyyy');
    
 
   visualizarEstado(){
@@ -156,11 +162,9 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         backgroundColor: const Color.fromRGBO(17, 24, 39, 1),
       ),
 
-      // backgroundColor: const Color.fromARGB(255, 129, 100, 197),
-      // backgroundColor: Colors.white70,
+            //SlidingUpPanel es el panel inferior para los detalles de la PO
       body: SlidingUpPanel(
         backdropEnabled: true,
-        // color: Color.fromARGB(255, 134, 111, 189),
         color: const Color.fromARGB(255, 134, 111, 189),
         controller: panelController,
         maxHeight: panelHeightOpen,
@@ -168,8 +172,11 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
         panelBuilder: (controller) => PanelWidget(
           controller: controller,
           panelController: panelController,
+          detalles: widget.detalles,
         ),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+
+        //Diseño del "header"
         body: 
           SingleChildScrollView(
             child: Center(
@@ -194,10 +201,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                     crossAxisSpacing: 5.0,
                     crossAxisCount: 3,
                     childAspectRatio: 17.0,
-                    // height: ,
                     children: <Widget>[
-                      // visualizarEstado(),
-                      // pendiente?
                       Container(
                         decoration: BoxDecoration(
                           color: elementos.linea1,
@@ -205,7 +209,6 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                         ),
                       ),
       
-                      // encurso?
                       Container(
                         decoration: BoxDecoration(
                           color: elementos.linea2,
@@ -221,9 +224,10 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       ),
                     ],
                   ),   
+
                   const SizedBox(height: 5),
+
                   Container(
-                    // width: ,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                           color: elementos.tag,
@@ -253,24 +257,8 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                   const SizedBox(height: 18),
                   Image.asset(
                     'images/trackingpos/${elementos.image}',
-                    height: (MediaQuery.of(context).size.height / 4) + 10,),
-
-                
-                  // Row(
-                  //   children: const [
-                  //     //Encabezados
-                  //     Text(
-                  //       "Cliente:",
-                  //       style: TextStyle(
-                  //         color: Colors.grey,
-                  //       ),
-                  //     ),
-                  //     Text("RTN:"),
-
-                  //     //Info real
-                  //   ],
-                  // ),
-                  // const SizedBox(height: 5),
+                    height: (MediaQuery.of(context).size.height / 4) + 10,
+                  ),
 
                   SizedBox(
                     height: 200,
@@ -281,110 +269,33 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                       crossAxisSpacing: 10.0,
                       // mainAxisSpacing: 1,
                       childAspectRatio: 3/1,
-                      children: const [
-                        // Text(
-                        //   "Cliente: \nTiendas Carrión",
-                        //   style: TextStyle(
-                        //     color: Colors.grey,
-                        //   ),
-                        // ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Cliente:",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\nTiendas Carrión",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              )
-                              
-                            ]
-                          )
+                      children: [
+
+                        HeadersInfoWidget(
+                          title: "Cliente:", 
+                          text: widget.data[0]["clie_Nombre_O_Razon_Social"]
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "RTN:",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\n0512-2003-007569",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              )
-                              
-                            ]
-                          )
+                        HeadersInfoWidget(
+                          title: "RTN:", 
+                          text: widget.data[0]["clie_RTN"]
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Fecha de emisión:",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\n8/9/2023",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              )
-                            ]
-                          )
+                        HeadersInfoWidget(
+                          title: "Fecha de emisión:", 
+                          text: format.format(DateTime.tryParse(widget.data[0]["orco_FechaEmision"]) as DateTime)
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Fecha límite:",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\n30/9/2023",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              )
-                            ]
-                          )
+                        HeadersInfoWidget(
+                          title: "Fecha límite:", 
+                          text: format.format(DateTime.tryParse(widget.data[0]["orco_FechaLimite"]) as DateTime)
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Embalaje general:",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\nBultos",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              )
-                            ]
-                          )
+                        HeadersInfoWidget(
+                          title: "Embalaje general:", 
+                          text: widget.data[0]["tiem_Descripcion"]
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Dirección de entrega:",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(text: "\nMullberry street, so good to see you.",
-                                       style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                              ),
-                            ]
-                          )
+                        HeadersInfoWidget(
+                          title: "Dirección de entrega:", 
+                          text: widget.data[0]["orco_DireccionEntrega"]
                         ),
-                        // Text("RTN:"),
-                        // Text("RTN:"),
-                        // Text("RTN:"),
-                        // Text("RTN:"),
-                        // Text("RTN:"),
+
                       ],),
                   )
                 ],
@@ -396,37 +307,3 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
     );
   }
 }
-
-// class ItemsContainer extends StatelessWidget {
-//   const ItemsContainer({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: MediaQuery.of(context).size.width,
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         border: Border.all(
-//           color: Colors.black
-//         ),
-//         boxShadow: const [
-//           BoxShadow(
-//             color: Colors.black12,
-//             spreadRadius: 5,
-//             // blurRadius: 1,
-//             // offset: const Offset(0, 3)
-//           )
-//         ]
-//       ),
-//       child: Column(
-//         children: const <Widget>[
-//           Text("info 1"),
-//           Text("info 2"),
-//           Text("info 3"),
-//         ]
-//       ),
-//     );
-//   }
-// }
