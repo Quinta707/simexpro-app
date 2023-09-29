@@ -17,7 +17,7 @@ class DetalleData {
   final String colrNombre;
   final String codeEspecificacionEmbalaje;
   final String orcoCodigo;
-  final bool orcoEstadoFinalizado;
+  final String orcoEstadoFinalizado;
   final String orcoEstadoOrdenCompra;
   final String fechaExportacion;
   final int cantidadExportada;
@@ -45,22 +45,22 @@ class DetalleData {
 
   Map<String, dynamic> toJson() {
     return {
-      'code_Id': codeId,
-      'orco_Id': orcoId,
-      'code_CantidadPrenda': codeCantidadPrenda,
-      'esti_Descripcion': estiDescripcion,
-      'code_FechaProcActual': codeFechaProcActual,
-      'tall_Nombre': tallNombre,
-      'code_Sexo': codeSexo,
-      'colr_Nombre': colrNombre,
-      'code_EspecificacionEmbalaje': codeEspecificacionEmbalaje,
-      'orco_Codigo': orcoCodigo,
-      'orco_EstadoFinalizado': orcoEstadoFinalizado,
-      'orco_EstadoOrdenCompra': orcoEstadoOrdenCompra,
+      'codeId': codeId,
+      'orcoId': orcoId,
+      'codeCantidadPrenda': codeCantidadPrenda,
+      'estiDescripcion': estiDescripcion,
+      'codeFechaProcActual': codeFechaProcActual,
+      'tallNombre': tallNombre,
+      'codeSexo': codeSexo,
+      'colrNombre': colrNombre,
+      'codeEspecificacionEmbalaje': codeEspecificacionEmbalaje,
+      'orcoCodigo': orcoCodigo,
+      'orcoEstadoFinalizado': orcoEstadoFinalizado,
+      'orcoEstadoOrdenCompra': orcoEstadoOrdenCompra,
       'fechaExportacion': fechaExportacion,
       'cantidadExportada': cantidadExportada,
-      'fede_Cajas': fedeCajas,
-      'fede_TotalDetalle': fedeTotalDetalle,
+      'fedeCajas': fedeCajas,
+      'fedeTotalDetalle': fedeTotalDetalle,
     };
   }
 }
@@ -92,7 +92,7 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
     var orderid = prefs.getString('orderid');
 
     final responsedetalles = await http.get(
-      Uri.parse('${apiUrl}OrdenCompraDetalles/Listar?orco_Id=3'),
+      Uri.parse('${apiUrl}OrdenCompraDetalles/Listar?orco_Id=${orderid}'),
       headers: {
         'XApiKey': apiKey,
         'Content-Type': 'application/json',
@@ -105,16 +105,21 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
 
       final ordersdetalles = dataList.map((data) {
         String codeFechaprocactual = data['code_FechaProcActual'];
+        String codefechaExportacion = data['fechaExportacion'];
+
         int indexOfT1 = codeFechaprocactual.indexOf('T');
+        int indexOfT2 = codefechaExportacion.indexOf('T');
 
         if (indexOfT1 >= 0) {
           codeFechaprocactual = codeFechaprocactual.substring(0, indexOfT1);
         }
+        if (indexOfT2 >= 0) {
+          codefechaExportacion = codefechaExportacion.substring(0, indexOfT2);
+        }
 
-        return DetalleData(
+        final detalle = DetalleData(
           codeId: data['code_Id'] ?? 0,
           orcoId: data['orco_Id'] ?? 0,
-
           codeCantidadPrenda: data['code_CantidadPrenda'] ?? 0,
           estiDescripcion: data['esti_Descripcion'] ?? "",
           codeFechaProcActual: codeFechaprocactual,
@@ -123,15 +128,21 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
           colrNombre: data['colr_Nombre'] ?? "",
           codeEspecificacionEmbalaje: data['code_EspecificacionEmbalaje'] ?? "",
           orcoCodigo: data['orco_Codigo'] ?? "",
-          orcoEstadoFinalizado: data['orco_EstadoFinalizado'] ?? false,
+          orcoEstadoFinalizado: data['orco_EstadoFinalizado'] == true ? "Si" : "No",
           orcoEstadoOrdenCompra: data['orco_EstadoOrdenCompra'] ?? "",
-          fechaExportacion: data['fechaExportacion'] ?? "",
+          fechaExportacion: codefechaExportacion ?? "",
           cantidadExportada: data['cantidadExportada'] ?? 0,
           fedeCajas: data['fede_Cajas'] ?? 0,
           fedeTotalDetalle: data['fede_TotalDetalle'] ?? 0,
         );
+
+        return detalle;
       }).toList();
 
+      setState(() {
+        detalles = ordersdetalles;
+        filtereddetalles = detalles;
+      });
 
       return detalles;
     } else {
@@ -192,7 +203,9 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
     setState(() {
       filtereddetalles = detalles
           .where((detalle) =>
-              detalle.colrNombre.toLowerCase().contains(searchText.toLowerCase()) ||
+              detalle.colrNombre
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase()) ||
               detalle.estiDescripcion
                   .toLowerCase()
                   .contains(searchText.toLowerCase()))
@@ -202,132 +215,68 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
 
   Widget buildCard(DetalleData detalle) {
     return Container(
-        margin: EdgeInsets.only(bottom: 16.0),
-        padding: EdgeInsets.symmetric(vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.white,
+      margin: EdgeInsets.only(bottom: 16.0),
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 4,
-              spreadRadius: 2,
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: false,
+          title: ListTile(
+            title: Text(
+              "Detalle ID #${detalle.codeId.toString()}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            subtitle: Text(detalle.estiDescripcion),
+            
+          ),
+          children: [
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                children: [
+                  _buildDataRow("Cantidad de Pedido:",
+                      detalle.codeCantidadPrenda.toString()),
+                  _buildDataRow("Fecha de Procesamiento Actual:",
+                      detalle.codeFechaProcActual),
+                  _buildDataRow("Talla:", detalle.tallNombre),
+                  _buildDataRow("Medida:", detalle.codeSexo),
+                  _buildDataRow("Color Nombre:", detalle.colrNombre),
+                  _buildDataRow("Especificación de Embalaje:",
+                      detalle.codeEspecificacionEmbalaje),
+                  _buildDataRow("Estado Finalizado de Orden de Compra:",
+                      detalle.orcoEstadoFinalizado.toString()),
+                  _buildDataRow(
+                      "Fecha de Exportación:", detalle.fechaExportacion),
+                  _buildDataRow("Cantidad Exportada:",
+                      detalle.cantidadExportada.toString()),
+                  _buildDataRow("Cajas:", detalle.fedeCajas.toString()),
+                  _buildDataRow(
+                      "Total de Detalle:", detalle.fedeTotalDetalle.toString()),
+                ],
+              ),
+            ),
+            SizedBox(height: 15),
           ],
         ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            children: [
-              ListTile(
-                title: Text(
-                  "Orden #${detalle.colrNombre}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(detalle.colrNombre),
-                trailing: SizedBox(
-                  width: 100,
-                  height: 25,
-                  child: Image.network(
-                    "https://i.ibb.co/GVHnGxg/encurso.png",
-                    fit: BoxFit
-                        .contain, // Ajusta la imagen para que cubra el espacio
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Divider(
-                  // color: Colors.black,
-                  thickness: 1,
-                  height: 20,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_month_outlined,
-                        color: Colors.black54,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        detalle.colrNombre,
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_month,
-                        color: Colors.black54,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        detalle.colrNombre,
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.yellow,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        "En Curso",
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () async {},
-                    child: Container(
-                      width: 150,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(87, 69, 223, 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Ver detalles",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-            ],
-          ),
-        ));
+      ),
+    );
+  }
+
+  Widget _buildDataRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(value),
+        ],
+      ),
+    );
   }
 }
