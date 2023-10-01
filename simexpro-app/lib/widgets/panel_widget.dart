@@ -138,7 +138,7 @@ class PanelWidget extends StatelessWidget{
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ItemTrackingScreen(),
+                              builder: (context) => ItemTrackingScreen(detalles: detalles),
                             )
                           );
                         },
