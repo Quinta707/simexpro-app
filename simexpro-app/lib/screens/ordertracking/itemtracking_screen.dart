@@ -54,7 +54,8 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
 
     TabController _TabController = 
     TabController(length: 2, vsync: this);
-    DibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
+    procesos = null;
+    // DibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
 
     return Scaffold(
       appBar: AppBar(
@@ -159,9 +160,9 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50.0),
                   child: FutureBuilder(
-                    future: procesos,
+                    future: DibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context),
                     builder: (BuildContext context, AsyncSnapshot snapshot){
-                      if(snapshot.hasData){
+                      if(procesos != null){
                         return ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -225,31 +226,14 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                             );
                           },
                         );
-                      } else if (snapshot.hasError) {
-                        return Column(
-                          children: [
-                            const Icon(
-                            Icons.error_outline,
-                            color: Colors.red,
-                            size: 60,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 16),
-                            child: Text('Error: ${snapshot.error}'),
-                          ),
-                          ],
-                        );
                       } else {
                         return Column(
                           children: const [
+                            SizedBox(height: 100,),
                             SizedBox(
                               width: 60,
                               height: 60,
                               child: CircularProgressIndicator(),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 16),
-                              child: Text('Awaiting result...'),
                             ),
                           ],
                         );
