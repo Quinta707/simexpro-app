@@ -54,11 +54,16 @@ Widget buildDetallesProcesos(procesosdetalles){
     shrinkWrap: true,
     itemCount: decodedDetalles.length,
     itemBuilder: (BuildContext context, int index){
-      Column(
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        Text("Orden de proceso:${decodedDetalles[index]["modu_Nombre"]}\nCantidad:\nEmpleado encargado:\nFecha inicio:\nFecha final:\nMódulo:"),
-        if (index < decodedDetalles.length) const Divider(),
+        Text("Orden de proceso: ${decodedDetalles[index]["ensa_Id"]}\n"
+             "Cantidad: ${decodedDetalles[index]["ensa_Cantidad"]}\n"
+             "Empleado encargado: ${decodedDetalles[index]["empl_NombreCompleto"]}\n"
+             "Fecha inicio: ${decodedDetalles[index]["ensa_FechaInicio"]}\n"
+             "Fecha final: ${decodedDetalles[index]["ensa_FechaLimite"]}\n"
+             "Módulo: ${decodedDetalles[index]["modu_Nombre"]}"),
+        if (index < decodedDetalles.length - 1) const Divider(),
         ],
       );
     },
@@ -74,7 +79,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
     TabController _TabController = 
     TabController(length: 2, vsync: this);
     procesos = null;
-    print(widget.detalles[0]["detallesprocesos"]);
+    print(widget.detalles[3]["detallesprocesos"]);
     // dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
 
     return Scaffold(
@@ -205,7 +210,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                               endChild: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
-                                  // crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(""),
                                     const SizedBox(height: 2),
@@ -225,7 +230,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                           showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
-                                              title: const Text("Random title"),
+                                              // title: const Text("Random title"),
                                               content: buildDetallesProcesos(widget.detalles[index]["detallesprocesos"]),
                                             )
                                           );
