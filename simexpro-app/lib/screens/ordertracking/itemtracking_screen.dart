@@ -28,7 +28,7 @@ class ItemTrackingScreen extends StatefulWidget {
 
 var procesos;
 
-Future<void> DibujarProcesos(String codigopo, context) async {
+Future<void> dibujarProcesos(String codigopo, context) async {
   final response = await http.get(
     Uri.parse(
       '${apiUrl}ProcesoPorOrdenCompraDetalle/DibujarProcesos?orco_Codigo=$codigopo'
@@ -39,15 +39,34 @@ Future<void> DibujarProcesos(String codigopo, context) async {
     },
   );
 
-  // print(response);
-
   final decodedJson = jsonDecode(response.body);
   procesos = decodedJson["data"];
 
   print(procesos);
-} 
+}
+
+Widget buildDetallesProcesos(procesosdetalles){
+    
+  final decodedDetalles = jsonDecode(procesosdetalles);
+
+  return ListView.builder(
+    scrollDirection: Axis.vertical,
+    shrinkWrap: true,
+    itemCount: decodedDetalles.length,
+    itemBuilder: (BuildContext context, int index){
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Text("Orden de proceso:${decodedDetalles[index]["modu_Nombre"]}\nCantidad:\nEmpleado encargado:\nFecha inicio:\nFecha final:\nMódulo:"),
+        if (index < decodedDetalles.length) const Divider(),
+        ],
+      );
+    },
+  );
+}
 
 class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProviderStateMixin{
+ 
 
   @override
   Widget build(BuildContext context){
@@ -55,7 +74,8 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
     TabController _TabController = 
     TabController(length: 2, vsync: this);
     procesos = null;
-    // DibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
+    print(widget.detalles[0]["detallesprocesos"]);
+    // dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
 
     return Scaffold(
       appBar: AppBar(
@@ -160,7 +180,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50.0),
                   child: FutureBuilder(
-                    future: DibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context),
+                    future: dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context),
                     builder: (BuildContext context, AsyncSnapshot snapshot){
                       if(procesos != null){
                         return ListView.builder(
@@ -204,9 +224,9 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                         onTap: () {
                                           showDialog(
                                             context: context,
-                                            builder: (context) => const AlertDialog(
-                                              title: Text("Random title"),
-                                              content: Text("Some more text pretending that it's important at all LMAO"),
+                                            builder: (context) => AlertDialog(
+                                              title: const Text("Random title"),
+                                              content: buildDetallesProcesos(widget.detalles[index]["detallesprocesos"]),
                                             )
                                           );
                                         },
