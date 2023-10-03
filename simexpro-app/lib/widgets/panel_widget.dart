@@ -185,7 +185,6 @@ class PanelWidget extends StatelessWidget{
                                         const SizedBox(width: 6),
                                         Flexible(
                                           child: Text(
-                                            // softWrap: false,
                                             detalles[index]["proc_IdActual"] == 0 ? 
                                                    "PENDIENTE" : detalles[index]["proc_IdActual"] > 0 ? 
                                                                         detalles[index]["proc_Descripcion"].toUpperCase() 

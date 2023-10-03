@@ -158,64 +158,104 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                 const Text("Hi"),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: procesos.length,
-                    itemBuilder: (BuildContext context, int index){
-                      return TimelineTile(
-                        alignment: TimelineAlign.manual,
-                        lineXY: 0.1,
-                        isFirst: index == 0,
-                        isLast: index == procesos.length - 1,
-                        beforeLineStyle: const LineStyle(
-                          color: Colors.black87,
-                          thickness: 2,
-                        ),
-                        indicatorStyle: IndicatorStyle(
-                          drawGap: true,
-                          color: HexColor(procesos[index]["proc_CodigoHTML"]),
-                          width: 30
-                        ),
-                      );
-                    },
-                    // children: [
+                  child: FutureBuilder(
+                    future: procesos,
+                    builder: (BuildContext context, AsyncSnapshot snapshot){
+                      if(snapshot.hasData){
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: procesos.length,
+                          itemBuilder: (BuildContext context, int index){
+                            return TimelineTile(
+                              alignment: TimelineAlign.manual,
+                              lineXY: 0.1,
+                              isFirst: index == 0,
+                              isLast: index == procesos.length - 1,
+                              beforeLineStyle: const LineStyle(
+                                color: Colors.black87,
+                                thickness: 2,
+                              ),
+                              indicatorStyle: IndicatorStyle(
+                                drawGap: true,
+                                color: HexColor(procesos[index]["proc_CodigoHTML"]),
+                                width: 30,
+                              ),
+                              endChild: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(""),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      procesos[index]["proc_Descripcion"].toUpperCase(),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500
+                                      ),
+                                    ),
+                                    // const SizedBox(height: 6),
+                                    Material(
+                                      child: InkWell(
+                                        splashColor: Colors.grey,
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => const AlertDialog(
+                                              title: Text("Random title"),
+                                              content: Text("Some more text pretending that it's important at all LMAO"),
+                                            )
+                                          );
+                                        },
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "nomás probar q ",
+                                            maxLines: 5,
+                                            overflow: TextOverflow.ellipsis,  
+                                          ),
+                                        )
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        return Column(
+                          children: [
+                            const Icon(
+                            Icons.error_outline,
+                            color: Colors.red,
+                            size: 60,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Text('Error: ${snapshot.error}'),
+                          ),
+                          ],
+                        );
+                      } else {
+                        return Column(
+                          children: const [
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: CircularProgressIndicator(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 16),
+                              child: Text('Awaiting result...'),
+                            ),
+                          ],
+                        );
+                      }
                       
-                    //   // TimelineTile(
-                    //   //   beforeLineStyle: const LineStyle(
-                    //   //     color: Colors.black87,
-                    //   //     thickness: 2
-                    //   //   ),
-                    //   //   indicatorStyle: const IndicatorStyle(
-                    //   //     drawGap: true,
-                    //   //     color: Colors.yellow,
-                    //   //     width: 30
-                    //   //   ),
-                    //   // ),
-                    //   // TimelineTile(
-                    //   //   beforeLineStyle: const LineStyle(
-                    //   //     color: Colors.black87,
-                    //   //     thickness: 2
-                    //   //   ),
-                    //   //   indicatorStyle: const IndicatorStyle(
-                    //   //     drawGap: true,
-                    //   //     color: Colors.purpleAccent,
-                    //   //     width: 30
-                    //   //   ),
-                    //   // ),
-                    //   // TimelineTile(
-                    //   //   isLast: true,
-                    //   //   beforeLineStyle: const LineStyle(
-                    //   //     color: Colors.black87,
-                    //   //     thickness: 2
-                    //   //   ),
-                    //   //   indicatorStyle: const IndicatorStyle(
-                    //   //     drawGap: true,
-                    //   //     color: Colors.pink,
-                    //   //     width: 30
-                    //   //   ),
-                    //   // ),
-                    // ],
+                    },
                   ),
                 ),
               ],
