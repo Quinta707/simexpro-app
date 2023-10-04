@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -15,11 +16,11 @@ import 'package:http/http.dart' as http;
 import '../../api.dart';
 
 class ItemTrackingScreen extends StatefulWidget {
-  final detalles;
+  final item;
 
   const ItemTrackingScreen({
     Key? key,
-    required this.detalles,
+    required this.item,
     }) : super(key: key);
 
   @override
@@ -27,6 +28,8 @@ class ItemTrackingScreen extends StatefulWidget {
 }
 
 var procesos;
+final format = DateFormat('dd-MM-yyyy');
+bool tieneDetalles = true;
 
 Future<void> dibujarProcesos(String codigopo, context) async {
   final response = await http.get(
@@ -45,25 +48,40 @@ Future<void> dibujarProcesos(String codigopo, context) async {
   print(procesos);
 }
 
-Widget buildDetallesProcesos(procesosdetalles){
+Widget buildDetallesProcesos(procesosdetalles, idProceso){
     
   final decodedDetalles = jsonDecode(procesosdetalles);
+  final foundDetalles = decodedDetalles.where((item) => 
+        item["proc_Id"] == idProceso
+  );
+
+  if(foundDetalles.length > 0){
+    tieneDetalles = true;
+  } else {
+    tieneDetalles = false;
+  }
 
   return ListView.builder(
     scrollDirection: Axis.vertical,
     shrinkWrap: true,
-    itemCount: decodedDetalles.length,
+    itemCount: foundDetalles.length,
     itemBuilder: (BuildContext context, int index){
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        Text("Orden de proceso: ${decodedDetalles[index]["ensa_Id"]}\n"
+        Text("Orden de proceso: #${decodedDetalles[index]["ensa_Id"]}\n"
              "Cantidad: ${decodedDetalles[index]["ensa_Cantidad"]}\n"
              "Empleado encargado: ${decodedDetalles[index]["empl_NombreCompleto"]}\n"
-             "Fecha inicio: ${decodedDetalles[index]["ensa_FechaInicio"]}\n"
-             "Fecha final: ${decodedDetalles[index]["ensa_FechaLimite"]}\n"
-             "Módulo: ${decodedDetalles[index]["modu_Nombre"]}"),
-        if (index < decodedDetalles.length - 1) const Divider(),
+             "Fecha inicio: ${format.format(DateTime.tryParse(decodedDetalles[index]["ensa_FechaInicio"]) as DateTime)}\n"
+             "Fecha final: ${format.format(DateTime.tryParse(decodedDetalles[index]["ensa_FechaLimite"]) as DateTime)}\n"
+             "Módulo: ${decodedDetalles[index]["modu_Nombre"]}",
+             style: TextStyle(
+              height: 1.25
+             ),
+        ),
+        if (index < decodedDetalles.length - 1) const Divider(
+          color: Colors.black,
+        ),
         ],
       );
     },
@@ -79,7 +97,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
     TabController _TabController = 
     TabController(length: 2, vsync: this);
     procesos = null;
-    print(widget.detalles[3]["detallesprocesos"]);
+    print(widget.item["detallesprocesos"]);
     // dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
 
     return Scaffold(
@@ -185,7 +203,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50.0),
                   child: FutureBuilder(
-                    future: dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context),
+                    future: dibujarProcesos(widget.item["orco_Codigo"].toString(), context),
                     builder: (BuildContext context, AsyncSnapshot snapshot){
                       if(procesos != null){
                         return ListView.builder(
@@ -213,7 +231,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(""),
-                                    const SizedBox(height: 2),
+                                    const SizedBox(height: 20),
                                     Text(
                                       procesos[index]["proc_Descripcion"].toUpperCase(),
                                       style: const TextStyle(
@@ -231,16 +249,15 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                             context: context,
                                             builder: (context) => AlertDialog(
                                               // title: const Text("Random title"),
-                                              content: buildDetallesProcesos(widget.detalles[index]["detallesprocesos"]),
+                                              content: buildDetallesProcesos(widget.item["detallesprocesos"], procesos[index]["proc_Id"]),
                                             )
                                           );
                                         },
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "nomás probar q ",
-                                            maxLines: 5,
-                                            overflow: TextOverflow.ellipsis,  
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            height: 20,
+                                            child: buildDetallesProcesos(widget.item["detallesprocesos"], procesos[index]["proc_Id"]),
                                           ),
                                         )
                                       ),
