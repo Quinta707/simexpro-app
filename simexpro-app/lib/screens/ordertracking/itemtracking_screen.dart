@@ -59,15 +59,14 @@ tieneDetalles (procesosdetalles, idProceso) {
 
 }
 
-class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProviderStateMixin{
- 
- Widget buildDetallesProcesos(isScrollable){
+Widget buildDetallesProcesos(isScrollable){
 
     final mappedFoundDetalles = foundDetalles.toList();
     print(mappedFoundDetalles);
 
     return ListView.builder(
       scrollDirection: Axis.vertical,
+      physics: isScrollable ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: foundDetalles.length,
       itemBuilder: (BuildContext context, int index){
@@ -92,6 +91,9 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
       },
     );
   }
+
+
+class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context){
@@ -202,7 +204,36 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
             child: TabBarView(
               controller: _TabController,
               children: [
-                const Text("Hi"),
+                ListView(
+                  children: <Widget>[
+                    ListTile(
+                      leading: const Icon(
+                        Icons.numbers_rounded,
+                        color: Colors.deepPurple,),
+                      title: const Text(
+                        "Código del ítem",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      subtitle: Text(widget.item["code_Id"].toString()),
+                    ),
+                    const Divider(height: 1,),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.numbers_rounded,
+                        color: Colors.deepPurple,),
+                      title: const Text(
+                        "Cantidad",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      subtitle: Text(widget.item["code_Cantidad"].toString()),
+                    ),
+                    const Divider(height: 1,),
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50.0),
                   child: FutureBuilder(
