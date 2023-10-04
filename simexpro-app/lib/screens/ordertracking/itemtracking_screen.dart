@@ -204,35 +204,164 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
             child: TabBarView(
               controller: _TabController,
               children: [
-                ListView(
-                  children: <Widget>[
-                    ListTile(
-                      leading: const Icon(
-                        Icons.numbers_rounded,
-                        color: Colors.deepPurple,),
-                      title: const Text(
-                        "Código del ítem",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold
-                        ),
+                Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10,),
+                      GridView.count(
+                        crossAxisCount: 2,
+                        childAspectRatio: 2.3,
+                        crossAxisSpacing: 0,
+                        // mainAxisSpacing: -1,
+                        shrinkWrap: true,
+                        children: <Widget>[
+                          ListTile(
+                            horizontalTitleGap: 5,
+                            leading: const Icon(
+                              Icons.content_paste_search_outlined,
+                              color: Colors.deepPurple,),
+                            title: const Text(
+                              "Orden de compra",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            subtitle: Text(widget.item["orco_Codigo"].toString()),
+                          ),
+                          ListTile(
+                            horizontalTitleGap: 5,
+                            leading: const Icon(
+                              Icons.numbers_rounded,
+                              color: Colors.deepPurple,),
+                            title: const Text(
+                              "Código de ítem",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            subtitle: Text(widget.item["code_Id"].toString()),
+                          ),
+                          ListTile(
+                            horizontalTitleGap: 5,
+                            leading: const Icon(
+                              Icons.shopping_cart_checkout_rounded,
+                              color: Colors.deepPurple,),
+                            title: const Text(
+                              "Cantidad",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            subtitle: Text(widget.item["code_CantidadPrenda"].toString()),
+                          ),
+                          ListTile(
+                            horizontalTitleGap: 5,
+                            leading: const Icon(
+                              Icons.design_services_rounded,
+                              color: Colors.deepPurple,),
+                            title: const Text(
+                              "Estilo",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            subtitle: Text(widget.item["esti_Descripcion"].toString()),
+                          ),
+                          ListTile(
+                            horizontalTitleGap: 5,
+                            leading: const Icon(
+                              Icons.format_size_rounded,
+                              color: Colors.deepPurple,),
+                            title: const Text(
+                              "Talla",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            subtitle: Text(widget.item["tall_Nombre"].toString()),
+                          ),
+                          ListTile(
+                            horizontalTitleGap: 5,
+                            leading: const Icon(
+                              Icons.transgender_rounded,
+                              color: Colors.deepPurple,),
+                            title: const Text(
+                              "Medida",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            subtitle: Text(widget.item["code_Sexo"].toString()),
+                          ),
+                          ListTile(
+                            horizontalTitleGap: 5,
+                            leading: const Icon(
+                              Icons.color_lens_rounded,
+                              color: Colors.deepPurple,),
+                            title: const Text(
+                              "Color",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            subtitle: Text(widget.item["colr_Nombre"].toString()),
+                          ),
+                          ListTile(
+                            horizontalTitleGap: 5,
+                            leading: const Icon(
+                              Icons.local_offer_rounded,
+                              color: Colors.deepPurple,),
+                            title: const Text(
+                              "Valor unitario",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            subtitle: Text(widget.item["code_Unidad"].toString()),
+                          ),
+                          ListTile(
+                            horizontalTitleGap: 5,
+                            leading: const Icon(
+                              Icons.payments,
+                              color: Colors.deepPurple,),
+                            title: const Text(
+                              "Impuesto",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            subtitle: Text(widget.item["code_Impuesto"].toString()),
+                          ),
+                          ListTile(
+                            horizontalTitleGap: 5,
+                            leading: const Icon(
+                              Icons.price_check_rounded,
+                              color: Colors.deepPurple,),
+                            title: const Text(
+                              "Valor total",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            subtitle: Text(widget.item["code_Valor"].toString()),
+                          ),
+                        ],
                       ),
-                      subtitle: Text(widget.item["code_Id"].toString()),
-                    ),
-                    const Divider(height: 1,),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.numbers_rounded,
-                        color: Colors.deepPurple,),
-                      title: const Text(
-                        "Cantidad",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold
+                      ListTile(
+                        horizontalTitleGap: 5,
+                        leading: const Icon(
+                          Icons.inventory,
+                          color: Colors.deepPurple,),
+                        title: const Text(
+                          "Especificación de embalaje",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
+                        subtitle: Text(widget.item["code_EspecificacionEmbalaje"].toString()),
                       ),
-                      subtitle: Text(widget.item["code_Cantidad"].toString()),
-                    ),
-                    const Divider(height: 1,),
-                  ],
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50.0),
