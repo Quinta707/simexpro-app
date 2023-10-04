@@ -29,7 +29,8 @@ class ItemTrackingScreen extends StatefulWidget {
 
 var procesos;
 final format = DateFormat('dd-MM-yyyy');
-bool tieneDetalles = true;
+var foundDetalles;
+// bool tieneDetalles = false;
 
 Future<void> dibujarProcesos(String codigopo, context) async {
   final response = await http.get(
@@ -48,48 +49,49 @@ Future<void> dibujarProcesos(String codigopo, context) async {
   print(procesos);
 }
 
-Widget buildDetallesProcesos(procesosdetalles, idProceso){
-    
-  final decodedDetalles = jsonDecode(procesosdetalles);
-  final foundDetalles = decodedDetalles.where((item) => 
-        item["proc_Id"] == idProceso
-  );
-
-  if(foundDetalles.length > 0){
-    tieneDetalles = true;
-  } else {
-    tieneDetalles = false;
+tieneDetalles (procesosdetalles, idProceso) {
+  if(procesosdetalles != null){
+    final decodedDetalles = jsonDecode(procesosdetalles);
+    foundDetalles = decodedDetalles.where((item) => 
+          item["proc_Id"] == idProceso
+    );
   }
 
-  return ListView.builder(
-    scrollDirection: Axis.vertical,
-    shrinkWrap: true,
-    itemCount: foundDetalles.length,
-    itemBuilder: (BuildContext context, int index){
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-        Text("Orden de proceso: #${decodedDetalles[index]["ensa_Id"]}\n"
-             "Cantidad: ${decodedDetalles[index]["ensa_Cantidad"]}\n"
-             "Empleado encargado: ${decodedDetalles[index]["empl_NombreCompleto"]}\n"
-             "Fecha inicio: ${format.format(DateTime.tryParse(decodedDetalles[index]["ensa_FechaInicio"]) as DateTime)}\n"
-             "Fecha final: ${format.format(DateTime.tryParse(decodedDetalles[index]["ensa_FechaLimite"]) as DateTime)}\n"
-             "Módulo: ${decodedDetalles[index]["modu_Nombre"]}",
-             style: TextStyle(
-              height: 1.25
-             ),
-        ),
-        if (index < decodedDetalles.length - 1) const Divider(
-          color: Colors.black,
-        ),
-        ],
-      );
-    },
-  );
 }
 
 class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProviderStateMixin{
  
+ Widget buildDetallesProcesos(isScrollable){
+
+    final mappedFoundDetalles = foundDetalles.toList();
+    print(mappedFoundDetalles);
+
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: foundDetalles.length,
+      itemBuilder: (BuildContext context, int index){
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+          Text("Orden de proceso: #${mappedFoundDetalles[index]["ensa_Id"]}\n"
+              "Cantidad: ${mappedFoundDetalles[index]["ensa_Cantidad"]}\n"
+              "Empleado encargado: ${mappedFoundDetalles[index]["empl_NombreCompleto"]}\n"
+              "Fecha inicio: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaInicio"]) as DateTime)}\n"
+              "Fecha final: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaLimite"]) as DateTime)}\n"
+              "Módulo: ${mappedFoundDetalles[index]["modu_Nombre"]}",
+              style: const TextStyle(
+                height: 1.25
+              ),
+          ),
+          if (index < foundDetalles.length - 1) const Divider(
+            color: Colors.black,
+          ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context){
@@ -97,6 +99,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
     TabController _TabController = 
     TabController(length: 2, vsync: this);
     procesos = null;
+    foundDetalles = null;
     print(widget.item["detallesprocesos"]);
     // dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
 
@@ -211,6 +214,9 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                           shrinkWrap: true,
                           itemCount: procesos.length,
                           itemBuilder: (BuildContext context, int index){
+
+                            tieneDetalles(widget.item["detallesprocesos"], procesos[index]["proc_Id"]);
+
                             return TimelineTile(
                               alignment: TimelineAlign.manual,
                               lineXY: 0.1,
@@ -231,7 +237,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(""),
-                                    const SizedBox(height: 20),
+                                    SizedBox(height: foundDetalles != null && foundDetalles.length > 0 ? 40 : 10),
                                     Text(
                                       procesos[index]["proc_Descripcion"].toUpperCase(),
                                       style: const TextStyle(
@@ -241,23 +247,23 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                       ),
                                     ),
                                     // const SizedBox(height: 6),
-                                    Material(
+                                    if(foundDetalles != null && foundDetalles.length > 0) Material(
                                       child: InkWell(
                                         splashColor: Colors.grey,
-                                        onTap: () {
+                                        onTap: () => {
                                           showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
                                               // title: const Text("Random title"),
-                                              content: buildDetallesProcesos(widget.item["detallesprocesos"], procesos[index]["proc_Id"]),
+                                              content: buildDetallesProcesos(true),
                                             )
-                                          );
+                                          )
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: SizedBox(
-                                            height: 20,
-                                            child: buildDetallesProcesos(widget.item["detallesprocesos"], procesos[index]["proc_Id"]),
+                                            height: 40,
+                                            child: buildDetallesProcesos(false),
                                           ),
                                         )
                                       ),
