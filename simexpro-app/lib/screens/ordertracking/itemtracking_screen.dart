@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, avoid_print
 
 import 'dart:convert';
 
@@ -9,6 +9,7 @@ import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../widgets/navbar_roots.dart';
 import '../../widgets/panel_widget.dart';
+import 'package:getwidget/getwidget.dart';
 import '../home_screen.dart';
 import '../login_screen.dart';
 import 'package:http/http.dart' as http;
@@ -61,48 +62,65 @@ tieneDetalles (procesosdetalles, idProceso) {
 
 Widget buildDetallesProcesos(isScrollable){
 
-    final mappedFoundDetalles = foundDetalles.toList();
-    print(mappedFoundDetalles);
+  final mappedFoundDetalles = foundDetalles.toList();
+  print(mappedFoundDetalles);
 
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      physics: isScrollable ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: foundDetalles.length,
-      itemBuilder: (BuildContext context, int index){
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-          Text("Orden de proceso: #${mappedFoundDetalles[index]["ensa_Id"]}\n"
-              "Cantidad: ${mappedFoundDetalles[index]["ensa_Cantidad"]}\n"
-              "Empleado encargado: ${mappedFoundDetalles[index]["empl_NombreCompleto"]}\n"
-              "Fecha inicio: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaInicio"]) as DateTime)}\n"
-              "Fecha final: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaLimite"]) as DateTime)}\n"
-              "Módulo: ${mappedFoundDetalles[index]["modu_Nombre"]}",
-              style: const TextStyle(
-                height: 1.25
-              ),
-          ),
-          if (index < foundDetalles.length - 1) const Divider(
-            color: Colors.black,
-          ),
-          ],
-        );
-      },
-    );
-  }
+  return ListView.builder(
+    scrollDirection: Axis.vertical,
+    physics: isScrollable ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
+    itemCount: foundDetalles.length,
+    itemBuilder: (BuildContext context, int index){
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Text("Orden de proceso: #${mappedFoundDetalles[index]["ensa_Id"]}\n"
+            "Cantidad: ${mappedFoundDetalles[index]["ensa_Cantidad"]}\n"
+            "Empleado encargado: ${mappedFoundDetalles[index]["empl_NombreCompleto"]}\n"
+            "Fecha inicio: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaInicio"]) as DateTime)}\n"
+            "Fecha final: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaLimite"]) as DateTime)}\n"
+            "Módulo: ${mappedFoundDetalles[index]["modu_Nombre"]}",
+            style: const TextStyle(
+              height: 1.25
+            ),
+        ),
+        if (index < foundDetalles.length - 1) const Divider(
+          color: Colors.black,
+        ),
+        ],
+      );
+    },
+  );
+}
 
+class ExpansionItem{
+  ExpansionItem({
+    this.isExpanded = false, 
+    this.header = '', 
+    this.body = '',
+    this.titleBorderRadius = const BorderRadius.all(Radius.circular(15)),});
+  
+  bool isExpanded;
+  final String header;
+  final String body;
+  var titleBorderRadius;
+}
+
+List<ExpansionItem> _items = <ExpansionItem>[
+  ExpansionItem(header: 'Documentos', body: 'Hola uwu'),
+  ExpansionItem(header: 'Materiales brindar', body: 'Hola uwu x2'),
+];
 
 class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context){
 
-    TabController _TabController = 
-    TabController(length: 2, vsync: this);
+    TabController _TabController = TabController(length: 2, vsync: this);
     procesos = null;
     foundDetalles = null;
-    print(widget.item["detallesprocesos"]);
+    // ignore: no_leading_underscores_for_local_identifiers
+    print("DETALLES PROCESOS ${widget.item["detallesprocesos"]}");
     // dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
 
     return Scaffold(
@@ -204,163 +222,214 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
             child: TabBarView(
               controller: _TabController,
               children: [
-                Center(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 10,),
-                      GridView.count(
-                        crossAxisCount: 2,
-                        childAspectRatio: 2.3,
-                        crossAxisSpacing: 0,
-                        // mainAxisSpacing: -1,
-                        shrinkWrap: true,
-                        children: <Widget>[
-                          ListTile(
-                            horizontalTitleGap: 5,
-                            leading: const Icon(
-                              Icons.content_paste_search_outlined,
-                              color: Colors.deepPurple,),
-                            title: const Text(
-                              "Orden de compra",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold
+                SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10,),
+                        GridView.count(
+                          crossAxisCount: 2,
+                          childAspectRatio: 2.3,
+                          crossAxisSpacing: 0,
+                          // mainAxisSpacing: -1,
+                          shrinkWrap: true,
+                          children: <Widget>[
+                            ListTile(
+                              horizontalTitleGap: 5,
+                              leading: const Icon(
+                                Icons.content_paste_search_outlined,
+                                color: Colors.deepPurple,),
+                              title: const Text(
+                                "Orden de compra",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
+                              subtitle: Text(widget.item["orco_Codigo"].toString()),
                             ),
-                            subtitle: Text(widget.item["orco_Codigo"].toString()),
-                          ),
-                          ListTile(
-                            horizontalTitleGap: 5,
-                            leading: const Icon(
-                              Icons.numbers_rounded,
-                              color: Colors.deepPurple,),
-                            title: const Text(
-                              "Código de ítem",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold
+                            ListTile(
+                              horizontalTitleGap: 5,
+                              leading: const Icon(
+                                Icons.numbers_rounded,
+                                color: Colors.deepPurple,),
+                              title: const Text(
+                                "Código de ítem",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
+                              subtitle: Text(widget.item["code_Id"].toString()),
                             ),
-                            subtitle: Text(widget.item["code_Id"].toString()),
-                          ),
-                          ListTile(
-                            horizontalTitleGap: 5,
-                            leading: const Icon(
-                              Icons.shopping_cart_checkout_rounded,
-                              color: Colors.deepPurple,),
-                            title: const Text(
-                              "Cantidad",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold
+                            ListTile(
+                              horizontalTitleGap: 5,
+                              leading: const Icon(
+                                Icons.shopping_cart_checkout_rounded,
+                                color: Colors.deepPurple,),
+                              title: const Text(
+                                "Cantidad",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
+                              subtitle: Text(widget.item["code_CantidadPrenda"].toString()),
                             ),
-                            subtitle: Text(widget.item["code_CantidadPrenda"].toString()),
-                          ),
-                          ListTile(
-                            horizontalTitleGap: 5,
-                            leading: const Icon(
-                              Icons.design_services_rounded,
-                              color: Colors.deepPurple,),
-                            title: const Text(
-                              "Estilo",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold
+                            ListTile(
+                              horizontalTitleGap: 5,
+                              leading: const Icon(
+                                Icons.design_services_rounded,
+                                color: Colors.deepPurple,),
+                              title: const Text(
+                                "Estilo",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
+                              subtitle: Text(widget.item["esti_Descripcion"].toString()),
                             ),
-                            subtitle: Text(widget.item["esti_Descripcion"].toString()),
-                          ),
-                          ListTile(
-                            horizontalTitleGap: 5,
-                            leading: const Icon(
-                              Icons.format_size_rounded,
-                              color: Colors.deepPurple,),
-                            title: const Text(
-                              "Talla",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold
+                            ListTile(
+                              horizontalTitleGap: 5,
+                              leading: const Icon(
+                                Icons.format_size_rounded,
+                                color: Colors.deepPurple,),
+                              title: const Text(
+                                "Talla",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
+                              subtitle: Text(widget.item["tall_Nombre"].toString()),
                             ),
-                            subtitle: Text(widget.item["tall_Nombre"].toString()),
-                          ),
-                          ListTile(
-                            horizontalTitleGap: 5,
-                            leading: const Icon(
-                              Icons.transgender_rounded,
-                              color: Colors.deepPurple,),
-                            title: const Text(
-                              "Medida",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold
+                            ListTile(
+                              horizontalTitleGap: 5,
+                              leading: const Icon(
+                                Icons.transgender_rounded,
+                                color: Colors.deepPurple,),
+                              title: const Text(
+                                "Medida",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
+                              subtitle: Text(widget.item["code_Sexo"].toString()),
                             ),
-                            subtitle: Text(widget.item["code_Sexo"].toString()),
-                          ),
-                          ListTile(
-                            horizontalTitleGap: 5,
-                            leading: const Icon(
-                              Icons.color_lens_rounded,
-                              color: Colors.deepPurple,),
-                            title: const Text(
-                              "Color",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold
+                            ListTile(
+                              horizontalTitleGap: 5,
+                              leading: const Icon(
+                                Icons.color_lens_rounded,
+                                color: Colors.deepPurple,),
+                              title: const Text(
+                                "Color",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
+                              subtitle: Text(widget.item["colr_Nombre"].toString()),
                             ),
-                            subtitle: Text(widget.item["colr_Nombre"].toString()),
-                          ),
-                          ListTile(
-                            horizontalTitleGap: 5,
-                            leading: const Icon(
-                              Icons.local_offer_rounded,
-                              color: Colors.deepPurple,),
-                            title: const Text(
-                              "Valor unitario",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold
+                            ListTile(
+                              horizontalTitleGap: 5,
+                              leading: const Icon(
+                                Icons.local_offer_rounded,
+                                color: Colors.deepPurple,),
+                              title: const Text(
+                                "Valor unitario",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
+                              subtitle: Text(widget.item["code_Unidad"].toString()),
                             ),
-                            subtitle: Text(widget.item["code_Unidad"].toString()),
-                          ),
-                          ListTile(
-                            horizontalTitleGap: 5,
-                            leading: const Icon(
-                              Icons.payments,
-                              color: Colors.deepPurple,),
-                            title: const Text(
-                              "Impuesto",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold
+                            ListTile(
+                              horizontalTitleGap: 5,
+                              leading: const Icon(
+                                Icons.payments,
+                                color: Colors.deepPurple,),
+                              title: const Text(
+                                "Impuesto",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
+                              subtitle: Text(widget.item["code_Impuesto"].toString()),
                             ),
-                            subtitle: Text(widget.item["code_Impuesto"].toString()),
-                          ),
-                          ListTile(
-                            horizontalTitleGap: 5,
-                            leading: const Icon(
-                              Icons.price_check_rounded,
-                              color: Colors.deepPurple,),
-                            title: const Text(
-                              "Valor total",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold
+                            ListTile(
+                              horizontalTitleGap: 5,
+                              leading: const Icon(
+                                Icons.price_check_rounded,
+                                color: Colors.deepPurple,),
+                              title: const Text(
+                                "Valor total",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
                               ),
+                              subtitle: Text(widget.item["code_Valor"].toString()),
                             ),
-                            subtitle: Text(widget.item["code_Valor"].toString()),
-                          ),
-                        ],
-                      ),
-                      ListTile(
-                        horizontalTitleGap: 5,
-                        leading: const Icon(
-                          Icons.inventory,
-                          color: Colors.deepPurple,),
-                        title: const Text(
-                          "Especificación de embalaje",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold
-                          ),
+                          ],
                         ),
-                        subtitle: Text(widget.item["code_EspecificacionEmbalaje"].toString()),
-                      ),
-                    ],
+                        ListTile(
+                          horizontalTitleGap: 5,
+                          leading: const Icon(
+                            Icons.inventory,
+                            color: Colors.deepPurple,),
+                          title: const Text(
+                            "Especificación de embalaje",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          subtitle: Text(widget.item["code_EspecificacionEmbalaje"].toString()),
+                        ),
+                        const SizedBox(height: 10,),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          // child: ClipRRect(
+                          //   borderRadius: BorderRadius.circular(8),
+                          //   child: ExpansionPanelList(
+                          //     animationDuration: const Duration(milliseconds: 500),
+                          //     expansionCallback: (int i, bool isExpanded) {
+                          //       setState(() {
+                          //         _items[i].isExpanded = !_items[i].isExpanded;
+                          //         print("expansion list ${_items[i].isExpanded}");
+                          //       });
+                          //     },
+                          //     children: _items.map((ExpansionItem item){
+                          //       return ExpansionPanel(
+                          //         headerBuilder: (BuildContext context, bool isExpanded){
+                          //           return ListTile(
+                          //             title: Text(
+                          //               item.header,
+                          //               style: const TextStyle(
+                          //                 fontWeight: FontWeight.bold
+                          //               ),
+                          //             ),
+                          //           );
+                          //         }, 
+                          //         body: Text(item.body),
+                          //         isExpanded: item.isExpanded,
+                          //       );
+                          //     }).toList(),
+                          //   ),
+                          // ),
+                          child: GFAccordion(
+                            titleBorderRadius: _items[0].titleBorderRadius,
+                            collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+                            contentBorderRadius: const BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                            onToggleCollapsed: (isCollapsed) {
+                              setState(() {
+                                print("hola");
+                                if(isCollapsed){
+                                  _items[0].titleBorderRadius = const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15));
+                                } else {
+                                  _items[0].titleBorderRadius = const BorderRadius.all(Radius.circular(15));
+                                }
+                              });                            
+                            },
+                            title: 'GF Accordion',
+                            content: 'GetFlutter is an open source library that comes with pre-build 1000+ UI components.'
+                          )
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
