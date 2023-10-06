@@ -29,6 +29,7 @@ class ItemTrackingScreen extends StatefulWidget {
 }
 
 var procesos;
+var documentos;
 final format = DateFormat('dd-MM-yyyy');
 var foundDetalles;
 // bool tieneDetalles = false;
@@ -48,6 +49,23 @@ Future<void> dibujarProcesos(String codigopo, context) async {
   procesos = decodedJson["data"];
 
   print(procesos);
+}
+
+Future<void> documentosSubidos(int codigopodetalle) async {
+  final response = await http.get(
+    Uri.parse(
+      '${apiUrl}DocumentosOrdenCompraDetalles/Listar?code_Id=$codigopodetalle'
+    ),
+    headers: {
+      'XApiKey': apiKey,
+      'Content-Type': 'application/json',
+    },
+  );
+
+  final decodedJson = jsonDecode(response.body);
+  documentos = decodedJson["data"];
+
+  print(documentos);
 }
 
 tieneDetalles (procesosdetalles, idProceso) {
@@ -108,11 +126,13 @@ class ExpansionItem{
 
 List<ExpansionItem> _items = <ExpansionItem>[
   ExpansionItem(header: 'Documentos', body: 'Hola uwu'),
-  ExpansionItem(header: 'Materiales brindar', body: 'Hola uwu x2'),
+  ExpansionItem(header: 'Materiales brindar', body: 'Hola uwuuuu\nq tal gente linda'),
 ];
 
 
 class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProviderStateMixin{
+  int? sortColumnIndex;
+  bool isAscending = false;
 
   @override
   Widget build(BuildContext context){
@@ -123,7 +143,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
     // ignore: no_leading_underscores_for_local_identifiers
     print("DETALLES PROCESOS ${widget.item["detallesprocesos"]}");
     // dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
-
+    documentosSubidos(widget.item["code_Id"]);
     return WillPopScope(
       onWillPop: (() async {
         _items[0].titleBorderRadius = const BorderRadius.all(Radius.circular(15));
@@ -389,34 +409,6 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                           const SizedBox(height: 10,),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            // child: ClipRRect(
-                            //   borderRadius: BorderRadius.circular(8),
-                            //   child: ExpansionPanelList(
-                            //     animationDuration: const Duration(milliseconds: 500),
-                            //     expansionCallback: (int i, bool isExpanded) {
-                            //       setState(() {
-                            //         _items[i].isExpanded = !_items[i].isExpanded;
-                            //         print("expansion list ${_items[i].isExpanded}");
-                            //       });
-                            //     },
-                            //     children: _items.map((ExpansionItem item){
-                            //       return ExpansionPanel(
-                            //         headerBuilder: (BuildContext context, bool isExpanded){
-                            //           return ListTile(
-                            //             title: Text(
-                            //               item.header,
-                            //               style: const TextStyle(
-                            //                 fontWeight: FontWeight.bold
-                            //               ),
-                            //             ),
-                            //           );
-                            //         }, 
-                            //         body: Text(item.body),
-                            //         isExpanded: item.isExpanded,
-                            //       );
-                            //     }).toList(),
-                            //   ),
-                            // ),
                             child: ListView.builder(
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
@@ -437,7 +429,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                     });                            
                                   },
                                   title: _items[index].header,
-                                  content: _items[index].body
+                                  contentChild: buildDataTable()
                                 );
                               }
                             )
@@ -542,4 +534,52 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
       ),
     );
   }
+
+  @override
+  Widget buildDataTable(){
+    final columns = ['Nombre', 'Tipo', 'Archivo'];
+
+    return DataTable(
+      sortColumnIndex: sortColumnIndex,
+      sortAscending: isAscending,
+      columns: getColumns(columns),
+      rows: getRows(documentos),
+    );
+  }
+  
+  List<DataColumn> getColumns(List<String> columns) => columns
+    .map((String column) => DataColumn(
+        label: Text(column),
+        onSort: onSort,
+      ))
+    .toList();
+
+  List<DataRow> getRows(rows) => rows
+    .map<DataRow>((row) => DataRow(
+      cells: [
+        DataCell(Text(row["dopo_NombreArchivo"])),
+        DataCell(Text(row["dopo_TipoArchivo"])),
+        DataCell(Text(row["dopo_Archivo"])),
+      ]
+    ))
+    .toList();
+
+  void onSort(int columnIndex, bool ascending){
+    if (columnIndex == 0){
+      documentos.sort((doc1, doc2) =>
+        compareString(ascending, doc1["dopo_NombreArchivo"], doc2["dopo_NombreArchivo"])
+      );
+    } else if (columnIndex == 1){
+      documentos.sort((doc1, doc2) =>
+        compareString(ascending, doc1["dopo_TipoArchivo"], doc2["dopo_TipoArchivo"])
+      );
+    }
+    setState(() {
+      sortColumnIndex = columnIndex;
+      isAscending = ascending;
+    });
+  }
+
+  int compareString(bool ascending, String value1, String value2) =>
+    ascending ? value1.compareTo(value2) : value2.compareTo(value1);
 }
