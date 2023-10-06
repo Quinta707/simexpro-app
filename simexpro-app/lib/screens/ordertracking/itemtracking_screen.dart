@@ -34,7 +34,8 @@ class ItemTrackingScreen extends StatefulWidget {
 }
 
 var procesos;
-var documentos;
+var documentos = [];
+var materiales = [];
 final format = DateFormat('dd-MM-yyyy');
 var foundDetalles;
 // bool tieneDetalles = false;
@@ -52,12 +53,10 @@ Future<void> dibujarProcesos(String codigopo, context) async {
 
   final decodedJson = jsonDecode(response.body);
   procesos = decodedJson["data"];
-
-  print(procesos);
 }
 
-Future<void> documentosSubidos(int codigopodetalle) async {
-  final response = await http.get(
+Future<void> infoAcordeon(int codigopodetalle) async {
+  final response1 = await http.get(
     Uri.parse(
       '${apiUrl}DocumentosOrdenCompraDetalles/Listar?code_Id=$codigopodetalle'
     ),
@@ -67,11 +66,37 @@ Future<void> documentosSubidos(int codigopodetalle) async {
     },
   );
 
-  final decodedJson = jsonDecode(response.body);
-  documentos = decodedJson["data"];
+  final decodedJson1 = jsonDecode(response1.body);
+  documentos = decodedJson1["data"];
 
-  print(documentos);
+  final response2 = await http.get(
+    Uri.parse(
+      '${apiUrl}MaterialesBrindar/ListarFiltrado?code_Id=$codigopodetalle'
+    ),
+    headers: {
+      'XApiKey': apiKey,
+      'Content-Type': 'application/json',
+    },
+  );
+
+  final decodedJson2 = jsonDecode(response2.body);
+  materiales = decodedJson2["data"];
 }
+
+// Future<void> materialesBrindar(int codigopodetalle) async {
+//   final response = await http.get(
+//     Uri.parse(
+//       '${apiUrl}MaterialesBrindar/ListarFiltrado?code_Id=$codigopodetalle'
+//     ),
+//     headers: {
+//       'XApiKey': apiKey,
+//       'Content-Type': 'application/json',
+//     },
+//   );
+
+//   final decodedJson = jsonDecode(response.body);
+//   materiales = decodedJson["data"];
+// }
 
 tieneDetalles (procesosdetalles, idProceso) {
   if(procesosdetalles != null){
@@ -120,18 +145,20 @@ class ExpansionItem{
   ExpansionItem({
     this.isExpanded = false, 
     this.header = '', 
-    this.body = '',
-    this.titleBorderRadius = const BorderRadius.all(Radius.circular(15)),});
+    this.titleBorderRadius = const BorderRadius.all(Radius.circular(15)),
+    this.esDocumentos = false});
   
   bool isExpanded;
   final String header;
-  final String body;
   var titleBorderRadius;
+  bool esDocumentos;
 }
 
 List<ExpansionItem> _items = <ExpansionItem>[
-  ExpansionItem(header: 'Documentos', body: 'Hola uwu'),
-  ExpansionItem(header: 'Materiales brindar', body: 'Hola uwuuuu\nq tal gente linda'),
+  ExpansionItem(header: 'Documentos', 
+                esDocumentos: true),
+  ExpansionItem(header: 'Materiales brindar', 
+                esDocumentos: false),
 ];
 
 
@@ -148,7 +175,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
     // ignore: no_leading_underscores_for_local_identifiers
     print("DETALLES PROCESOS ${widget.item["detallesprocesos"]}");
     // dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
-    documentosSubidos(widget.item["code_Id"]);
+    infoAcordeon(widget.item["code_Id"]);
     return WillPopScope(
       onWillPop: (() async {
         _items[0].titleBorderRadius = const BorderRadius.all(Radius.circular(15));
@@ -263,6 +290,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                             crossAxisCount: 2,
                             childAspectRatio: 2.3,
                             crossAxisSpacing: 0,
+                            physics: const NeverScrollableScrollPhysics(),
                             // mainAxisSpacing: -1,
                             shrinkWrap: true,
                             children: <Widget>[
@@ -437,7 +465,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                   contentChild: SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
                                     child: FittedBox(
-                                      child: buildDataTable()
+                                      child: buildDataTable(_items[index].esDocumentos)
                                     )
                                   )
                                 );
@@ -451,89 +479,91 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                    child: FutureBuilder(
-                      future: dibujarProcesos(widget.item["orco_Codigo"].toString(), context),
-                      builder: (BuildContext context, AsyncSnapshot snapshot){
-                        if(procesos != null){
-                          return ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: procesos.length,
-                            itemBuilder: (BuildContext context, int index){
+                    child: Column(
+                      children: [
+                        Text('Proceso actual'),
+                        FutureBuilder(
+                          future: dibujarProcesos(widget.item["orco_Codigo"].toString(), context),
+                          builder: (BuildContext context, AsyncSnapshot snapshot){
+                            if(procesos != null){
+                              return ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: procesos.length,
+                                itemBuilder: (BuildContext context, int index){
     
-                              tieneDetalles(widget.item["detallesprocesos"], procesos[index]["proc_Id"]);
+                                  tieneDetalles(widget.item["detallesprocesos"], procesos[index]["proc_Id"]);
     
-                              return TimelineTile(
-                                alignment: TimelineAlign.manual,
-                                lineXY: 0.1,
-                                isFirst: index == 0,
-                                isLast: index == procesos.length - 1,
-                                beforeLineStyle: const LineStyle(
-                                  color: Colors.black87,
-                                  thickness: 2,
-                                ),
-                                indicatorStyle: IndicatorStyle(
-                                  drawGap: true,
-                                  color: HexColor(procesos[index]["proc_CodigoHTML"]),
-                                  width: 30,
-                                ),
-                                endChild: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(""),
-                                      SizedBox(height: foundDetalles != null && foundDetalles.length > 0 ? 40 : 10),
-                                      Text(
-                                        procesos[index]["proc_Descripcion"].toUpperCase(),
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500
-                                        ),
-                                      ),
-                                      // const SizedBox(height: 6),
-                                      if(foundDetalles != null && foundDetalles.length > 0) Material(
-                                        child: InkWell(
-                                          splashColor: Colors.grey,
-                                          onTap: () => {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                // title: const Text("Random title"),
-                                                content: buildDetallesProcesos(true),
-                                              )
-                                            )
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: SizedBox(
-                                              height: 40,
-                                              child: buildDetallesProcesos(false),
+                                  return TimelineTile(
+                                    alignment: TimelineAlign.manual,
+                                    lineXY: 0.1,
+                                    isFirst: index == 0,
+                                    isLast: index == procesos.length - 1,
+                                    beforeLineStyle: const LineStyle(
+                                      color: Colors.black87,
+                                      thickness: 2,
+                                    ),
+                                    indicatorStyle: IndicatorStyle(
+                                      drawGap: true,
+                                      color: HexColor(procesos[index]["proc_CodigoHTML"]),
+                                      width: 30,
+                                    ),
+                                    endChild: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(""),
+                                          SizedBox(height: foundDetalles != null && foundDetalles.length > 0 ? 30 : 20),
+                                          Text(
+                                            procesos[index]["proc_Descripcion"].toUpperCase(),
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500
                                             ),
-                                          )
-                                        ),
+                                          ),
+                                          // const SizedBox(height: 6),
+                                          if(foundDetalles != null && foundDetalles.length > 0) Material(
+                                            child: InkWell(
+                                              splashColor: Colors.grey,
+                                              onTap: () => {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(
+                                                    // title: const Text("Random title"),
+                                                    content: buildDetallesProcesos(true),
+                                                  )
+                                                )
+                                              },
+                                              child: SizedBox(
+                                                height: 40,
+                                                child: buildDetallesProcesos(false),
+                                              ),
+                                            ),
+                                          ) else const SizedBox(height: 40),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
+                                    ),
+                                  );
+                                },
                               );
-                            },
-                          );
-                        } else {
-                          return Column(
-                            children: const [
-                              SizedBox(height: 100,),
-                              SizedBox(
-                                width: 60,
-                                height: 60,
-                                child: CircularProgressIndicator(),
-                              ),
-                            ],
-                          );
-                        }
-                        
-                      },
+                            } else {
+                              return Column(
+                                children: const [
+                                  SizedBox(height: 100,),
+                                  SizedBox(
+                                    width: 60,
+                                    height: 60,
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ],
+                              );
+                            }
+                            
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -546,14 +576,19 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
   }
 
   @override
-  Widget buildDataTable(){
-    final columns = ['Nombre', 'Tipo', 'Archivo'];
+  Widget buildDataTable(bool esDocumentos){
+    List<String> columns;
 
+    if(esDocumentos){
+      columns = ['Nombre', 'Tipo', 'Archivo'];
+    } else{
+      columns = ['Material', 'Unidad Medida', 'Cantidad'];
+    }
     return DataTable(
       sortColumnIndex: sortColumnIndex,
       sortAscending: isAscending,
       columns: getColumns(columns),
-      rows: getRows(documentos),
+      rows: esDocumentos ? getRowsDocumentos(documentos) : getRowsMateriales(materiales),
     );
   }
   
@@ -564,8 +599,8 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
       ))
     .toList();
 
-  List<DataRow> getRows(rows) => rows
-    .map<DataRow>((row) => DataRow(
+  List<DataRow> getRowsDocumentos(rows) => 
+    rows.map<DataRow>((row) => DataRow(
       cells: [
         DataCell(ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 100),
@@ -591,6 +626,34 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
           ),
           child: const Icon(Icons.remove_red_eye_rounded),
         )),
+      ]
+    ))
+    .toList();
+
+    List<DataRow> getRowsMateriales(rows) => 
+    rows.map<DataRow>((row) => DataRow(
+      cells: [
+        DataCell(ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 100),
+          child: Text(
+            row["mate_Descripcion"],
+            overflow: TextOverflow.ellipsis,)
+          )
+        ),
+        DataCell(ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 60),
+          child: Text(
+            row["unme_Descripcion"],
+            overflow: TextOverflow.ellipsis,)
+          )
+        ),
+        DataCell(ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 60),
+          child: Text(
+            row["code_CantidadPrenda"],
+            overflow: TextOverflow.ellipsis,)
+          )
+        ),
       ]
     ))
     .toList();
