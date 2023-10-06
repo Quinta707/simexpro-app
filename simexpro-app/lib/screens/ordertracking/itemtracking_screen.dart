@@ -589,7 +589,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
           style: ElevatedButton.styleFrom(
             backgroundColor: Color.fromARGB(255, 230, 200, 92)
           ),
-          child: const Icon(Icons.download),
+          child: const Icon(Icons.remove_red_eye_rounded),
         )),
       ]
     ))
@@ -646,7 +646,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
 
     } catch (e) {
       CherryToast.error(
-          title: const Text('Ha ocurrido un error al descargar al archivo',
+          title: const Text('Ha ocurrido un error.',
               style: TextStyle(color: Colors.white)))
       .show(context);
 
