@@ -634,7 +634,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
         options: Options(
           responseType: ResponseType.bytes,
           followRedirects: false,
-          receiveTimeout: const Duration(seconds: 0),
+          receiveTimeout: const Duration(seconds: 10),
         ),
       );
 
@@ -646,9 +646,11 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
 
     } catch (e) {
       CherryToast.error(
-          title: const Text('Ha ocurrido un error',
+          title: const Text('Ha ocurrido un error al descargar al archivo',
               style: TextStyle(color: Colors.white)))
       .show(context);
+
+      print(e);
 
       return null;
     }
