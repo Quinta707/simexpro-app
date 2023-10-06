@@ -53,6 +53,9 @@ dependencies:
   iconify_flutter: ^0.0.5
   intl: ^0.17.0
   getwidget: ^2.0.4
+  path_provider: ^1.6.28
+  dio: ^5.3.3
+  open_file: ^3.2.1
 
 
 dev_dependencies:

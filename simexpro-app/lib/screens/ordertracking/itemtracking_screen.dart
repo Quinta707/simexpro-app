@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, avoid_print
 
 import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart';
+import 'package:open_file/open_file.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +17,7 @@ import 'package:getwidget/getwidget.dart';
 import '../home_screen.dart';
 import '../login_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:simexpro/toastconfig/toastconfig.dart';
 
 import '../../api.dart';
 
@@ -429,7 +434,12 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                     });                            
                                   },
                                   title: _items[index].header,
-                                  contentChild: buildDataTable()
+                                  contentChild: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: FittedBox(
+                                      child: buildDataTable()
+                                    )
+                                  )
                                 );
                               }
                             )
@@ -557,9 +567,30 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
   List<DataRow> getRows(rows) => rows
     .map<DataRow>((row) => DataRow(
       cells: [
-        DataCell(Text(row["dopo_NombreArchivo"])),
-        DataCell(Text(row["dopo_TipoArchivo"])),
-        DataCell(Text(row["dopo_Archivo"])),
+        DataCell(ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 100),
+          child: Text(
+            row["dopo_NombreArchivo"],
+            overflow: TextOverflow.ellipsis,)
+          )
+        ),
+        DataCell(ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 60),
+          child: Text(
+            row["dopo_TipoArchivo"],
+            overflow: TextOverflow.ellipsis,)
+          )
+        ),
+        DataCell(ElevatedButton(
+          onPressed: () => openFile(
+            url: row["dopo_Archivo"],
+            fileName: row["dopo_NombreArchivo"]
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(255, 230, 200, 92)
+          ),
+          child: const Icon(Icons.download),
+        )),
       ]
     ))
     .toList();
@@ -582,4 +613,44 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
 
   int compareString(bool ascending, String value1, String value2) =>
     ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+
+  Future openFile({required String url, String? fileName}) async {
+    final file = await downloadFile(url, fileName!);
+
+    if(file == null) return;
+
+    print('Path: ${file.path}');
+
+    OpenFile.open(file.path);
+  }
+
+  Future<File?> downloadFile(String url, String name) async {
+    try{
+      final appStorage = await getApplicationDocumentsDirectory();
+      final file = File('${appStorage.path}/$name');
+
+      final response = await Dio().get(
+        url,
+        options: Options(
+          responseType: ResponseType.bytes,
+          followRedirects: false,
+          receiveTimeout: const Duration(seconds: 0),
+        ),
+      );
+
+      final raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+
+      return file;
+
+    } catch (e) {
+      CherryToast.error(
+          title: const Text('Ha ocurrido un error',
+              style: TextStyle(color: Colors.white)))
+      .show(context);
+
+      return null;
+    }
+  }
 }
