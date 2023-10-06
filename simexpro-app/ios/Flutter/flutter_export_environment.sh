@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\Users\LAB2\Desktop\flutter_windows_3.7.10-stable\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\LAB2\Documents\GitHub\simexpro-app\simexpro-app"
+export "FLUTTER_ROOT=C:\Users\karla\OneDrive\Escritorio\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\karla\OneDrive\Documents\simexpro-app\simexpro-app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib\main.dart"
 export "FLUTTER_BUILD_DIR=build"
