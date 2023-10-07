@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
 import 'package:simexpro/screens/historial_detalles_screen.dart';
 
+import '../screens/historial_detallesAduana_screen.dart';
+
 class OrderData {
   final int id;
   final String codigo;
@@ -288,7 +290,7 @@ class _UpcominghistorialAduanaState extends State<UpcominghistorialAduana> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Historial_detalles_Screen(),
+                          builder: (context) => Historial_detallesAduana_Screen(),
                         ),
                       );
                     },
