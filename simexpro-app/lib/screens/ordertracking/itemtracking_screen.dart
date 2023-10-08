@@ -111,7 +111,6 @@ tieneDetalles (procesosdetalles, idProceso) {
 Widget buildDetallesProcesos(isScrollable){
 
   final mappedFoundDetalles = foundDetalles.toList();
-  print(mappedFoundDetalles);
 
   return ListView.builder(
     scrollDirection: Axis.vertical,
@@ -176,6 +175,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
     print("DETALLES PROCESOS ${widget.item["detallesprocesos"]}");
     // dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
     infoAcordeon(widget.item["code_Id"]);
+    print(widget.item);
     return WillPopScope(
       onWillPop: (() async {
         _items[0].titleBorderRadius = const BorderRadius.all(Radius.circular(15));
@@ -481,7 +481,40 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                     padding: const EdgeInsets.symmetric(horizontal: 50.0),
                     child: Column(
                       children: [
-                        Text('Proceso actual'),
+                        const SizedBox(height: 20,),
+                        // Text('Proceso actual: '),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 20,),
+                            const Text('Proceso actual: '),
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: widget.item["proc_IdActual"] == 0 ? 
+                                        Colors.redAccent : widget.item["proc_IdActual"] > 0 ? 
+                                                            HexColor(widget.item["proc_CodigoHtml"]) : Colors.greenAccent,
+                              ),
+                              width: 20.0 / 2,
+                              height: 20.0 / 2,
+                            ),
+                            //Dot and text separator
+                            const SizedBox(width: 6),
+                            Flexible(
+                              child: Text(
+                                widget.item["proc_IdActual"] == 0 ? 
+                                        "PENDIENTE" : widget.item["proc_IdActual"] > 0 ? 
+                                                            widget.item["proc_Descripcion"].toUpperCase() 
+                                                            : "TERMINADO",
+                                style: const TextStyle(fontSize: 13),
+                                textAlign: TextAlign.end,
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                              ),
+                            ),
+                          ],
+                        ),
                         FutureBuilder(
                           future: dibujarProcesos(widget.item["orco_Codigo"].toString(), context),
                           builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -533,6 +566,10 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                                   builder: (context) => AlertDialog(
                                                     // title: const Text("Random title"),
                                                     content: buildDetallesProcesos(true),
+                                                    elevation: 24.0,
+                                                    shape: const RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.all(Radius.circular(20.0))
+                                                    ),
                                                   )
                                                 )
                                               },
