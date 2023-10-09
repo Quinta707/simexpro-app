@@ -35,7 +35,7 @@ class TimelineAduanaScreen extends StatelessWidget {
                 ));
               },
               child: CircleAvatar(
-                backgroundImage: AssetImage('images/logoMaquinas.png'),
+                backgroundImage: AssetImage('images/deva.png'),
                 radius: 90,
               ),
             ),
@@ -58,7 +58,7 @@ class TimelineAduanaScreen extends StatelessWidget {
                 ));
               },
               child: CircleAvatar(
-                backgroundImage: AssetImage('images/logoOrdenes.png'),
+                backgroundImage: AssetImage('images/duca.png'),
                 radius: 90,
               ),
             ),

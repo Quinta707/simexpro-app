@@ -49,8 +49,8 @@ class _NavBarRootsState extends State<NavBarRoots> {
     } else {
       _screens = [
         TapsProduccion(),
-        TimelineScreen(),
         historialScreen(), // Usa la pantalla de historial existente
+        TimelineScreen(),
         const OrdersScreen(),
       ];
     }
