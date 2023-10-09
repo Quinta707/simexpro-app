@@ -7,8 +7,8 @@ import 'package:simexpro/api.dart';
 import 'package:simexpro/screens/historial_detalles_screen.dart';
 
 class DetalleData {
-  final String factId;
-  final String devaId;
+  final int factId;
+  final int devaId;
   final String factNumero;
   final String factFecha;
 
@@ -158,10 +158,10 @@ class _DetalleshistorialAduanaState extends State<DetalleshistorialAduana> {
     setState(() {
       filtereddetalles = detalles
           .where((detalle) =>
-              detalle.factNumero
+              detalle.factNumero.toString()
                   .toLowerCase()
                   .contains(searchText.toLowerCase()) ||
-              detalle.factNumero
+              detalle.factNumero.toString()
                   .toLowerCase()
                   .contains(searchText.toLowerCase()))
           .toList();
@@ -186,7 +186,7 @@ class _DetalleshistorialAduanaState extends State<DetalleshistorialAduana> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            subtitle: Text(detalle.factNumero),
+            subtitle: Text(detalle.factNumero.toString()),
           ),
           children: [
             Divider(),
@@ -195,7 +195,7 @@ class _DetalleshistorialAduanaState extends State<DetalleshistorialAduana> {
               child: Column(
                 children: [
                   _buildDataRow("Factura ID:", detalle.factId.toString()),
-                  _buildDataRow("Numero de factura:", detalle.factNumero),
+                  _buildDataRow("Numero de factura:", detalle.factNumero.toString()),
                   _buildDataRow("Deva ID:", detalle.devaId.toString()),
                   _buildDataRow("Fecha Emision:", detalle.factFecha),
                 
