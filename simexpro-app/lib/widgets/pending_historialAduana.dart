@@ -4,30 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
-import 'package:simexpro/screens/DUCA/duca_screen.dart';
 import 'package:simexpro/screens/historial_detalles_screen.dart';
 import 'package:simexpro/widgets/upcoming_historial.dart';
+
+import '../screens/historial_detallesAduana_screen.dart';
 
 class OrderData {
   final int id;
   final String codigo;
   final String fechaEmision;
   final String fechaLimite;
-  final String estadoOrdenCompra;
-  final String nombreCliente;
-  final String direccionEntrega;
-  final String metodoPago;
+  // final String estadoOrdenCompra;
+  // final String nombreCliente;
+  // final String direccionEntrega;
+  // final String metodoPago;
 
-  OrderData({
-    required this.id,
-    required this.codigo,
-    required this.fechaEmision,
-    required this.fechaLimite,
-    required this.estadoOrdenCompra,
-    required this.nombreCliente,
-    required this.direccionEntrega,
-    required this.metodoPago,
-  });
+  OrderData(
+      {required this.id,
+      required this.codigo,
+      required this.fechaEmision,
+      required this.fechaLimite
+      // required this.estadoOrdenCompra,
+      // required this.nombreCliente,
+      // required this.direccionEntrega,
+      // required this.metodoPago,
+      });
 
   Map<String, dynamic> toJson() {
     return {
@@ -35,20 +36,20 @@ class OrderData {
       'codigo': codigo,
       'fechaEmision': fechaEmision,
       'fechaLimite': fechaLimite,
-      'estadoOrdenCompra': estadoOrdenCompra,
-      'nombreCliente': nombreCliente,
-      'direccionEntrega': direccionEntrega,
-      'metodoPago': metodoPago,
+      // 'estadoOrdenCompra': estadoOrdenCompra,
+      // 'nombreCliente': nombreCliente,
+      // 'direccionEntrega': direccionEntrega,
+      // 'metodoPago': metodoPago,
     };
   }
 }
 
-class Pendinghistorial extends StatefulWidget {
+class PendinghistorialAduana extends StatefulWidget {
   @override
-  _PendinghistorialState createState() => _PendinghistorialState();
+  _PendinghistorialAduanaState createState() => _PendinghistorialAduanaState();
 }
 
-class _PendinghistorialState extends State<Pendinghistorial> {
+class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
   List<OrderData> orders = [];
   List<OrderData> filteredOrders = [];
 
@@ -67,7 +68,7 @@ class _PendinghistorialState extends State<Pendinghistorial> {
 
   Future<List<OrderData>> fetchData() async {
     final response = await http.get(
-      Uri.parse('${apiUrl}OrdenCompra/Listar'),
+      Uri.parse('${apiUrl}Declaracion_Valor/ListarHistorial'),
       headers: {
         'XApiKey': apiKey,
         'Content-Type': 'application/json',
@@ -79,10 +80,10 @@ class _PendinghistorialState extends State<Pendinghistorial> {
       final dataList = decodedJson["data"] as List<dynamic>;
 
       final orders = dataList
-          .where((data) => data['orco_EstadoOrdenCompra'] == 'P')
+          // .where((data) => data['orco_EstadoOrdenCompra'] == 'P')
           .map((data) {
-        String fechaEmision = data['orco_FechaEmision'];
-        String fechaLimite = data['orco_FechaLimite'];
+        String fechaEmision = data['deva_FechaAceptacion'];
+        String fechaLimite = data['deva_FechaAceptacion'];
 
         int indexOfT1 = fechaEmision.indexOf('T');
         int indexOfT2 = fechaLimite.indexOf('T');
@@ -96,14 +97,14 @@ class _PendinghistorialState extends State<Pendinghistorial> {
         }
 
         return OrderData(
-          id: data['orco_Id'],
-          codigo: data['orco_Codigo'],
+          id: data['deva_Id'],
+          codigo: data['deva_DeclaracionMercancia'],
           fechaEmision: fechaEmision,
           fechaLimite: fechaLimite,
-          estadoOrdenCompra: data['orco_EstadoOrdenCompra'],
-          nombreCliente: data['clie_Nombre_O_Razon_Social'],
-          direccionEntrega: data['orco_DireccionEntrega'],
-          metodoPago: data['fopa_Descripcion'],
+          // estadoOrdenCompra: data['orco_EstadoOrdenCompra'],
+          // nombreCliente: data['clie_Nombre_O_Razon_Social'],
+          // direccionEntrega: data['orco_DireccionEntrega'],
+          // metodoPago: data['fopa_Descripcion'],
         );
       }).toList();
 
@@ -140,7 +141,7 @@ class _PendinghistorialState extends State<Pendinghistorial> {
             ),
           ),
           SizedBox(height: 16),
-                 ListView.builder(
+          ListView.builder(
             shrinkWrap: true,
             itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
             itemBuilder: (context, index) {
@@ -168,7 +169,7 @@ class _PendinghistorialState extends State<Pendinghistorial> {
       filteredOrders = orders
           .where((order) =>
               order.codigo.toLowerCase().contains(searchText.toLowerCase()) ||
-              order.nombreCliente
+              order.fechaEmision
                   .toLowerCase()
                   .contains(searchText.toLowerCase()))
           .toList();
@@ -196,12 +197,12 @@ class _PendinghistorialState extends State<Pendinghistorial> {
             children: [
               ListTile(
                 title: Text(
-                  "Orden #${order.codigo}",
+                  "Mercancia #${order.codigo}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Text(order.nombreCliente),
+                subtitle: Text(order.fechaEmision),
                 trailing: SizedBox(
                   width: 100,
                   height: 25,
@@ -282,13 +283,11 @@ class _PendinghistorialState extends State<Pendinghistorial> {
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       prefs.setString('ordercodigo', order.codigo);
-                      prefs.setString('orderid',
-                          order.id.toString());
-
+                      prefs.setString('orderid', order.id.toString());
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DucasScreen(),
+                          builder: (context) => Historial_detallesAduana_Screen(),
                         ),
                       );
                     },

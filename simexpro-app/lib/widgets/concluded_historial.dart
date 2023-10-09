@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
+import 'package:simexpro/screens/historial_detalles_screen.dart';
 
 class OrderData {
   final int id;
@@ -277,7 +278,20 @@ class _ConcludedhistorialState extends State<Concludedhistorial> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InkWell(
-                    onTap: () {},
+                   onTap: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString('ordercodigo', order.codigo);
+                      prefs.setString('orderid',
+                          order.id.toString());
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Historial_detalles_Screen(),
+                        ),
+                      );
+                    },
                     child: Container(
                       width: 150,
                       padding: EdgeInsets.symmetric(vertical: 12),

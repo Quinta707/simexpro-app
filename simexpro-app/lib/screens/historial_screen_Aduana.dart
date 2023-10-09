@@ -3,19 +3,23 @@ import 'package:simexpro/widgets/concluded_historial.dart';
 import 'package:simexpro/widgets/upcoming_historial.dart';
 import 'package:simexpro/widgets/pending_historial.dart';
 
+import '../widgets/concluded_historialAduana.dart';
+import '../widgets/pending_historialAduana.dart';
+import '../widgets/upcoming_historialAduana.dart';
 
-class historialScreen extends StatefulWidget {
+
+class historialAduanaScreen extends StatefulWidget {
   @override 
-  State<historialScreen> createState() => _historialScreenState();
+  State<historialAduanaScreen> createState() => _historialAduanaScreenState();
 }
 
-class _historialScreenState extends State<historialScreen> {
+class _historialAduanaScreenState extends State<historialAduanaScreen> {
   int _buttonIndex = 0;
 
   final _historialWidgets = [
-    Pendinghistorial(),
-    Upcominghistorial(),
-    Concludedhistorial(),
+    PendinghistorialAduana(),
+    UpcominghistorialAduana(),
+    ConcludedhistorialAduana(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,7 @@ class _historialScreenState extends State<historialScreen> {
                       child: Text(
                         "Pendientes",
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 13,
                           fontWeight: FontWeight.w500,
                           color:
                               _buttonIndex == 0 ? Colors.white : Colors.black38,
@@ -94,7 +98,7 @@ class _historialScreenState extends State<historialScreen> {
                       child: Text(
                         "En proceso",
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 13,
                           fontWeight: FontWeight.w500,
                           color:
                               _buttonIndex == 1 ? Colors.white : Colors.black38,
@@ -123,7 +127,7 @@ class _historialScreenState extends State<historialScreen> {
                       child: Text(
                         "Completadas",
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 13,
                           fontWeight: FontWeight.w500,
                           color:
                               _buttonIndex == 2 ? Colors.white : Colors.black38,

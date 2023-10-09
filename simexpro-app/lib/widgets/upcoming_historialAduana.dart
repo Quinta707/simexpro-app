@@ -4,51 +4,45 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
-import 'package:simexpro/screens/DUCA/duca_screen.dart';
-import 'package:simexpro/screens/historial_detalles_screen.dart';
-import 'package:simexpro/widgets/upcoming_historial.dart';
+import 'package:simexpro/screens/Historial_detallesAduana_upcoming_Screen.dart';
+
+import '../screens/historial_detallesAduana_screen.dart';
 
 class OrderData {
   final int id;
-  final String codigo;
-  final String fechaEmision;
-  final String fechaLimite;
-  final String estadoOrdenCompra;
-  final String nombreCliente;
-  final String direccionEntrega;
-  final String metodoPago;
+  final String duca_No_Duca;
+  final String duca_No_Correlativo_Referencia;
+  final String nombre_Aduana_Registro;
+  final String nombre_Aduana_Destino;
+   
 
   OrderData({
     required this.id,
-    required this.codigo,
-    required this.fechaEmision,
-    required this.fechaLimite,
-    required this.estadoOrdenCompra,
-    required this.nombreCliente,
-    required this.direccionEntrega,
-    required this.metodoPago,
+    required this.duca_No_Duca,
+    required this.duca_No_Correlativo_Referencia,
+    required this.nombre_Aduana_Registro,
+    required this.nombre_Aduana_Destino,
+ 
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'codigo': codigo,
-      'fechaEmision': fechaEmision,
-      'fechaLimite': fechaLimite,
-      'estadoOrdenCompra': estadoOrdenCompra,
-      'nombreCliente': nombreCliente,
-      'direccionEntrega': direccionEntrega,
-      'metodoPago': metodoPago,
+      'duca_No_Duca': duca_No_Duca,
+      'duca_No_Correlativo_Referencia': duca_No_Correlativo_Referencia,
+      'nombre_Aduana_Registro': nombre_Aduana_Registro,
+      'nombre_Aduana_Destino': nombre_Aduana_Destino,
+      
     };
   }
 }
 
-class Pendinghistorial extends StatefulWidget {
+class UpcominghistorialAduana extends StatefulWidget {
   @override
-  _PendinghistorialState createState() => _PendinghistorialState();
+  _UpcominghistorialAduanaState createState() => _UpcominghistorialAduanaState();
 }
 
-class _PendinghistorialState extends State<Pendinghistorial> {
+class _UpcominghistorialAduanaState extends State<UpcominghistorialAduana> {
   List<OrderData> orders = [];
   List<OrderData> filteredOrders = [];
 
@@ -66,56 +60,43 @@ class _PendinghistorialState extends State<Pendinghistorial> {
   }
 
   Future<List<OrderData>> fetchData() async {
-    final response = await http.get(
-      Uri.parse('${apiUrl}OrdenCompra/Listar'),
-      headers: {
-        'XApiKey': apiKey,
-        'Content-Type': 'application/json',
-      },
-    );
+  final response = await http.get(
+    Uri.parse('${apiUrl}Duca/DucaHistorial'),
+    headers: {
+      'XApiKey': apiKey,
+      'Content-Type': 'application/json',
+    },
+  );
 
-    if (response.statusCode == 200) {
-      final decodedJson = jsonDecode(response.body);
-      final dataList = decodedJson["data"] as List<dynamic>;
+  if (response.statusCode == 200) {
+    final decodedJson = jsonDecode(response.body);
+    final dataList = decodedJson["data"] as List<dynamic>;
 
-      final orders = dataList
-          .where((data) => data['orco_EstadoOrdenCompra'] == 'P')
-          .map((data) {
-        String fechaEmision = data['orco_FechaEmision'];
-        String fechaLimite = data['orco_FechaLimite'];
+    final orders = dataList.map((data) {
+      return OrderData(
+        id: data['duca_Id'],
+        duca_No_Duca: data['duca_No_Duca'],
+        duca_No_Correlativo_Referencia: data['duca_No_Correlativo_Referencia'],
+        nombre_Aduana_Registro: data['nombre_Aduana_Registro'],
+        nombre_Aduana_Destino: data['nombre_Aduana_Destino'],
+      
 
-        int indexOfT1 = fechaEmision.indexOf('T');
-        int indexOfT2 = fechaLimite.indexOf('T');
+      );
+    }).toList();
 
-        if (indexOfT1 >= 0) {
-          fechaEmision = fechaEmision.substring(0, indexOfT1);
-        }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+        'userData', jsonEncode(orders.map((order) => order.toJson()).toList()));
 
-        if (indexOfT2 >= 0) {
-          fechaLimite = fechaLimite.substring(0, indexOfT2);
-        }
 
-        return OrderData(
-          id: data['orco_Id'],
-          codigo: data['orco_Codigo'],
-          fechaEmision: fechaEmision,
-          fechaLimite: fechaLimite,
-          estadoOrdenCompra: data['orco_EstadoOrdenCompra'],
-          nombreCliente: data['clie_Nombre_O_Razon_Social'],
-          direccionEntrega: data['orco_DireccionEntrega'],
-          metodoPago: data['fopa_Descripcion'],
-        );
-      }).toList();
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('userData',
-          jsonEncode(orders.map((order) => order.toJson()).toList()));
-
-      return orders;
-    } else {
-      throw Exception('Failed to load data');
-    }
+    return orders;
+    
+  } else {
+    
+    throw Exception('Failed to load data');
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -140,13 +121,15 @@ class _PendinghistorialState extends State<Pendinghistorial> {
             ),
           ),
           SizedBox(height: 16),
-                 ListView.builder(
+          ListView.builder(
             shrinkWrap: true,
             itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
             itemBuilder: (context, index) {
               if (filteredOrders.isNotEmpty) {
+                // Muestra la tarjeta de pedido si hay datos
                 return buildCard(filteredOrders[index]);
               } else {
+                // Muestra la imagen predeterminada con el tamaño deseado
                 return Center(
                   child: Image.network(
                     "https://i.ibb.co/9sgcf39/image.png",
@@ -167,8 +150,8 @@ class _PendinghistorialState extends State<Pendinghistorial> {
     setState(() {
       filteredOrders = orders
           .where((order) =>
-              order.codigo.toLowerCase().contains(searchText.toLowerCase()) ||
-              order.nombreCliente
+              order.duca_No_Duca.toLowerCase().contains(searchText.toLowerCase()) ||
+              order.duca_No_Correlativo_Referencia
                   .toLowerCase()
                   .contains(searchText.toLowerCase()))
           .toList();
@@ -196,17 +179,17 @@ class _PendinghistorialState extends State<Pendinghistorial> {
             children: [
               ListTile(
                 title: Text(
-                  "Orden #${order.codigo}",
+                  "Duca #${order.id}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Text(order.nombreCliente),
+                subtitle: Text(order.duca_No_Duca),
                 trailing: SizedBox(
                   width: 100,
                   height: 25,
                   child: Image.network(
-                    "https://i.ibb.co/9T4ST2V/pendiente.png",
+                    "https://i.ibb.co/GVHnGxg/encurso.png",
                     fit: BoxFit
                         .contain, // Ajusta la imagen para que cubra el espacio
                   ),
@@ -226,12 +209,12 @@ class _PendinghistorialState extends State<Pendinghistorial> {
                   Row(
                     children: [
                       Icon(
-                        Icons.calendar_month_outlined,
+                        Icons.add_location_alt,
                         color: Colors.black54,
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.fechaEmision,
+                        order.nombre_Aduana_Registro,
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -241,38 +224,43 @@ class _PendinghistorialState extends State<Pendinghistorial> {
                   Row(
                     children: [
                       Icon(
-                        Icons.calendar_month,
+                        Icons.add_location_alt,
                         color: Colors.black54,
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.fechaLimite,
+                        order.nombre_Aduana_Destino ?? 'No Asignado',
                         style: TextStyle(
                           color: Colors.black54,
                         ),
                       ),
                     ],
                   ),
-                  Row(
+
+                   Row(
                     children: [
                       Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: Colors.yellow,
                           shape: BoxShape.circle,
                         ),
                       ),
                       SizedBox(width: 5),
                       Text(
-                        "Pendiente",
+                        "En Curso",
+                       
                         style: TextStyle(
                           color: Colors.black54,
                         ),
                       ),
                     ],
                   ),
+                 
                 ],
-              ),
+                
+              ),  
+              
               SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -281,14 +269,13 @@ class _PendinghistorialState extends State<Pendinghistorial> {
                     onTap: () async {
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
-                      prefs.setString('ordercodigo', order.codigo);
-                      prefs.setString('orderid',
-                          order.id.toString());
+                      prefs.setString('DucaId', order.id.toString());
+             
 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DucasScreen(),
+                          builder: (context) => Historial_detallesAduana_upcoming_Screen(),
                         ),
                       );
                     },
