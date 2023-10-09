@@ -5,7 +5,8 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../screens/ordertracking/itemtracking_screen.dart';
 
-class PanelWidget extends StatelessWidget{
+// ignore: must_be_immutable
+class PanelWidget extends StatefulWidget{
   final ScrollController controller;
   final PanelController panelController;
   final detalles;
@@ -17,11 +18,30 @@ class PanelWidget extends StatelessWidget{
     required this.detalles
   }) : super(key: key);
   
+  @override 
+  // ignore: library_private_types_in_public_api
+  _PanelWidgetState createState() => _PanelWidgetState(); 
+  
+} 
+
+class _PanelWidgetState extends State<PanelWidget>{
+  late List displayDetalles = List.from(widget.detalles);
+  final TextEditingController _textController = new TextEditingController();
+   
+  void updateList(String value){
+    setState(() => {
+      displayDetalles = widget.detalles
+        .where((detalle) => 
+          detalle["code_Id"]!.toString().contains(value) ? true : false
+        ).toList()
+    }); 
+  }
+ 
 
   @override
   Widget build(BuildContext context) => ListView(
     padding: EdgeInsets.zero,
-    controller: controller,
+    controller: widget.controller,
     children: <Widget>[
       const SizedBox(height: 15,),
       buildDragHandle(),
@@ -46,9 +66,9 @@ class PanelWidget extends StatelessWidget{
     ),
   );
 
-  void togglePanel() => panelController.isPanelOpen 
-    ? panelController.close()
-    : panelController.open(); 
+  void togglePanel() => widget.panelController.isPanelOpen 
+    ? widget.panelController.close()
+    : widget.panelController.open(); 
 
   Widget buildAboutText(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -62,6 +82,8 @@ class PanelWidget extends StatelessWidget{
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.87,
             child: TextField(
+              onChanged: (value) => updateList(value), 
+              controller: _textController,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -94,7 +116,8 @@ class PanelWidget extends StatelessWidget{
                     Icons.clear, 
                     color: Colors.black54,),
                   onPressed: () {
-        
+                    updateList('');
+                    _textController.clear();
                   },
                 ), 
               ),
@@ -108,7 +131,7 @@ class PanelWidget extends StatelessWidget{
         ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: detalles.length,
+          itemCount: displayDetalles.length,
           itemBuilder: (BuildContext context, int index){
             //Items
             return SingleChildScrollView(
@@ -138,7 +161,7 @@ class PanelWidget extends StatelessWidget{
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ItemTrackingScreen(),
+                              builder: (context) => ItemTrackingScreen(item: displayDetalles[index]),
                             )
                           );
                         },
@@ -152,7 +175,7 @@ class PanelWidget extends StatelessWidget{
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 15, top: 23),
                                   child: Text(
-                                    "Código de ítem: ${detalles[index]["code_Id"]}",
+                                    "Código de ítem: ${displayDetalles[index]["code_Id"]}",
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -174,9 +197,9 @@ class PanelWidget extends StatelessWidget{
                                         Container(
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: detalles[index]["proc_IdActual"] == 0 ? 
-                                                   Colors.redAccent : detalles[index]["proc_IdActual"] > 0 ? 
-                                                                        HexColor(detalles[index]["proc_CodigoHtml"]) : Colors.greenAccent,
+                                            color: displayDetalles[index]["proc_IdActual"] == 0 ? 
+                                                   Colors.redAccent : displayDetalles[index]["proc_IdActual"] > 0 ? 
+                                                                        HexColor(displayDetalles[index]["proc_CodigoHtml"]) : Colors.greenAccent,
                                           ),
                                           width: 20.0 / 2,
                                           height: 20.0 / 2,
@@ -185,13 +208,10 @@ class PanelWidget extends StatelessWidget{
                                         const SizedBox(width: 6),
                                         Flexible(
                                           child: Text(
-                                            // softWrap: false,
-                                            detalles[index]["proc_IdActual"] == 0 ? 
-                                                   "PENDIENTE" : detalles[index]["proc_IdActual"] > 0 ? 
-                                                                        detalles[index]["proc_Descripcion"].toUpperCase() 
+                                            displayDetalles[index]["proc_IdActual"] == 0 ? 
+                                                   "PENDIENTE" : displayDetalles[index]["proc_IdActual"] > 0 ? 
+                                                                        displayDetalles[index]["proc_Descripcion"].toUpperCase() 
                                                                         : "TERMINADO",
-                                            // detalles[index]["proc_Descripcion"].toUpperCase(),
-                                            // overflow: TextOverflow.clip,
                                             style: const TextStyle(fontSize: 11),
                                             textAlign: TextAlign.end,
                                             maxLines: 1,
@@ -213,7 +233,7 @@ class PanelWidget extends StatelessWidget{
                               padding: const EdgeInsets.only(left: 15, top: 16, right: 18),
                               child: Text(
                                 // softWrap: false,
-                                "ESTILO: ${detalles[index]["esti_Descripcion"]}, TALLA: ${detalles[index]["tall_Nombre"]}",
+                                "ESTILO: ${displayDetalles[index]["esti_Descripcion"]}, TALLA: ${displayDetalles[index]["tall_Nombre"]}",
                                 // overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 overflow: TextOverflow.fade,
@@ -225,7 +245,7 @@ class PanelWidget extends StatelessWidget{
                             Padding(
                               padding: const EdgeInsets.only(left: 15, top: 6, right: 18),
                               child: Text(
-                                "COLOR: ${detalles[index]["colr_Nombre"]}, CANTIDAD: ${detalles[index]["code_CantidadPrenda"]}",
+                                "COLOR: ${displayDetalles[index]["colr_Nombre"]}, CANTIDAD: ${displayDetalles[index]["code_CantidadPrenda"]}",
                                 maxLines: 1,
                                 overflow: TextOverflow.fade,
                                 softWrap: false,
@@ -249,7 +269,7 @@ class PanelWidget extends StatelessWidget{
       ],
     ),
   );
-} 
+}
 
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
