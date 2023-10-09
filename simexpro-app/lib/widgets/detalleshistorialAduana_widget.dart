@@ -7,72 +7,38 @@ import 'package:simexpro/api.dart';
 import 'package:simexpro/screens/historial_detalles_screen.dart';
 
 class DetalleData {
-  final int codeId;
-  final int orcoId;
-  final int codeCantidadPrenda;
-  final String estiDescripcion;
-  final String codeFechaProcActual;
-  final String tallNombre;
-  final String codeSexo;
-  final String colrNombre;
-  final String codeEspecificacionEmbalaje;
-  final String orcoCodigo;
-  final String orcoEstadoFinalizado;
-  final String orcoEstadoOrdenCompra;
-  final String fechaExportacion;
-  final int cantidadExportada;
-  final int fedeCajas;
-  final int fedeTotalDetalle;
+  final String factId;
+  final String devaId;
+  final String factNumero;
+  final String factFecha;
 
   DetalleData({
-    required this.codeId,
-    required this.orcoId,
-    required this.orcoCodigo,
-    required this.codeCantidadPrenda,
-    required this.estiDescripcion,
-    required this.codeFechaProcActual,
-    required this.tallNombre,
-    required this.codeSexo,
-    required this.colrNombre,
-    required this.codeEspecificacionEmbalaje,
-    required this.orcoEstadoFinalizado,
-    required this.orcoEstadoOrdenCompra,
-    required this.fechaExportacion,
-    required this.cantidadExportada,
-    required this.fedeCajas,
-    required this.fedeTotalDetalle,
+    required this.factId,
+    required this.devaId,
+    required this.factNumero,
+    required this.factFecha,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'codeId': codeId,
-      'orcoId': orcoId,
-      'codeCantidadPrenda': codeCantidadPrenda,
-      'estiDescripcion': estiDescripcion,
-      'codeFechaProcActual': codeFechaProcActual,
-      'tallNombre': tallNombre,
-      'codeSexo': codeSexo,
-      'colrNombre': colrNombre,
-      'codeEspecificacionEmbalaje': codeEspecificacionEmbalaje,
-      'orcoCodigo': orcoCodigo,
-      'orcoEstadoFinalizado': orcoEstadoFinalizado,
-      'orcoEstadoOrdenCompra': orcoEstadoOrdenCompra,
-      'fechaExportacion': fechaExportacion,
-      'cantidadExportada': cantidadExportada,
-      'fedeCajas': fedeCajas,
-      'fedeTotalDetalle': fedeTotalDetalle,
+      'factId': factId,
+      'devaId': devaId,
+      'factNumero': factNumero,
+      'factFecha': factFecha,
     };
   }
 }
 
-class Detalleshistorial extends StatefulWidget {
+class DetalleshistorialAduana extends StatefulWidget {
   @override
-  _DetalleshistorialState createState() => _DetalleshistorialState();
+  _DetalleshistorialAduanaState createState() =>
+      _DetalleshistorialAduanaState();
 }
 
-class _DetalleshistorialState extends State<Detalleshistorial> {
+class _DetalleshistorialAduanaState extends State<DetalleshistorialAduana> {
   List<DetalleData> detalles = [];
   List<DetalleData> filtereddetalles = [];
+  
 
   TextEditingController searchController = TextEditingController();
 
@@ -89,10 +55,11 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
 
   Future<List<DetalleData>> fetchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     var orderid = prefs.getString('orderid');
 
     final responsedetalles = await http.get(
-      Uri.parse('${apiUrl}OrdenCompraDetalles/Listar?orco_Id=${orderid}'),
+      Uri.parse('${apiUrl}Declaracion_Valor/ListarFacturasByDeva?deva_Id=${orderid}'),
       headers: {
         'XApiKey': apiKey,
         'Content-Type': 'application/json',
@@ -102,40 +69,27 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
     if (responsedetalles.statusCode == 200) {
       final decodedJson = jsonDecode(responsedetalles.body);
       final dataList = decodedJson["data"] as List<dynamic>;
+       
+       
 
       final ordersdetalles = dataList.map((data) {
-        String codeFechaprocactual = data['code_FechaProcActual'];
-        String codefechaExportacion = data['fechaExportacion'];
+        String codeFechaprocactual = data['fact_Fecha'];
 
-        int indexOfT1 = codeFechaprocactual.indexOf('T');
-        int indexOfT2 = codefechaExportacion.indexOf('T');
+         int indexOfT1 = codeFechaprocactual.indexOf('T');
 
-        if (indexOfT1 >= 0) {
-          codeFechaprocactual = codeFechaprocactual.substring(0, indexOfT1);
-        }
-        if (indexOfT2 >= 0) {
-          codefechaExportacion = codefechaExportacion.substring(0, indexOfT2);
-        }
+         if (indexOfT1 >= 0) {
+           codeFechaprocactual = codeFechaprocactual.substring(0, indexOfT1);
+         }
+             
 
         final detalle = DetalleData(
-          codeId: data['code_Id'] ?? 0,
-          orcoId: data['orco_Id'] ?? 0,
-          codeCantidadPrenda: data['code_CantidadPrenda'] ?? 0,
-          estiDescripcion: data['esti_Descripcion'] ?? "",
-          codeFechaProcActual: codeFechaprocactual,
-          tallNombre: data['tall_Nombre'] ?? "",
-          codeSexo: data['code_Sexo'] ?? "",
-          colrNombre: data['colr_Nombre'] ?? "",
-          codeEspecificacionEmbalaje: data['code_EspecificacionEmbalaje'] ?? "",
-          orcoCodigo: data['orco_Codigo'] ?? "",
-          orcoEstadoFinalizado: data['orco_EstadoFinalizado'] == true ? "Si" : "No",
-          orcoEstadoOrdenCompra: data['orco_EstadoOrdenCompra'] ?? "",
-          fechaExportacion: codefechaExportacion ?? "",
-          cantidadExportada: data['cantidadExportada'] ?? 0,
-          fedeCajas: data['fede_Cajas'] ?? 0,
-          fedeTotalDetalle: data['fede_TotalDetalle'] ?? 0,
+          factId: data['fact_Id'] ?? 0,
+          devaId: data['deva_Id'] ?? 0,
+          factNumero: data['fact_Numero'] ?? "",
+          factFecha: codeFechaprocactual,
         );
-
+      
+         
         return detalle;
       }).toList();
 
@@ -149,7 +103,7 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
       throw Exception('Failed to load data');
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -179,7 +133,7 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
                 filtereddetalles.isNotEmpty ? filtereddetalles.length : 1,
             itemBuilder: (context, index) {
               if (filtereddetalles.isNotEmpty) {
-                print("Detalles: ${filtereddetalles[index].toJson()}");
+              
                 // Muestra la tarjeta de pedido si hay datos
                 return buildCard(filtereddetalles[index]);
               } else {
@@ -204,13 +158,14 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
     setState(() {
       filtereddetalles = detalles
           .where((detalle) =>
-              detalle.colrNombre
+              detalle.factNumero
                   .toLowerCase()
                   .contains(searchText.toLowerCase()) ||
-              detalle.estiDescripcion
+              detalle.factNumero
                   .toLowerCase()
                   .contains(searchText.toLowerCase()))
           .toList();
+          
     });
   }
 
@@ -226,13 +181,12 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
           initiallyExpanded: false,
           title: ListTile(
             title: Text(
-              "Detalle ID #${detalle.codeId.toString()}",
+              "Detalle ID #${detalle.factId.toString()}",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            subtitle: Text(detalle.estiDescripcion),
-            
+            subtitle: Text(detalle.factNumero),
           ),
           children: [
             Divider(),
@@ -240,24 +194,11 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
-                  _buildDataRow("Cantidad de Pedido:",
-                      detalle.codeCantidadPrenda.toString()),
-                  _buildDataRow("Fecha de Procesamiento Actual:",
-                      detalle.codeFechaProcActual),
-                  _buildDataRow("Talla:", detalle.tallNombre),
-                  _buildDataRow("Medida:", detalle.codeSexo),
-                  _buildDataRow("Color Nombre:", detalle.colrNombre),
-                  _buildDataRow("Especificación de Embalaje:",
-                      detalle.codeEspecificacionEmbalaje),
-                  _buildDataRow("Estado Finalizado de Orden de Compra:",
-                      detalle.orcoEstadoFinalizado.toString()),
-                  _buildDataRow(
-                      "Fecha de Exportación:", detalle.fechaExportacion),
-                  _buildDataRow("Cantidad Exportada:",
-                      detalle.cantidadExportada.toString()),
-                  _buildDataRow("Cajas:", detalle.fedeCajas.toString()),
-                  _buildDataRow(
-                      "Total de Detalle:", detalle.fedeTotalDetalle.toString()),
+                  _buildDataRow("Factura ID:", detalle.factId.toString()),
+                  _buildDataRow("Numero de factura:", detalle.factNumero),
+                  _buildDataRow("Deva ID:", detalle.devaId.toString()),
+                  _buildDataRow("Fecha Emision:", detalle.factFecha),
+                
                 ],
               ),
             ),

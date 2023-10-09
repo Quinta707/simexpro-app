@@ -19,16 +19,16 @@ class OrderData {
   // final String direccionEntrega;
   // final String metodoPago;
 
-  OrderData({
-    required this.id,
-    required this.codigo,
-    required this.fechaEmision,
-    required this.fechaLimite
-    // required this.estadoOrdenCompra,
-    // required this.nombreCliente,
-    // required this.direccionEntrega,
-    // required this.metodoPago,
-  });
+  OrderData(
+      {required this.id,
+      required this.codigo,
+      required this.fechaEmision,
+      required this.fechaLimite
+      // required this.estadoOrdenCompra,
+      // required this.nombreCliente,
+      // required this.direccionEntrega,
+      // required this.metodoPago,
+      });
 
   Map<String, dynamic> toJson() {
     return {
@@ -141,7 +141,7 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
             ),
           ),
           SizedBox(height: 16),
-                 ListView.builder(
+          ListView.builder(
             shrinkWrap: true,
             itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
             itemBuilder: (context, index) {
@@ -197,7 +197,7 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
             children: [
               ListTile(
                 title: Text(
-                  "Orden #${order.codigo}",
+                  "Mercancia #${order.codigo}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -279,11 +279,16 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString('ordercodigo', order.codigo);
+                      prefs.setString('orderid', order.id.toString());
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Historial_detallesAduana_Screen()),
+                          builder: (context) => Historial_detallesAduana_Screen(),
+                        ),
                       );
                     },
                     child: Container(

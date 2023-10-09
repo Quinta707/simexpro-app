@@ -276,45 +276,45 @@ class _UpcominghistorialAduanaState extends State<UpcominghistorialAduana> {
                 ],
               ),
               SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('ordercodigo', order.codigo);
-                      prefs.setString('orderid',
-                          order.id.toString());
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: [
+              //     InkWell(
+              //       onTap: () async {
+              //         SharedPreferences prefs =
+              //             await SharedPreferences.getInstance();
+              //         prefs.setString('ordercodigo', order.codigo);
+              //         prefs.setString('orderid',
+              //             order.id.toString());
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Historial_detallesAduana_Screen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 150,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(87, 69, 223, 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Ver detalles",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              //         Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //             builder: (context) => Historial_detallesAduana_Screen(),
+              //           ),
+              //         );
+              //       },
+              //       child: Container(
+              //         width: 150,
+              //         padding: EdgeInsets.symmetric(vertical: 12),
+              //         decoration: BoxDecoration(
+              //           color: Color.fromRGBO(87, 69, 223, 1),
+              //           borderRadius: BorderRadius.circular(10),
+              //         ),
+              //         child: Center(
+              //           child: Text(
+              //             "Ver detalles",
+              //             style: TextStyle(
+              //               fontSize: 16,
+              //               fontWeight: FontWeight.w500,
+              //               color: Colors.white,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
               SizedBox(height: 15),
             ],
           ),
