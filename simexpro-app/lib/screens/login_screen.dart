@@ -89,8 +89,8 @@ class _loginScreenState extends State<loginScreen> {
                   SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: Image.network(
-                      "https://i.ibb.co/vk2tjx1/SIMEXPRO-V3-PNG.png",
+                    child: Image.asset(
+                      "images/SIMEXPRO-V3-PNG.png",
                       height: 230,
                     ),
                   ),
