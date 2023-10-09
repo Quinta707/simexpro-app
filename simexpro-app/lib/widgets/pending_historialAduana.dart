@@ -197,7 +197,7 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
             children: [
               ListTile(
                 title: Text(
-                  "Deva #${order.id}",
+                  "Mercancia #${order.codigo}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
