@@ -583,88 +583,89 @@ class TabBarDemo extends State<TapsProduccion> {
                         ),
                       ),
                        SizedBox(height: 15),
-                      Container(
-                        width: 385,
-                        height: 111,
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        decoration: BoxDecoration(
-                          //color: Color.fromRGBO(232, 252, 232, 1),
-                          image: DecorationImage(
-                            image: AssetImage(
-                                'images/MaquinaCosturera.png'), // Reemplaza con la ruta de tu imagen
-                            fit: BoxFit
-                                .cover, // Ajusta la forma en que la imagen se adapta al contenedor
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 4,
-                              spreadRadius: 2,
+                       Container(
+                          width: 385,
+                          height: 111,
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          decoration: BoxDecoration(
+                            //color: Color.fromRGBO(232, 252, 232, 1),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                  'images/MaquinaCosturera.png'), // Reemplaza con la ruta de tu imagen
+                              fit: BoxFit
+                                  .cover, // Ajusta la forma en que la imagen se adapta al contenedor
                             ),
-                          ],
-                          border: Border.all(
-                              color: Color.fromARGB(255, 83, 83, 83)),
-                        ),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            children: [
-                              ListTile(
-                                title: Text(
-                                  'ÓRDENES FINALIZADAS EN ${DateTime.now().year}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17,
-                                      color:
-                                          Color.fromARGB(255, 255, 255, 255)),
-                                ),
-                              ),
-                              const Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Divider(
-                                  color: Colors.white,
-                                  thickness: 3,
-                                  height: 20,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(5),
-                                        alignment: Alignment.bottomRight,
-                                        decoration: const BoxDecoration(
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255),
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                      SizedBox(width: 5),
-                                      Text(
-                                        Conteo == 1
-                                            ? ' ${Conteo} Órden Completada'
-                                            : '${Conteo} Órdenes Completadas',
-                                        style: TextStyle(
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255),
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                spreadRadius: 2,
                               ),
                             ],
+                            border: Border.all(
+                                color: Color.fromARGB(255, 83, 83, 83)),
+                          ),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                    'ÓRDENES FINALIZADAS EN ${DateTime.now().year}',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255)),
+                                  ),
+                                ),
+                                const Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 15),
+                                  child: Divider(
+                                    color: Colors.white,
+                                    thickness: 3,
+                                    height: 20,
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(5),
+                                          alignment: Alignment.bottomRight,
+                                          decoration: const BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Text(
+                                          Conteo == 1
+                                              ? ' ${Conteo} Órden Completada'
+                                              : '${Conteo} Órdenes Completadas',
+                                          style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
+                      
                       SizedBox(height: 15),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -832,14 +833,16 @@ class TabBarDemo extends State<TapsProduccion> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text(
-                                              ConteoMesFinalizado == 1
-                                                  ? ' ${ConteoMesFinalizado} Órden Completada'
-                                                  : '${ConteoMesFinalizado} Órdenes Completadas',
-                                              style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                                fontSize: 15,
+                                            Expanded(
+                                              child: Text(
+                                                ConteoMesFinalizado == 1
+                                                    ? ' ${ConteoMesFinalizado} Órden Completada'
+                                                    : '${ConteoMesFinalizado} Órdenes Completadas',
+                                                style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  fontSize: 15,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -945,14 +948,16 @@ class TabBarDemo extends State<TapsProduccion> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text(
-                                              ConteoMesPendiente == 1
-                                                  ? ' ${ConteoSemanaPendiente} Órden Pendiente'
-                                                  : '${ConteoSemanaPendiente} Órdenes Pendientes',
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                color: Color.fromARGB(
-                                                    255, 255, 255, 255),
+                                            Expanded(
+                                              child: Text(
+                                                ConteoMesPendiente == 1
+                                                    ? ' ${ConteoSemanaPendiente} Órden Pendiente'
+                                                    : '${ConteoSemanaPendiente} Órdenes Pendientes',
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -1020,14 +1025,16 @@ class TabBarDemo extends State<TapsProduccion> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text(
-                                              ConteoMesFinalizado == 1
-                                                  ? ' ${ConteoSemanaFinalizado} Órden Completada'
-                                                  : '${ConteoSemanaFinalizado} Órdenes Completadas',
-                                              style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                                fontSize: 15,
+                                            Expanded(
+                                              child: Text(
+                                                ConteoMesFinalizado == 1
+                                                    ? ' ${ConteoSemanaFinalizado} Órden Completada'
+                                                    : '${ConteoSemanaFinalizado} Órdenes Completadas',
+                                                style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  fontSize: 15,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -1143,12 +1150,14 @@ class TabBarDemo extends State<TapsProduccion> {
                                           height: 20,
                                         ),
                                       ),
-                                      Text(
-                                        '${GananciasAnio} .LPS',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Color.fromARGB(
-                                              255, 241, 240, 240),
+                                      Expanded(
+                                        child: Text(
+                                          '${GananciasAnio} .LPS',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Color.fromARGB(
+                                                255, 241, 240, 240),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -1233,12 +1242,14 @@ class TabBarDemo extends State<TapsProduccion> {
                                           height: 20,
                                         ),
                                       ),
-                                      Text(
-                                        '${GananciasMensuales} .LPS',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Color.fromARGB(
-                                              255, 255, 253, 253),
+                                      Expanded(
+                                        child: Text(
+                                          '${GananciasMensuales} .LPS',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Color.fromARGB(
+                                                255, 255, 253, 253),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -1322,15 +1333,18 @@ class TabBarDemo extends State<TapsProduccion> {
                                           height: 20,
                                         ),
                                       ),
-                                      Text(
-                                        '${GananciasSemanales} .LPS',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255),
+                                      Expanded(
+                                        child: Text(
+                                          '${GananciasSemanales} .LPS',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
-                                        textAlign: TextAlign.center,
                                       ),
+                                      
                                     ],
                                   ),
                                 ),

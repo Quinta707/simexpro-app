@@ -360,6 +360,7 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
 
 class RightChild extends StatelessWidget {
   @override
+  final format = DateFormat('dd-MM-yyyy');
   Widget build(BuildContext context) {
     return
     Padding(
@@ -478,6 +479,7 @@ class RightChild extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                 //dateFormat.format(new DateTime.fromMillisecondsSinceEpoch(datamaquina[index]['mahi_FechaInicio'])),
+                                //format.format(DateTime.tryParse(datamaquina[index]['mahi_FechaInicio']) as DateTime)
                                 datamaquina[index]['mahi_FechaInicio'],
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 0, 0, 0),
