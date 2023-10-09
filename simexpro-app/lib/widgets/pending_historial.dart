@@ -282,13 +282,12 @@ class _PendinghistorialState extends State<Pendinghistorial> {
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       prefs.setString('ordercodigo', order.codigo);
-                      prefs.setString('orderid',
-                          order.id.toString());
+                      prefs.setString('orderid', order.id.toString());
 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DucasScreen(),
+                          builder: (context) => Historial_detalles_Screen(),
                         ),
                       );
                     },

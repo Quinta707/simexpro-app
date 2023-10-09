@@ -45,6 +45,8 @@ Future<void> TraerDatos(String NoDuca, context) async {
     print('data after search $data');
   if (data.length > 0) {
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('duca_Id', data.duca_Id);
 
     Navigator.push(
       context,
@@ -174,7 +176,7 @@ class _DucasScreenState extends State<DucasScreen> {
               child: Container(
                 alignment: Alignment.center,
                 child: Text(
-                  "Busqueda de DUCA",
+                  "Búsqueda de DUCA",
                   style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
