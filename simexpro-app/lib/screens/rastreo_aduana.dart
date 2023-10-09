@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simexpro/screens/deva_screen.dart';
 import 'package:simexpro/screens/lineatiempo.dart';
 import 'package:simexpro/screens/ordertracking/orders_screen.dart';
+import 'package:simexpro/screens/DUCA/duca_screen.dart';
 
 class TimelineAduanaScreen extends StatelessWidget {
   @override
@@ -53,7 +54,7 @@ class TimelineAduanaScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => OrdersScreen(),
+                      builder: (context) => DucasScreen(),
                 ));
               },
               child: CircleAvatar(
