@@ -147,14 +147,12 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
         ),
         body: SlidingUpPanel(
           backdropEnabled: true,
-          color: const Color.fromARGB(255, 134, 111, 189),
+          color: Color.fromARGB(212, 134, 111, 189),
           controller: panelController,
           maxHeight: panelHeightOpen,
           minHeight: panelHeightClosed,
           panelBuilder: (controller) => PanelDucaWidget(
-            controller: controller,
-            panelController: panelController,
-            detalles: widget.data,
+          
           ),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
           body: DefaultTabController(

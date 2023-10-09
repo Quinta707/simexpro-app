@@ -174,7 +174,7 @@ class _DucasScreenState extends State<DucasScreen> {
               child: Container(
                 alignment: Alignment.center,
                 child: Text(
-                  "Busqueda de DUCA",
+                  "Búsqueda de DUCA",
                   style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
