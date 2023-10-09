@@ -12,7 +12,7 @@ import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/screens/ordertracking/qrscanner_screen.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
-import 'package:simexpro/widgets/detalleshistorial_widget.dart';
+import 'package:simexpro/widgets/detallesBoletin_concluded.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,41 +20,22 @@ import '../api.dart';
 
 class OrderData {
   final int id;
-  final String codigo;
-  final String fechaEmision;
-  final String fechaLimite;
-  final String estadoOrdenCompra;
-  final String nombreCliente;
-  final String direccionEntrega;
-  final String metodoPago;
-  final String RTN;
-  final String embalaje;
+  final String boen_FechaEmision;
+ 
+  
+
 
   OrderData({
     required this.id,
-    required this.codigo,
-    required this.fechaEmision,
-    required this.fechaLimite,
-    required this.estadoOrdenCompra,
-    required this.nombreCliente,
-    required this.direccionEntrega,
-    required this.metodoPago,
-    required this.RTN,
-    required this.embalaje,
+    required this.boen_FechaEmision,
+
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'codigo': codigo,
-      'fechaEmision': fechaEmision,
-      'fechaLimite': fechaLimite,
-      'estadoOrdenCompra': estadoOrdenCompra,
-      'nombreCliente': nombreCliente,
-      'direccionEntrega': direccionEntrega,
-      'metodoPago': metodoPago,
-      'RTN': RTN,
-      'embalaje': embalaje,
+      'boen_FechaEmision': boen_FechaEmision,
+
     };
   }
 }
@@ -89,59 +70,52 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
   }
 
   Future<List<OrderData>> fetchData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var ordercodigo = prefs.getString('ordercodigo');
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var BoletinId = prefs.getString('BoletinId');
 
-    final response = await http.get(
-      Uri.parse(
-          '${apiUrl}OrdenCompra/LineaTiempoOrdenCompra?orco_Codigo=$ordercodigo'),
-      headers: {
-        'XApiKey': apiKey,
-        'Content-Type': 'application/json',
-      },
-    );
+  
+  final response = await http.get(
+    Uri.parse('${apiUrl}Duca/DucaHistorial'),
+    headers: {
+      'XApiKey': apiKey,
+      'Content-Type': 'application/json',
+    },
+  );
 
-    if (response.statusCode == 200) {
-      final decodedJson = jsonDecode(response.body);
-      final dataList = decodedJson["data"] as List<dynamic>;
+  if (response.statusCode == 200) {
+    final decodedJson = jsonDecode(response.body);
+    final dataList = decodedJson["data"] as List<dynamic>;
 
-      final orders = dataList.map((data) {
-        String fechaEmision = data['orco_FechaEmision'];
-        String fechaLimite = data['orco_FechaLimite'];
+    final orders = dataList.map((data) {
 
-        int indexOfT1 = fechaEmision.indexOf('T');
-        int indexOfT2 = fechaLimite.indexOf('T');
+       String fechaemision = data['boen_FechaEmision'];
+    
+        int indexOfT1 = fechaemision.indexOf('T');
 
         if (indexOfT1 >= 0) {
-          fechaEmision = fechaEmision.substring(0, indexOfT1);
+          fechaemision = fechaemision.substring(0, indexOfT1);
         }
 
-        if (indexOfT2 >= 0) {
-          fechaLimite = fechaLimite.substring(0, indexOfT2);
-        }
+      return OrderData(
+        id: data['boen_Id'],
+        boen_FechaEmision: fechaemision,
+       
+      );
+    }).toList();
 
-        return OrderData(
-            id: data['orco_Id'],
-            codigo: data['orco_Codigo'],
-            fechaEmision: fechaEmision,
-            fechaLimite: fechaLimite,
-            estadoOrdenCompra: data['orco_EstadoOrdenCompra'],
-            nombreCliente: data['clie_Nombre_O_Razon_Social'],
-            direccionEntrega: data['orco_DireccionEntrega'],
-            metodoPago: data['fopa_Descripcion'],
-            embalaje: data['tiem_Descripcion'],
-            RTN: data['clie_RTN']);
-      }).toList();
+    // Filtra los elementos con duca_Id igual a orderid
+    final filteredOrders = orders.where((order) => order.id == int.parse(BoletinId)).toList();
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('userData',
-          jsonEncode(orders.map((order) => order.toJson()).toList()));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+        'userData', jsonEncode(filteredOrders.map((order) => order.toJson()).toList()));
 
-      return orders;
-    } else {
-      throw Exception('Failed to load data');
-    }
+    return filteredOrders;
+  } else {
+    throw Exception('Failed to load data');
   }
+}
+
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -242,7 +216,7 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
             //cards
             SizedBox(height: 16),
             
-            Detalleshistorial(),
+            detallesBoletin_concluded(),
           ],
         ),
       ),
@@ -258,7 +232,7 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "Detalles orden de compra #${order.codigo}",
+              "Boletin de Pago #${order.id}",
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.w200,
@@ -278,13 +252,13 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
             childAspectRatio: 3 / 1,
             children: [
               Text.rich(TextSpan(
-                text: "Cliente:",
+                text: "Fecha Emisión:",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${order.nombreCliente}",
+                    text: "\n${order.boen_FechaEmision}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -298,7 +272,7 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${order.RTN}",
+                    text: "\n${"order.RTN"}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -312,7 +286,7 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${order.fechaEmision}",
+                    text: "\n${"order.fechaEmision"}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -326,7 +300,7 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${order.fechaLimite}",
+                    text: "\n${"order.fechaLimite"}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -340,7 +314,7 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${order.embalaje}",
+                    text: "\n${"order.embalaje"}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -354,7 +328,7 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${order.direccionEntrega}",
+                    text: "\n${"order.direccionEntrega"}",
                     style: TextStyle(
                       color: Colors.black,
                     ),

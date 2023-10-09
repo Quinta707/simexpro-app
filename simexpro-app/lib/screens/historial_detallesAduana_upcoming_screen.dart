@@ -28,8 +28,10 @@ class OrderData {
   final String duca_No_Correlativo_Referencia;
   final String nombre_Aduana_Registro;
   final String nombre_Aduana_Destino;
-  final String duca_Ventaja;
+  final String nombre_pais_procedencia;
   final String duca_FechaVencimiento;
+  final String duca_Manifiesto;
+  final String duca_Titulo;
    
   
   
@@ -40,8 +42,10 @@ class OrderData {
     required this.duca_No_Correlativo_Referencia,
     required this.nombre_Aduana_Registro,
     required this.nombre_Aduana_Destino,
-    required this.duca_Ventaja,
+    required this.nombre_pais_procedencia,
     required this.duca_FechaVencimiento,
+    required this.duca_Manifiesto,
+    required this.duca_Titulo,
  
  
   });
@@ -53,8 +57,10 @@ class OrderData {
       'duca_No_Correlativo_Referencia': duca_No_Correlativo_Referencia,
       'nombre_Aduana_Registro': nombre_Aduana_Registro,
       'nombre_Aduana_Destino': nombre_Aduana_Destino,
-      'duca_Ventaja': duca_Ventaja,
+      'nombre_pais_procedencia': nombre_pais_procedencia,
       'duca_FechaVencimiento': duca_FechaVencimiento,
+      'duca_FechaVencimiento': duca_Manifiesto,
+      'duca_FechaVencimiento': duca_Titulo,
       
     };
   }
@@ -122,7 +128,9 @@ Future<List<OrderData>> fetchData() async {
         duca_No_Correlativo_Referencia: data['duca_No_Correlativo_Referencia'],
         nombre_Aduana_Registro: data['nombre_Aduana_Registro'],
         nombre_Aduana_Destino: data['nombre_Aduana_Destino'],
-        duca_Ventaja: data['duca_Ventaja'],
+        nombre_pais_procedencia: data['nombre_pais_procedencia'],
+        duca_Manifiesto: data['duca_Manifiesto'],
+        duca_Titulo: data['duca_Titulo'],
         duca_FechaVencimiento: fechavencimiento,
       );
     }).toList();
@@ -292,13 +300,13 @@ Future<List<OrderData>> fetchData() async {
                 ],
               )),
               Text.rich(TextSpan(
-                text: "Ventaja:",
+                text: "Pais Procedencia:",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${order.duca_Ventaja}",
+                    text: "\n${order.nombre_pais_procedencia}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -355,6 +363,34 @@ Future<List<OrderData>> fetchData() async {
                 children: <TextSpan>[
                   TextSpan(
                     text: "\n${order.duca_FechaVencimiento}",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              )),
+               Text.rich(TextSpan(
+                text: "Manifiesto:",
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "\n${order.duca_Manifiesto}",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              )),
+               Text.rich(TextSpan(
+                text: "Titulo:",
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "\n${order.duca_Titulo}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
