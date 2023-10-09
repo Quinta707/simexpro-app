@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
+import 'package:simexpro/screens/DUCA/duca_screen.dart';
 import 'package:simexpro/screens/historial_detalles_screen.dart';
 import 'package:simexpro/widgets/upcoming_historial.dart';
 
@@ -277,11 +278,18 @@ class _PendinghistorialState extends State<Pendinghistorial> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString('ordercodigo', order.codigo);
+                      prefs.setString('orderid',
+                          order.id.toString());
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Historial_detalles_Screen()),
+                          builder: (context) => DucasScreen(),
+                        ),
                       );
                     },
                     child: Container(
