@@ -3,8 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
-import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
+import 'package:simexpro/screens/rastreo_aduana.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:simexpro/widgets/taps_Aduana.dart';
@@ -41,7 +41,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
       _screens = [
         esAduana ? GraficasAduanas() : TapsProduccion(),
         historialScreen(),
-        TimelineScreen(),
+        esAduana ? TimelineAduanaScreen() : TimelineScreen(),
         const OrdersScreen(),
       ];
     });
