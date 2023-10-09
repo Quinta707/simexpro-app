@@ -98,11 +98,15 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
         filteredDevas = devas;
       });
     });
-  }
+  }    
 
   Future<List<DevaData>> fetchData() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var duca_Id = prefs.getString('duca_Id');
+
     final response = await http.get(
-      Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDucaId?id=1'),
+      Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDucaId?id=${duca_Id}'),
       headers: {
         'XApiKey': apiKey,
         'Content-Type': 'application/json',
