@@ -177,6 +177,7 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
                 filtereddetalles.isNotEmpty ? filtereddetalles.length : 1,
             itemBuilder: (context, index) {
               if (filtereddetalles.isNotEmpty) {
+                print("Detalles: ${filtereddetalles[index].toJson()}");
                 // Muestra la tarjeta de pedido si hay datos
                 return buildCard(filtereddetalles[index]);
               } else {

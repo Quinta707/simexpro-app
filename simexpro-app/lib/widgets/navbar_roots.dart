@@ -9,6 +9,7 @@ import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:simexpro/widgets/taps_Aduana.dart';
 
+import '../screens/historial_screen_Aduana.dart';
 import '../screens/ordertracking/orders_screen.dart';
 
 enum MenuItem { item1, item2 }
@@ -38,12 +39,21 @@ class _NavBarRootsState extends State<NavBarRoots> {
     bool esAduana = prefs.getBool('esAduana');
 
     setState(() {
+      if (esAduana) {
       _screens = [
-        esAduana ? GraficasAduanas() : TapsProduccion(),
-        historialScreen(),
+        GraficasAduanas(), // Usa la pantalla relacionada con la aduana
+        historialAduanaScreen(), // Modifica esta línea a la pantalla de historial relacionada con la aduana
         TimelineScreen(),
         const OrdersScreen(),
       ];
+    } else {
+      _screens = [
+        TapsProduccion(),
+        historialScreen(), // Usa la pantalla de historial existente
+        TimelineScreen(),
+        const OrdersScreen(),
+      ];
+    }
     });
   }
 

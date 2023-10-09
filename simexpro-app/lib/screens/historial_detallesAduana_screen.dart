@@ -24,38 +24,39 @@ class OrderData {
   final String codigo;
   final String fechaEmision;
   final String fechaLimite;
-  final String estadoOrdenCompra;
-  final String nombreCliente;
-  final String direccionEntrega;
-  final String metodoPago;
-  final String RTN;
-  final String embalaje;
+  final String fact_Numero;
+  final String fact_Fecha;
+  
+  // final String estadoOrdenCompra;
+  // final String nombreCliente;
+  // final String direccionEntrega;
+  // final String metodoPago;
 
   OrderData({
     required this.id,
     required this.codigo,
     required this.fechaEmision,
     required this.fechaLimite,
-    required this.estadoOrdenCompra,
-    required this.nombreCliente,
-    required this.direccionEntrega,
-    required this.metodoPago,
-    required this.RTN,
-    required this.embalaje,
+    required this.fact_Numero,
+    required this.fact_Fecha,
+    // required this.estadoOrdenCompra,
+    // required this.nombreCliente,
+    // required this.direccionEntrega,
+    // required this.metodoPago,
   });
 
-  Map<String, dynamic> toJson() {
+   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'codigo': codigo,
       'fechaEmision': fechaEmision,
       'fechaLimite': fechaLimite,
-      'estadoOrdenCompra': estadoOrdenCompra,
-      'nombreCliente': nombreCliente,
-      'direccionEntrega': direccionEntrega,
-      'metodoPago': metodoPago,
-      'RTN': RTN,
-      'embalaje': embalaje,
+      'fact_Numero':fact_Numero,
+      'fact_Fecha':fact_Fecha,
+      // 'estadoOrdenCompra': estadoOrdenCompra,
+      // 'nombreCliente': nombreCliente,
+      // 'direccionEntrega': direccionEntrega,
+      // 'metodoPago': metodoPago,
     };
   }
 }
@@ -66,15 +67,18 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-class Historial_detalles_Screen extends StatefulWidget {
-  const Historial_detalles_Screen({Key? key}) : super(key: key);
+class Historial_detallesAduana_Screen extends StatefulWidget {
+  
 
+
+  const Historial_detallesAduana_Screen({Key? key}) : super(key: key);
+     
   @override
-  _Historial_detalles_ScreenState createState() =>
-      _Historial_detalles_ScreenState();
+  _Historial_detallesAduana_ScreenState createState() =>
+      _Historial_detallesAduana_ScreenState();
 }
 
-class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
+class _Historial_detallesAduana_ScreenState extends State<Historial_detallesAduana_Screen> {
   List<OrderData> orders = [];
 
   TextEditingController searchController = TextEditingController();
@@ -91,58 +95,57 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
 
   Future<List<OrderData>> fetchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var ordercodigo = prefs.getString('ordercodigo');
+    var orderid = prefs.getString('orderid');
+      print('Order ID: $orderid');
+     final response = await http.get(
+    Uri.parse('${apiUrl}Declaracion_Valor/ListarHistorial'),
+    headers: {
+      'XApiKey': apiKey,
+      'Content-Type': 'application/json',
+    },
+  );
 
-    final response = await http.get(
-      Uri.parse(
-          '${apiUrl}OrdenCompra/LineaTiempoOrdenCompra?orco_Codigo=$ordercodigo'),
-      headers: {
-        'XApiKey': apiKey,
-        'Content-Type': 'application/json',
-      },
-    );
+  if (response.statusCode == 200) {
+    final decodedJson = jsonDecode(response.body);
+    final dataList = decodedJson["data"] as List<dynamic>;
+    
+    print('Order ID2: $orderid');
+    final orders = dataList
+        .where((data) => data['deva_Id'].toString() ==orderid ) // Filtra por deva_id
+        .map((data) {
+          String fechaEmision = data['deva_FechaAceptacion'];
+          String fechaLimite = data['deva_FechaAceptacion'];
 
-    if (response.statusCode == 200) {
-      final decodedJson = jsonDecode(response.body);
-      final dataList = decodedJson["data"] as List<dynamic>;
+          int indexOfT1 = fechaEmision.indexOf('T');
+          int indexOfT2 = fechaLimite.indexOf('T');
 
-      final orders = dataList.map((data) {
-        String fechaEmision = data['orco_FechaEmision'];
-        String fechaLimite = data['orco_FechaLimite'];
+          if (indexOfT1 >= 0) {
+            fechaEmision = fechaEmision.substring(0, indexOfT1);
+          }
 
-        int indexOfT1 = fechaEmision.indexOf('T');
-        int indexOfT2 = fechaLimite.indexOf('T');
+          if (indexOfT2 >= 0) {
+            fechaLimite = fechaLimite.substring(0, indexOfT2);
+          }
 
-        if (indexOfT1 >= 0) {
-          fechaEmision = fechaEmision.substring(0, indexOfT1);
-        }
-
-        if (indexOfT2 >= 0) {
-          fechaLimite = fechaLimite.substring(0, indexOfT2);
-        }
-
-        return OrderData(
-            id: data['orco_Id'],
-            codigo: data['orco_Codigo'],
+          return OrderData(
+            id: data['deva_Id'],
+            codigo: data['deva_DeclaracionMercancia'],
+            fact_Numero: data['fact_Numero'],
+            fact_Fecha: data['fact_Fecha'],
             fechaEmision: fechaEmision,
             fechaLimite: fechaLimite,
-            estadoOrdenCompra: data['orco_EstadoOrdenCompra'],
-            nombreCliente: data['clie_Nombre_O_Razon_Social'],
-            direccionEntrega: data['orco_DireccionEntrega'],
-            metodoPago: data['fopa_Descripcion'],
-            embalaje: data['tiem_Descripcion'],
-            RTN: data['clie_RTN']);
-      }).toList();
+          );
+        })
+        .toList();
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('userData',
-          jsonEncode(orders.map((order) => order.toJson()).toList()));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('userData', jsonEncode(orders.map((order) => order.toJson()).toList()));
 
-      return orders;
-    } else {
-      throw Exception('Failed to load data');
-    }
+    return orders;
+  } else {
+    throw Exception('Failed to load data');
   }
+}
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -238,12 +241,10 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
             //encabezado
 
             if (orders.isNotEmpty) buildEncabezado(orders[0]),
-           
-
             //cards
             SizedBox(height: 16),
             
-            Detalleshistorial(),
+            DetalleshistorialAduana(),
           ],
         ),
       ),
@@ -259,7 +260,7 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "Detalles orden de compra #${order.codigo}",
+              "Numero de deva #${order.id}",
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.w200,
@@ -279,13 +280,13 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
             childAspectRatio: 3 / 1,
             children: [
               Text.rich(TextSpan(
-                text: "Cliente:",
+                text: "Numero de Deva:",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${order.nombreCliente}",
+                    text: "\n${order.id}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -293,13 +294,13 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
                 ],
               )),
               Text.rich(TextSpan(
-                text: "RTN:",
+                text: "Estado Mercancia:",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${order.RTN}",
+                    text: "\n${order.codigo}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -320,48 +321,48 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
                   )
                 ],
               )),
-              Text.rich(TextSpan(
-                text: "Fecha Limite",
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "\n${order.fechaLimite}",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  )
-                ],
-              )),
-              Text.rich(TextSpan(
-                text: "Embalaje general:",
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "\n${order.embalaje}",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  )
-                ],
-              )),
-              Text.rich(TextSpan(
-                text: "Dirección de entrega:",
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "\n${order.direccionEntrega}",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              )),
+              // Text.rich(TextSpan(
+              //   text: "Fecha Limite",
+              //   style: TextStyle(
+              //     color: Colors.grey,
+              //   ),
+              //   children: <TextSpan>[
+              //     TextSpan(
+              //       text: "\n${order.fechaLimite}",
+              //       style: TextStyle(
+              //         color: Colors.black,
+              //       ),
+              //     )
+              //   ],
+              // )),
+              // Text.rich(TextSpan(
+              //   text: "Embalaje general:",
+              //   style: TextStyle(
+              //     color: Colors.grey,
+              //   ),
+              //   children: <TextSpan>[
+              //     TextSpan(
+              //       text: "\n${order.embalaje}",
+              //       style: TextStyle(
+              //         color: Colors.black,
+              //       ),
+              //     )
+              //   ],
+              // )),
+              // Text.rich(TextSpan(
+              //   text: "Dirección de entrega:",
+              //   style: TextStyle(
+              //     color: Colors.grey,
+              //   ),
+              //   children: <TextSpan>[
+              //     TextSpan(
+              //       text: "\n${order.direccionEntrega}",
+              //       style: TextStyle(
+              //         color: Colors.black,
+              //       ),
+              //     ),
+              //   ],
+              // )),
             ],
           ),
         ),
