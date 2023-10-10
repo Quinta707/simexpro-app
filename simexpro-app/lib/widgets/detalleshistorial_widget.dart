@@ -172,6 +172,7 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
           ),
           SizedBox(height: 16),
           ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount:
                 filtereddetalles.isNotEmpty ? filtereddetalles.length : 1,

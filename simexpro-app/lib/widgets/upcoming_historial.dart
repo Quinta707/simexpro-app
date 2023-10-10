@@ -139,6 +139,7 @@ class _UpcominghistorialState extends State<Upcominghistorial> {
           ),
           SizedBox(height: 16),
           ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
             itemBuilder: (context, index) {

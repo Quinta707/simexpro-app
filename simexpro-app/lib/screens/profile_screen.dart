@@ -402,7 +402,7 @@ class PerfilUsuario extends State<ProfileScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 backgroundColor: Color.fromRGBO(99, 74, 158, 1),
-                                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                                // padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                               ),
                             ),
                           ),

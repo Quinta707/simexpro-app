@@ -487,7 +487,10 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const SizedBox(height: 20,),
-                            const Text('Proceso actual: '),
+                            const Text(
+                              'PROCESO ACTUAL: ',
+                              style: TextStyle(fontSize: 14),
+                            ),
                             Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
