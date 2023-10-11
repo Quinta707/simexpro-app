@@ -35,10 +35,10 @@ charts.Color getRandomColor() {
 
 class TabBarDemo extends State<TapsProduccion> {
   num Conteo = 0;
-  var ConteoMesPendiente = 0;
-  var ConteoMesFinalizado = 0;
-  var ConteoSemanaPendiente = 0;
-  var ConteoSemanaFinalizado = 0;
+  num ConteoMesPendiente = 0;
+  num ConteoMesFinalizado = 0;
+  num ConteoSemanaPendiente = 0;
+  num ConteoSemanaFinalizado = 0;
 
   num GananciasSemanales = 0;
   num GananciasMensuales = 0;
@@ -134,7 +134,7 @@ class TabBarDemo extends State<TapsProduccion> {
   Future<void> OrdenesMes() async {
     try {
       final response = await http.get(
-        Uri.parse('${apiUrl}Graficas/OrdenenesEntregadasPendientes_Mensual'),
+        Uri.parse('${apiUrl}Graficas/ContadorOrdenesCompraPorEstado'),
         headers: {
           'XApiKey': apiKey,
         },
@@ -144,7 +144,7 @@ class TabBarDemo extends State<TapsProduccion> {
 
       for (var item in dataMes) {
         String avance = item['orco_Avance'];
-        int conteo = item['orco_Conteo'];
+        num conteo = item['orco_Conteo'];
 
         setState(() {
           if (avance == "Terminado") {
@@ -173,7 +173,7 @@ class TabBarDemo extends State<TapsProduccion> {
 
       for (var item in dataMes) {
         String avance = item['orco_Avance'];
-        int conteo = item['orco_Conteo'];
+        num conteo = item['orco_Conteo'];
 
         setState(() {
           if (avance == "Terminado") {
@@ -582,10 +582,10 @@ class TabBarDemo extends State<TapsProduccion> {
                           ],
                         ),
                       ),
-                       SizedBox(height: 15),
+                      SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 111,
+                        height: 120,
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         padding: EdgeInsets.symmetric(vertical: 5),
                         decoration: BoxDecoration(
@@ -759,8 +759,8 @@ class TabBarDemo extends State<TapsProduccion> {
                                           children: [
                                             Text(
                                               ConteoMesPendiente == 1
-                                                  ? ' ${ConteoMesPendiente} Órden Pendiente'
-                                                  : '${ConteoMesPendiente} Órdenes Pendientes',
+                                                  ? ' ${ConteoMesPendiente} Órden '
+                                                  : '${ConteoMesPendiente} Órdenes ',
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 color: Color.fromARGB(
@@ -776,7 +776,7 @@ class TabBarDemo extends State<TapsProduccion> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 5),
                           Expanded(
                             child: Container(
                               width: 165,
@@ -834,8 +834,8 @@ class TabBarDemo extends State<TapsProduccion> {
                                           children: [
                                             Text(
                                               ConteoMesFinalizado == 1
-                                                  ? ' ${ConteoMesFinalizado} Órden Completada'
-                                                  : '${ConteoMesFinalizado} Órdenes Completadas',
+                                                  ? ' ${ConteoMesFinalizado} Órden '
+                                                  : '${ConteoMesFinalizado} Órdenes ',
                                               style: TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 255, 255, 255),
@@ -946,9 +946,9 @@ class TabBarDemo extends State<TapsProduccion> {
                                         Row(
                                           children: [
                                             Text(
-                                              ConteoMesPendiente == 1
-                                                  ? ' ${ConteoSemanaPendiente} Órden Pendiente'
-                                                  : '${ConteoSemanaPendiente} Órdenes Pendientes',
+                                              ConteoSemanaPendiente == 1
+                                                  ? ' ${ConteoSemanaPendiente} Órden'
+                                                  : '${ConteoSemanaPendiente} Órdenes',
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 color: Color.fromARGB(
@@ -964,7 +964,7 @@ class TabBarDemo extends State<TapsProduccion> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 5),
                           Expanded(
                             child: Container(
                               width: 167,
@@ -1021,9 +1021,9 @@ class TabBarDemo extends State<TapsProduccion> {
                                         Row(
                                           children: [
                                             Text(
-                                              ConteoMesFinalizado == 1
-                                                  ? ' ${ConteoSemanaFinalizado} Órden Completada'
-                                                  : '${ConteoSemanaFinalizado} Órdenes Completadas',
+                                              ConteoMesFinalizado == "1"
+                                                  ? ' ${ConteoSemanaFinalizado} Órden'
+                                                  : '${ConteoSemanaFinalizado} Órdenes',
                                               style: TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 255, 255, 255),
@@ -1087,7 +1087,7 @@ class TabBarDemo extends State<TapsProduccion> {
                       SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 145,
+                        height: 155,
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
@@ -1180,7 +1180,7 @@ class TabBarDemo extends State<TapsProduccion> {
                       SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 145,
+                        height: 155,
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
@@ -1215,7 +1215,7 @@ class TabBarDemo extends State<TapsProduccion> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "GANANCIAS DE ${MesActual.toUpperCase()}",
+                                        "GANANCIAS  DE \n ${MesActual.toUpperCase()}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 20,
@@ -1269,7 +1269,7 @@ class TabBarDemo extends State<TapsProduccion> {
                       SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 145,
+                        height: 155,
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
@@ -1304,7 +1304,7 @@ class TabBarDemo extends State<TapsProduccion> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       const Text(
-                                        "GANANCIA DE LA SEMANA",
+                                        "GANANCIA  DE  LA  SEMANA",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 20,
