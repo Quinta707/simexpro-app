@@ -202,7 +202,7 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Text(order.fechaEmision),
+                subtitle: Text(order.codigo),
                 trailing: SizedBox(
                   width: 100,
                   height: 25,
@@ -227,12 +227,12 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
                   Row(
                     children: [
                       Icon(
-                        Icons.calendar_month_outlined,
+                        Icons.add_box,
                         color: Colors.black54,
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.fechaEmision,
+                        order.codigo,
                         style: TextStyle(
                           color: Colors.black54,
                         ),
