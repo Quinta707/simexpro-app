@@ -28,7 +28,7 @@ class _historialScreenState extends State<historialScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Text(
-              "Historial",
+              "Historial de órdenes",
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w500,
