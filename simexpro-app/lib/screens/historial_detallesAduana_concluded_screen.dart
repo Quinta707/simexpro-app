@@ -21,6 +21,18 @@ import '../api.dart';
 class OrderData {
   final int id;
   final String boen_FechaEmision;
+
+  final int duca_No_Duca;
+  final String tipl_Descripcion;
+  final String esbo_Descripcion;
+  final String boen_Observaciones;
+  final String boen_NDeclaracion;
+  final String boen_Preimpreso;
+  final int boen_TotalPagar;
+  final int boen_TotalGarantizar;
+  final String coim_Descripcion;
+  final String copa_Descripcion;
+  
  
   
 
@@ -29,12 +41,35 @@ class OrderData {
     required this.id,
     required this.boen_FechaEmision,
 
+    required this.duca_No_Duca,
+    required this.tipl_Descripcion,
+    required this.esbo_Descripcion,
+    required this.boen_Observaciones,
+    required this.boen_NDeclaracion,
+    required this.boen_Preimpreso,
+    required this.boen_TotalPagar,
+    required this.boen_TotalGarantizar,
+    required this.coim_Descripcion,
+    required this.copa_Descripcion,
+
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'boen_FechaEmision': boen_FechaEmision,
+
+      'duca_No_Duca': duca_No_Duca,
+      'tipl_Descripcion': tipl_Descripcion,
+      'esbo_Descripcion': esbo_Descripcion,
+      'boen_Observaciones': boen_Observaciones,
+      'boen_NDeclaracion': boen_NDeclaracion,
+      'boen_Preimpreso': boen_Preimpreso,
+      'boen_TotalPagar': boen_TotalPagar,
+      'boen_TotalGarantizar': boen_TotalGarantizar,
+      'coim_Descripcion': coim_Descripcion,
+      'copa_Descripcion': copa_Descripcion,
+     
 
     };
   }
@@ -74,8 +109,8 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
   var BoletinId = prefs.getString('BoletinId');
 
   
-  final response = await http.get(
-    Uri.parse('${apiUrl}Duca/DucaHistorial'),
+ final response = await http.get(
+    Uri.parse('${apiUrl}BoletinPago/ListarHistorial'),
     headers: {
       'XApiKey': apiKey,
       'Content-Type': 'application/json',
@@ -88,17 +123,22 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
 
     final orders = dataList.map((data) {
 
-       String fechaemision = data['boen_FechaEmision'];
-    
-        int indexOfT1 = fechaemision.indexOf('T');
-
-        if (indexOfT1 >= 0) {
-          fechaemision = fechaemision.substring(0, indexOfT1);
-        }
+     
 
       return OrderData(
-        id: data['boen_Id'],
-        boen_FechaEmision: fechaemision,
+          id: data['boen_Id'],
+        boen_FechaEmision: data['boen_FechaEmision'],
+
+        duca_No_Duca: data['duca_No_Duca'],
+        tipl_Descripcion: data['tipl_Descripcion'],
+        esbo_Descripcion: data['esbo_Descripcion'],
+        boen_Observaciones: data['boen_Observaciones'],
+        boen_NDeclaracion: data['boen_NDeclaracion'],
+        boen_Preimpreso: data['boen_Preimpreso'],
+        boen_TotalPagar: data['boen_TotalPagar'],
+        boen_TotalGarantizar: data['boen_TotalGarantizar'],
+        coim_Descripcion: data['coim_Descripcion'],
+        copa_Descripcion: data['copa_Descripcion'],
        
       );
     }).toList();
@@ -258,7 +298,7 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${order.boen_FechaEmision}",
+                    text: "\n${(order.boen_FechaEmision.substring(0, order.boen_FechaEmision.indexOf('T')))}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -266,13 +306,13 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ],
               )),
               Text.rich(TextSpan(
-                text: "RTN:",
+                text: "Numero Duca:",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${"order.RTN"}",
+                    text: "\n${order.duca_No_Duca}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -280,13 +320,13 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ],
               )),
               Text.rich(TextSpan(
-                text: "Fecha de Emisión",
+                text: "Tipo Liquidación",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${"order.fechaEmision"}",
+                    text: "\n${order.tipl_Descripcion}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -294,13 +334,13 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ],
               )),
               Text.rich(TextSpan(
-                text: "Fecha Limite",
+                text: "Estado Boletin",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${"order.fechaLimite"}",
+                    text: "\n${order.esbo_Descripcion}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -308,13 +348,13 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ],
               )),
               Text.rich(TextSpan(
-                text: "Embalaje general:",
+                text: "Concepto de Pago:",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${"order.embalaje"}",
+                    text: "\n${order.coim_Descripcion}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -322,13 +362,41 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
                 ],
               )),
               Text.rich(TextSpan(
-                text: "Dirección de entrega:",
+                text: "Codigo Impuesto:",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: "\n${"order.direccionEntrega"}",
+                    text: "\n${order.copa_Descripcion}",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              )),
+               Text.rich(TextSpan(
+                text: "Total Garantizar:",
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "\n${order.boen_TotalGarantizar}",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              )),
+               Text.rich(TextSpan(
+                text: "Total a Pagar:",
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: "\n${order.boen_TotalPagar}",
                     style: TextStyle(
                       color: Colors.black,
                     ),
