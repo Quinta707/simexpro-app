@@ -187,26 +187,42 @@ class _NavBarRootsState extends State<NavBarRoots> {
                   ),
                 ),
                 ListTile(
-                  title: Text('Item 1'),
+                  title: Text(
+                    'Gráficas',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onTap: () {
-                    // Actualiza el estado de la aplicación
-                    // ...
+                    // Agrega la lógica para la opción "Gráficas" aquí
                     // Luego cierra el drawer
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
-                  title: Text('Item 2'),
+                  title: Text(
+                    'Historial',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onTap: () {
-                    // // Actualiza el estado de la aplicación
-                    // ...
+                    // Agrega la lógica para la opción "Historial" aquí
+                    // Luego cierra el drawer
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text(
+                    'Rastreo',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onTap: () {
+                    // Agrega la lógica para la opción "Rastreo" aquí
                     // Luego cierra el drawer
                     Navigator.pop(context);
                   },
                 ),
               ],
             ),
-          ),
+          )
+
         ),
     );
   }
