@@ -95,6 +95,7 @@ tieneDetalles (procesosdetalles, idProceso) {
 
 Widget buildDetallesProcesos(isScrollable){
 
+// return Text("Hola");
   final mappedFoundDetalles = foundDetalles.toList();
 
   return ListView.builder(
@@ -558,7 +559,10 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                                         // title: const Text("Random title"),
                                                         content: ConstrainedBox(
                                                           constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
-                                                          child: buildDetallesProcesos(true)
+                                                          // child: Flexible(
+                                                            // height: double.maxFinite,
+                                                            child: buildDetallesProcesos(true)
+                                                          // )
                                                         ),
                                                         elevation: 24.0,
                                                         shape: const RoundedRectangleBorder(
