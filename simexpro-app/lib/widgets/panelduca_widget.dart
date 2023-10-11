@@ -8,49 +8,84 @@ import 'package:simexpro/screens/DUCA/duca_screen.dart';
 import 'package:simexpro/screens/historial_detalles_screen.dart';
 import 'package:simexpro/widgets/upcoming_historial.dart';
 
-class OrderData {
-  final int id;
-  final String codigo;
-  final String fechaEmision;
-  final String fechaLimite;
-  final String estadoOrdenCompra;
-  final String nombreCliente;
-  final String direccionEntrega;
-  final String metodoPago;
+class DevaData {
+  final int deva_Id;
+  final String adua_IngresoNombre;
+  final String deva_DeclaracionMercancia;
+  final String deva_FechaAceptacion;
+  final String regi_Codigo;
+  final String regi_Descripcion;
+  final String impo_NumRegistro;
+  final String nico_Descripcion;
+  final String impo_NivelComercial_Otro;
+  final String impo_Nombre_Raso;
+  final String impo_Direccion_Exacta;
+  final String impo_Correo_Electronico;
+  final String impo_Telefono;
+  final String prov_Nombre_Raso;
+  final String prov_Direccion_Exacta;
+  final String prov_Correo_Electronico;
+  final String prov_Telefono;
+  final String orco_DireccionEntrega;
+  final String deva_NumeroContrato;
 
-  OrderData({
-    required this.id,
-    required this.codigo,
-    required this.fechaEmision,
-    required this.fechaLimite,
-    required this.estadoOrdenCompra,
-    required this.nombreCliente,
-    required this.direccionEntrega,
-    required this.metodoPago,
+
+  DevaData({
+    required this.deva_Id,
+    required this.adua_IngresoNombre,
+    required this.deva_DeclaracionMercancia,
+    required this.deva_FechaAceptacion,
+    required this.regi_Codigo,
+    required this.regi_Descripcion,
+    required this.impo_NumRegistro,
+    required this.nico_Descripcion,
+    required this.impo_NivelComercial_Otro,
+    required this.impo_Nombre_Raso,
+    required this.impo_Direccion_Exacta,
+    required this.impo_Correo_Electronico,
+    required this.impo_Telefono,
+    required this.prov_Nombre_Raso,
+    required this.prov_Direccion_Exacta,
+    required this.prov_Correo_Electronico,
+    required this.prov_Telefono,
+    required this.orco_DireccionEntrega,
+    required this.deva_NumeroContrato,
+
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'codigo': codigo,
-      'fechaEmision': fechaEmision,
-      'fechaLimite': fechaLimite,
-      'estadoOrdenCompra': estadoOrdenCompra,
-      'nombreCliente': nombreCliente,
-      'direccionEntrega': direccionEntrega,
-      'metodoPago': metodoPago,
+      'deva_Id': deva_Id,
+      'adua_IngresoNombre': adua_IngresoNombre,
+      'deva_DeclaracionMercancia': deva_DeclaracionMercancia,
+      'deva_FechaAceptacion': deva_FechaAceptacion,
+      'regi_Codigo': regi_Codigo,
+      'regi_Descripcion': regi_Descripcion,
+      'impo_NumRegistro': impo_NumRegistro,
+      'nico_Descripcion': nico_Descripcion,
+      'impo_NivelComercial_Otro': impo_NivelComercial_Otro,
+      'impo_Nombre_Raso': impo_Nombre_Raso,
+      'impo_Direccion_Exacta': impo_Direccion_Exacta,
+      'impo_Correo_Electronico': impo_Correo_Electronico,
+      'impo_Telefono': impo_Telefono,
+      'prov_Nombre_Raso': prov_Nombre_Raso,
+      'prov_Direccion_Exacta': prov_Direccion_Exacta,
+      'prov_Correo_Electronico': prov_Correo_Electronico,
+      'prov_Telefono': prov_Telefono,
+      'deva_NumeroContrato': deva_NumeroContrato,
+
     };
   }
 }
 
-class Pendinghistorial extends StatefulWidget {
+class PanelDucaWidget extends StatefulWidget {
   @override
-  _PendinghistorialState createState() => _PendinghistorialState();
+  _PanelDucaWidgetState createState() => _PanelDucaWidgetState();
 }
 
-class _PendinghistorialState extends State<Pendinghistorial> {
-  List<OrderData> orders = [];
-  List<OrderData> filteredOrders = [];
+class _PanelDucaWidgetState extends State<PanelDucaWidget> {
+  List<DevaData> devas = [];
+  List<DevaData> filteredDevas = [];
 
   TextEditingController searchController = TextEditingController();
 
@@ -59,15 +94,19 @@ class _PendinghistorialState extends State<Pendinghistorial> {
     super.initState();
     fetchData().then((result) {
       setState(() {
-        orders = result;
-        filteredOrders = orders;
+        devas = result;
+        filteredDevas = devas;
       });
     });
-  }
+  }    
 
-  Future<List<OrderData>> fetchData() async {
+  Future<List<DevaData>> fetchData() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var duca_Id = prefs.getInt('duca_Id');
+
     final response = await http.get(
-      Uri.parse('${apiUrl}OrdenCompra/Listar'),
+      Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDucaId?id=${duca_Id}'),
       headers: {
         'XApiKey': apiKey,
         'Content-Type': 'application/json',
@@ -78,40 +117,45 @@ class _PendinghistorialState extends State<Pendinghistorial> {
       final decodedJson = jsonDecode(response.body);
       final dataList = decodedJson["data"] as List<dynamic>;
 
-      final orders = dataList
-          .where((data) => data['orco_EstadoOrdenCompra'] == 'P')
+      final devas = dataList
           .map((data) {
-        String fechaEmision = data['orco_FechaEmision'];
-        String fechaLimite = data['orco_FechaLimite'];
+        String deva_FechaAceptacion = data['deva_FechaAceptacion'];
 
-        int indexOfT1 = fechaEmision.indexOf('T');
-        int indexOfT2 = fechaLimite.indexOf('T');
+        int indexOfT1 = deva_FechaAceptacion.indexOf('T');
 
         if (indexOfT1 >= 0) {
-          fechaEmision = fechaEmision.substring(0, indexOfT1);
+          deva_FechaAceptacion = deva_FechaAceptacion.substring(0, indexOfT1);
         }
 
-        if (indexOfT2 >= 0) {
-          fechaLimite = fechaLimite.substring(0, indexOfT2);
-        }
+        return DevaData(
+          deva_Id: data['deva_Id'],
+          adua_IngresoNombre: data['adua_IngresoNombre'],
+          deva_FechaAceptacion: deva_FechaAceptacion,
+          deva_DeclaracionMercancia: data['deva_DeclaracionMercancia'],
+          regi_Codigo: data['regi_Codigo'],
+          regi_Descripcion: data['regi_Descripcion'],
+          impo_NumRegistro: data['impo_NumRegistro'],
+          nico_Descripcion: data['nico_Descripcion'],
+          impo_NivelComercial_Otro: data['impo_NivelComercial_Otro'],
+          impo_Nombre_Raso: data['impo_Nombre_Raso'],
+          impo_Direccion_Exacta: data['impo_Direccion_Exacta'],
+          impo_Correo_Electronico: data['impo_Correo_Electronico'],
+          orco_DireccionEntrega: data['orco_DireccionEntrega'],
+          impo_Telefono: data['impo_Telefono'],
+          prov_Nombre_Raso: data['prov_Nombre_Raso'],
+          prov_Direccion_Exacta: data['prov_Direccion_Exacta'],
+          prov_Correo_Electronico: data['prov_Correo_Electronico'],
+          prov_Telefono: data['prov_Telefono'],
+          deva_NumeroContrato: data['deva_NumeroContrato'],
 
-        return OrderData(
-          id: data['orco_Id'],
-          codigo: data['orco_Codigo'],
-          fechaEmision: fechaEmision,
-          fechaLimite: fechaLimite,
-          estadoOrdenCompra: data['orco_EstadoOrdenCompra'],
-          nombreCliente: data['clie_Nombre_O_Razon_Social'],
-          direccionEntrega: data['orco_DireccionEntrega'],
-          metodoPago: data['fopa_Descripcion'],
         );
       }).toList();
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('userData',
-          jsonEncode(orders.map((order) => order.toJson()).toList()));
+          jsonEncode(devas.map((order) => order.toJson()).toList()));
 
-      return orders;
+      return devas;
     } else {
       throw Exception('Failed to load data');
     }
@@ -124,7 +168,7 @@ class _PendinghistorialState extends State<Pendinghistorial> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 0),
+          SizedBox(height: 15),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 0),
             child: TextField(
@@ -132,28 +176,27 @@ class _PendinghistorialState extends State<Pendinghistorial> {
               onChanged: onSearchTextChanged,
               decoration: InputDecoration(
                 hintText: 'Buscar',
+                filled: true,
+                fillColor: Colors.white,
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(50),
                 ),
               ),
             ),
           ),
           SizedBox(height: 16),
           ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
+            itemCount: filteredDevas.isNotEmpty ? filteredDevas.length : 1,
             itemBuilder: (context, index) {
-              if (filteredOrders.isNotEmpty) {
-                return buildCard(filteredOrders[index]);
+              if (filteredDevas.isNotEmpty) {
+                return buildCard(filteredDevas[index]);
               } else {
-                return Center(
-                  child: Image.network(
-                    "https://i.ibb.co/9sgcf39/image.png",
-                    fit: BoxFit.contain,
-                    width: 400,
-                    height: 400,
+                return Text(
+                  'No se encontraron Devas',
+                  style: TextStyle(
+                    color: Colors.black54,
                   ),
                 );
               }
@@ -161,22 +204,23 @@ class _PendinghistorialState extends State<Pendinghistorial> {
           )
         ],
       ),
-    );
+    );  
   }
 
   void onSearchTextChanged(String searchText) {
     setState(() {
-      filteredOrders = orders
+      filteredDevas = devas
           .where((order) =>
-              order.codigo.toLowerCase().contains(searchText.toLowerCase()) ||
-              order.nombreCliente
+              order.deva_NumeroContrato
+                  .toLowerCase().contains(searchText.toLowerCase()) ||
+              order.deva_Id.toString()
                   .toLowerCase()
                   .contains(searchText.toLowerCase()))
           .toList();
     });
   }
 
-  Widget buildCard(OrderData order) {
+  Widget buildCard(DevaData deva) {
     return Container(
         margin: EdgeInsets.only(bottom: 16.0),
         padding: EdgeInsets.symmetric(vertical: 5),
@@ -197,21 +241,13 @@ class _PendinghistorialState extends State<Pendinghistorial> {
             children: [
               ListTile(
                 title: Text(
-                  "Orden #${order.codigo}",
+                  "DEVA #${deva.deva_Id}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Text(order.nombreCliente),
-                trailing: SizedBox(
-                  width: 100,
-                  height: 25,
-                  child: Image.network(
-                    "https://i.ibb.co/9T4ST2V/pendiente.png",
-                    fit: BoxFit
-                        .contain, // Ajusta la imagen para que cubra el espacio
-                  ),
-                ),
+                subtitle: Text(deva.deva_NumeroContrato),
+                
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -232,7 +268,7 @@ class _PendinghistorialState extends State<Pendinghistorial> {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.fechaEmision,
+                        deva.deva_NumeroContrato,
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -247,7 +283,7 @@ class _PendinghistorialState extends State<Pendinghistorial> {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.fechaLimite,
+                        deva.deva_NumeroContrato,
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -280,17 +316,7 @@ class _PendinghistorialState extends State<Pendinghistorial> {
                 children: [
                   InkWell(
                     onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('ordercodigo', order.codigo);
-                      prefs.setString('orderid', order.id.toString());
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Historial_detalles_Screen(),
-                        ),
-                      );
+                     
                     },
                     child: Container(
                       width: 150,

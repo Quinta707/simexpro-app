@@ -3,12 +3,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
-import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
+import 'package:simexpro/screens/rastreo_aduana.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:simexpro/widgets/taps_Aduana.dart';
 
+import '../screens/historial_screen_Aduana.dart';
 import '../screens/ordertracking/orders_screen.dart';
 
 enum MenuItem { item1, item2 }
@@ -32,18 +33,27 @@ class _NavBarRootsState extends State<NavBarRoots> {
   }
 
 
-  Future<void> Imagen() async {
+   Future<void> Imagen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     image = prefs.getString('image');
     bool esAduana = prefs.getBool('esAduana');
 
     setState(() {
+      if (esAduana) {
       _screens = [
-        esAduana ? GraficasAduanas() : TapsProduccion(),
-        historialScreen(),
+        GraficasAduanas(), // Usa la pantalla relacionada con la aduana
+        historialAduanaScreen(), // Modifica esta línea a la pantalla de historial relacionada con la aduana
+        TimelineAduanaScreen(),
+        const OrdersScreen(),
+      ];
+    } else {
+      _screens = [
+        TapsProduccion(),
+        historialScreen(), // Usa la pantalla de historial existente
         TimelineScreen(),
         const OrdersScreen(),
       ];
+    }
     });
   }
 
@@ -133,11 +143,6 @@ class _NavBarRootsState extends State<NavBarRoots> {
                   ],
                   backgroundColor: Color.fromRGBO(17, 24, 39, 1),
                   //elevation: 50.0,
-                  leading: IconButton(
-                    icon: const Icon(Icons.menu),
-                    tooltip: 'Menú',
-                    onPressed: () {},
-                  ),
                   //systemOverlayStyle: SystemUiOverlayStyle.light,
                 )
               : null,
@@ -167,6 +172,38 @@ class _NavBarRootsState extends State<NavBarRoots> {
                     icon: Icon(Icons.calendar_month_outlined), label: "Historial"),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.timelapse_outlined), label: "Rastreo"),
+              ],
+            ),
+          ),
+          drawer: Drawer(
+            backgroundColor: Color.fromRGBO(17, 24, 39, 1),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  child: Image.network('https://i.ibb.co/HgdBM0r/slogan.png', height: 35),
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(17, 24, 39, 1),
+                  ),
+                ),
+                ListTile(
+                  title: Text('Item 1'),
+                  onTap: () {
+                    // Actualiza el estado de la aplicación
+                    // ...
+                    // Luego cierra el drawer
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('Item 2'),
+                  onTap: () {
+                    // // Actualiza el estado de la aplicación
+                    // ...
+                    // Luego cierra el drawer
+                    Navigator.pop(context);
+                  },
+                ),
               ],
             ),
           ),

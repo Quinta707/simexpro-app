@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
+import 'package:simexpro/screens/ordertracking/qrscanner_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
@@ -296,6 +297,54 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                     ),
                    ),
                   ),
+                  //   SizedBox(height: 40),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Expanded(
+                  //         child: new Container(
+                  //       margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                  //       child: Divider(
+                  //         color: Colors.black,
+                  //       ),
+                  //     )),
+                  //     Text("O"),
+                  //     Expanded(
+                  //         child: new Container(
+                  //       margin: const EdgeInsets.only(left: 20.0, right: 10.0),
+                  //       child: Divider(
+                  //         color: Colors.black,
+                  //       ),
+                  //     ))
+                  //   ],
+                  // ),
+                  // SizedBox(height: 40),
+                  // ElevatedButton.icon(
+                  //   style: ElevatedButton.styleFrom(
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     backgroundColor: Color.fromRGBO(99, 74, 158, 1),
+                  //     padding:
+                  //         EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  //   ),
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context, 
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const   QRScannerScreen(),
+                  //       )
+                  //     );
+                  //   },
+                  //   icon: Icon(Icons.qr_code),
+                  //   label: Text(
+                  //     'Escanear',
+                  //     style: TextStyle(
+                  //       fontSize: 18,
+                  //       fontWeight: FontWeight.bold,
+                  //       color: Colors.white,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -311,6 +360,7 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
 
 class RightChild extends StatelessWidget {
   @override
+  final format = DateFormat('dd-MM-yyyy HH:mm');
   Widget build(BuildContext context) {
     return
     Padding(
@@ -429,7 +479,8 @@ class RightChild extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                 //dateFormat.format(new DateTime.fromMillisecondsSinceEpoch(datamaquina[index]['mahi_FechaInicio'])),
-                                datamaquina[index]['mahi_FechaInicio'],
+                                format.format(DateTime.tryParse(datamaquina[index]['mahi_FechaInicio']) as DateTime),
+                                //datamaquina[index]['mahi_FechaInicio'],
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 0, 0, 0),
                                   fontSize: 18,

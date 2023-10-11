@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
-import 'package:simexpro/screens/historial_detalles_screen.dart';
 
 class DetalleData {
   final int codeId;
@@ -174,11 +172,13 @@ class _DetalleshistorialState extends State<Detalleshistorial> {
           ),
           SizedBox(height: 16),
           ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount:
                 filtereddetalles.isNotEmpty ? filtereddetalles.length : 1,
             itemBuilder: (context, index) {
               if (filtereddetalles.isNotEmpty) {
+                print("Detalles: ${filtereddetalles[index].toJson()}");
                 // Muestra la tarjeta de pedido si hay datos
                 return buildCard(filtereddetalles[index]);
               } else {

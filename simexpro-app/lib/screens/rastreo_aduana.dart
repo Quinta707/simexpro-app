@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:simexpro/screens/deva_screen.dart';
 import 'package:simexpro/screens/lineatiempo.dart';
-import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/ordertracking/orders_screen.dart';
-import 'package:simexpro/toastconfig/toastconfig.dart';
+import 'package:simexpro/screens/DUCA/duca_screen.dart';
 
-class TimelineScreen extends StatelessWidget {
+class TimelineAduanaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -15,7 +15,7 @@ class TimelineScreen extends StatelessWidget {
           Container(
             alignment: Alignment.center,
             child: Text(
-              "Líneas de tiempo",
+              "Rastreo",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w500,
@@ -31,18 +31,18 @@ class TimelineScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MaquinasScreen(),
+                      builder: (context) => DevaScreen(),
                 ));
               },
               child: CircleAvatar(
-                backgroundImage: AssetImage('images/logoMaquinas.png'),
+                backgroundImage: AssetImage('images/deva.png'),
                 radius: 90,
               ),
             ),
           ),
           Container(
             alignment: Alignment.center,
-            child: Text('Máquinas',
+            child: Text('Declaraciones de valor',
               style: TextStyle(fontSize: 20),
             ),
           ),
@@ -54,18 +54,18 @@ class TimelineScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => OrdersScreen(),
+                      builder: (context) => DucasScreen(),
                 ));
               },
               child: CircleAvatar(
-                backgroundImage: AssetImage('images/logoOrdenes.png'),
+                backgroundImage: AssetImage('images/duca.png'),
                 radius: 90,
               ),
             ),
           ),
           Container(
             alignment: Alignment.center,
-            child: Text('Órdenes',
+            child: Text('DUCAS',
               style: TextStyle(fontSize: 20),
             ),
           ),
