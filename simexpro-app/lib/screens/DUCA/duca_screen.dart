@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/DUCA/duca_found_screen.dart';
+import 'package:simexpro/screens/DUCA/ducaqrscanner_screen.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
@@ -55,6 +56,23 @@ Future<void> TraerDatos(String NoDuca, context) async {
             title: const Text('El código no es válido',
                 style: TextStyle(color: Colors.white)))
         .show(context);
+  }
+}
+
+Future<void> TraerDatosById(int Id_Duca, context) async {
+  final response = await http.post(
+    Uri.parse('${apiUrl}Duca/Listar_ById?id=$Id_Duca'),
+    headers: {
+      'XApiKey': apiKey,
+      'Content-Type': 'application/json',
+    },
+  );
+  final decodedJson = jsonDecode(response.body);
+  final data = decodedJson["data"];
+  String NoDuca = data[0]['duca_No_Duca'];
+
+  if (data.length > 0) {
+    TraerDatos(NoDuca, context);
   }
 }
 
@@ -254,7 +272,7 @@ class _DucasScreenState extends State<DucasScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const QRScannerScreen(),
+                            builder: (context) => const DucaQRScannerScreen(),
                           ));
                     },
                     icon: Icon(Icons.qr_code),
