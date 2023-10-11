@@ -103,7 +103,7 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
   Future<List<DevaData>> fetchData() async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var duca_Id = prefs.getString('duca_Id');
+    var duca_Id = prefs.getInt('duca_Id');
 
     final response = await http.get(
       Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDucaId?id=${duca_Id}'),

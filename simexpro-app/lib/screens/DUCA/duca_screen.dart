@@ -32,8 +32,7 @@ Future<void> Imagen() async {
 
 Future<void> TraerDatos(String NoDuca, context) async {
   final response = await http.post(
-    Uri.parse(
-        '${apiUrl}Duca/List_ByNoDuca?NoDuca=$NoDuca'),
+    Uri.parse('${apiUrl}Duca/List_ByNoDuca?NoDuca=$NoDuca'),
     headers: {
       'XApiKey': apiKey,
       'Content-Type': 'application/json',
@@ -41,24 +40,21 @@ Future<void> TraerDatos(String NoDuca, context) async {
   );
   final decodedJson = jsonDecode(response.body);
   final data = decodedJson["data"];
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var duca_Id = data[0]['duca_Id'];
+  prefs.setInt('duca_Id', duca_Id);
 
-    print('data after search $data');
   if (data.length > 0) {
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('duca_Id', data.duca_Id);
-
     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Duca_Found_Screen(data: data),
-      )
-    );
-  } else{
+        context,
+        MaterialPageRoute(
+          builder: (context) => Duca_Found_Screen(data: data),
+        ));
+  } else {
     CherryToast.warning(
-        title: const Text('El código no es válido',
-            style: TextStyle(color: Colors.white)))
-    .show(context);
+            title: const Text('El código no es válido',
+                style: TextStyle(color: Colors.white)))
+        .show(context);
   }
 }
 
@@ -75,16 +71,15 @@ class _DucasScreenState extends State<DucasScreen> {
     Imagen();
   }
 
-    String searchValue = '';
+  String searchValue = '';
 
-    void updatedText (val){
-      setState((){
-        searchValue = val;
-      });
-    }
+  void updatedText(val) {
+    setState(() {
+      searchValue = val;
+    });
+  }
 
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Image(
@@ -257,11 +252,10 @@ class _DucasScreenState extends State<DucasScreen> {
                     ),
                     onPressed: () {
                       Navigator.push(
-                        context, 
-                        MaterialPageRoute(
-                          builder: (context) => const   QRScannerScreen(),
-                        )
-                      );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const QRScannerScreen(),
+                          ));
                     },
                     icon: Icon(Icons.qr_code),
                     label: Text(
