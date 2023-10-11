@@ -181,7 +181,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
               padding: EdgeInsets.zero,
               children: <Widget>[
                 DrawerHeader(
-                  child: Image.network('https://i.ibb.co/HgdBM0r/slogan.png', height: 35),
+                  child: Image.network('https://i.ibb.co/HgdBM0r/slogan.png', height: 25),
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(17, 24, 39, 1),
                   ),
