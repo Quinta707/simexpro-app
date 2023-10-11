@@ -27,6 +27,7 @@ bool esAduana1 = false;
   int _selectedIndex = 0;
   List<Widget> _screens = [];
   String imagenperfil = '';
+  String username = '';
   @override
   void initState() {
     super.initState();
@@ -40,6 +41,7 @@ bool esAduana1 = false;
     imagenperfil = image;
     bool esAduana = prefs.getBool('esAduana');
     esAduana1 = esAduana;
+    username = prefs.getString('username');
     setState(() {
       if (esAduana) {
       _screens = [
@@ -182,24 +184,34 @@ bool esAduana1 = false;
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
-                DrawerHeader(
-                  child: Container(
-                    padding: EdgeInsets.only(right: 30, left: 30, bottom: 20), 
-                    child: Image.network('https://i.ibb.co/HgdBM0r/slogan.png')
-                  ),
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(17, 24, 39, 1),
-                  ),
+                // DrawerHeader(
+                //   child: Container(
+                //     padding: EdgeInsets.only(right: 30, left: 30), 
+                //     child: Image.network('https://i.ibb.co/HgdBM0r/slogan.png')
+                //   ),
+                //   decoration: BoxDecoration(
+                //     color: Color.fromRGBO(17, 24, 39, 1),
+                //   ),
+                // ),
+                SizedBox(height: 10),
+                Image.network('https://i.ibb.co/HgdBM0r/slogan.png', height: 50),
+                SizedBox(height: 20),
+                CircleAvatar(
+                  radius: 100,
+                  backgroundImage: NetworkImage(imagenperfil),
                 ),
-                Ink.image(
-                  image: NetworkImage(imagenperfil),
-                  fit: BoxFit.cover,
-                  width: 170,
-                  height: 170,
-                  child: InkWell(
-                    onTap: () {}
-                  ),
+                SizedBox(height: 20),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(username, style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w700)),
                 ),
+                SizedBox(height: 20),
+                // Ink.image(
+                //   image: NetworkImage(imagenperfil),
+                //   fit: BoxFit.cover,
+                //   width: 170,
+                //   height: 170,
+                // ),
                 Column(
                   children: [
                     ListTile(
