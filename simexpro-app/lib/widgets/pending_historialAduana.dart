@@ -197,12 +197,12 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
             children: [
               ListTile(
                 title: Text(
-                  "Mercancia #${order.codigo}",
+                  "Deva #${order.id}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Text(order.fechaEmision),
+                subtitle: Text(order.codigo),
                 trailing: SizedBox(
                   width: 100,
                   height: 25,
@@ -227,12 +227,12 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
                   Row(
                     children: [
                       Icon(
-                        Icons.calendar_month_outlined,
+                        Icons.battery_0_bar,
                         color: Colors.black54,
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.fechaEmision,
+                        order.codigo,
                         style: TextStyle(
                           color: Colors.black54,
                         ),
