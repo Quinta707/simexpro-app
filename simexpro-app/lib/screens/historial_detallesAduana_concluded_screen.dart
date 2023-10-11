@@ -91,7 +91,7 @@ class _Historial_detallesAduana_concluded_ScreenState extends State<Historial_de
        String fechaemision = data['boen_FechaEmision'];
     
         int indexOfT1 = fechaemision.indexOf('T');
-
+flutter doctor
         if (indexOfT1 >= 0) {
           fechaemision = fechaemision.substring(0, indexOfT1);
         }
