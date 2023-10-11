@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simexpro/screens/DUCA/duca_screen.dart';
+import 'package:simexpro/screens/deva_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
+import 'package:simexpro/screens/maquinas_screen.dart';
+import 'package:simexpro/screens/ordertracking/orders_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 
 import 'package:http/http.dart' as http;
@@ -21,10 +25,7 @@ class GraficasAduanas extends StatefulWidget {
   State<GraficasAduanas> createState() => Graficas();
 }
 
-Future<void> Imagen() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  imagen = prefs.getString('image');
-}
+
 
 // Función para generar un color aleatorio
 charts.Color getRandomColor() {
@@ -45,6 +46,18 @@ class Graficas extends State<GraficasAduanas> {
   num ImportaciionesAnio = 0;
 
   String MesActual = "";
+
+  bool esAduana1 = false;
+  String imagenperfil = '';
+  String username = '';
+
+  Future<void> Imagen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    imagen = prefs.getString('image');
+    imagenperfil = imagen;
+    esAduana1 = prefs.getBool('esAduana');
+    username = prefs.getString('username');
+  }
 
   //PETICION PARA OPTENER LOS DATOS DE LA GRAFICA (REGIMENES ADUANEROS MAS UTILIZADOS)
   Future<void> GetRegimenesAduaneros() async {
@@ -368,12 +381,6 @@ class Graficas extends State<GraficasAduanas> {
               )
             ],
             backgroundColor: Color.fromRGBO(17, 24, 39, 1),
-            //elevation: 50.0,
-            leading: IconButton(
-              icon: const Icon(Icons.menu),
-              tooltip: 'Menú',
-              onPressed: () {},
-            ),
             bottom: const TabBar(
               tabs: [
                 Tab(icon: Icon(Icons.auto_graph_sharp)),
@@ -382,6 +389,110 @@ class Graficas extends State<GraficasAduanas> {
               ],
             ),
             //systemOverlayStyle: SystemUiOverlayStyle.light,
+          ),
+          drawer: Drawer(
+            backgroundColor: Color.fromRGBO(17, 24, 39, 1),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                SizedBox(height: 10),
+                Image.network('https://i.ibb.co/HgdBM0r/slogan.png', height: 50),
+                SizedBox(height: 20),
+                CircleAvatar(
+                  radius: 100,
+                  backgroundImage: NetworkImage(imagenperfil),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(username, style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w700)),
+                ),
+                SizedBox(height: 20),
+                Column(
+                  children: [
+                    ListTile(
+                       leading: Icon(Icons.person, color: Colors.white),
+                      title: Text(
+                        'Perfil',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                        ));
+                      },
+                    ),
+                  ],
+                ),
+                esAduana1
+                ? Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.document_scanner, color: Colors.white),
+                      title: Text(
+                        'Rastreo de declaraciones de valor',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DevaScreen(),
+                        ));
+                      },
+                    ),
+                    ListTile(
+                       leading: Icon(Icons.edit_document, color: Colors.white),
+                      title: Text(
+                        'Rastreo de ducas',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DucasScreen(),
+                        ));
+                      },
+                    )
+                  ],
+                )
+                : Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.precision_manufacturing_rounded, color: Colors.white),
+                      title: Text(
+                        'Rastreo de máquinas',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MaquinasScreen(),
+                        ));
+                      },
+                    ),
+                    ListTile(
+                       leading: Icon(Icons.shopping_bag_rounded, color: Colors.white),
+                      title: Text(
+                        'Rastreo de órdenes de compra',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OrdersScreen(),
+                        ));
+                      },
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
           body: TabBarView(
             children: [
