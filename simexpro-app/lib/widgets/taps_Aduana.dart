@@ -37,7 +37,7 @@ charts.Color getRandomColor() {
 
 class Graficas extends State<GraficasAduanas> {
   //DECLARACION DE VARIABLES UTILIZADAS EN LAS GRAFICAS
-  List<RegimenesAduaneros> RegimenesData = [];
+  List<PaisesExportados> PaisesData = [];
   List<AduanasIngresos> AduanasData = [];
 
   num ImportaciionesSemanales = 0;
@@ -51,7 +51,7 @@ class Graficas extends State<GraficasAduanas> {
     try {
       final response = await http.get(
         Uri.parse(
-            '${apiUrl}AduanasGraficas/RegimenesAduaneros_CantidadPorcentaje'),
+            '${apiUrl}AduanasGraficas/PaisesMasExportadores'),
         headers: {
           'XApiKey': apiKey,
         },
@@ -62,18 +62,9 @@ class Graficas extends State<GraficasAduanas> {
         final List<dynamic> jsonData = responseData['data'];
 
         setState(() {
-          RegimenesData = jsonData.map((item) {
-            // Divide la cadena 'label' en dos partes usando "|"
-            List<String> partes = item['label'].split("|");
-
-            // Verifica si hay al menos dos partes (si hay "|")
-            if (partes.length > 1) {
-              return RegimenesAduaneros(partes[0], item['cantidad']);
-            } else {
-              // Si no hay "|", simplemente usa la cadena original
-              return RegimenesAduaneros(item['label'], item['cantidad']);
-            }
-          }).toList();
+          PaisesData = jsonData
+          .map((item) => PaisesExportados(item['pais_Nombre'], item['cantidad'], item['porcentaje']))
+          .toList();
         });
       }
     } catch (error) {
@@ -194,23 +185,16 @@ class Graficas extends State<GraficasAduanas> {
     );
 
     //ASIGNACION DEL GRAFICO DE BARRAS (REGIMENES ADUANEROS MAS UTILIZADOS)
-    final List<charts.Series<RegimenesAduaneros, String>>
-        DatosGraficaRegimenes = [
-      charts.Series<RegimenesAduaneros, String>(
+    final List<charts.Series<PaisesExportados, String>>
+        DatosGraficaPaisesExportadores = [
+      charts.Series<PaisesExportados, String>(
         id: 'Barras',
-        domainFn: (RegimenesAduaneros data, _) => data.label,
-        measureFn: (RegimenesAduaneros data, _) => data.cantidad,
-        labelAccessorFn: (RegimenesAduaneros data, _) {
-          final Porcentaje = (data.cantidad /
-                  RegimenesData.map((item) => item.cantidad)
-                      .reduce((a, b) => a + b) *
-                  100)
-              .toStringAsFixed(1);
-          return '${Porcentaje}%';
-        },
-        colorFn: (RegimenesAduaneros data, int? index) =>
+        domainFn: (PaisesExportados data, _) => data.pais_Nombre,
+        measureFn: (PaisesExportados data, _) => data.cantidad,
+        labelAccessorFn: (PaisesExportados data, _) => '${data.porcentaje}%',
+        colorFn: (PaisesExportados data, int? index) =>
             getRandomColor(), // Asigna el color desde la lista de colores aleatorios
-        data: RegimenesData, // Utiliza los datos de la API
+        data: PaisesData, // Utiliza los datos de la API
       )
     ];
 
@@ -230,8 +214,8 @@ class Graficas extends State<GraficasAduanas> {
     ];
 
     //GRAFICA DE BARRAS (REGIMENES ADUANEROS MAS UTILIZADOS)
-    final GraficaRegimenes = new charts.BarChart(
-      DatosGraficaRegimenes,
+    final GraficaPaisesExportadores = new charts.BarChart(
+      DatosGraficaPaisesExportadores,
       animate: true,
       vertical: true,
       domainAxis: new charts.OrdinalAxisSpec(
@@ -305,7 +289,7 @@ class Graficas extends State<GraficasAduanas> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
-        length: 4,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             title: const Image(
@@ -395,7 +379,6 @@ class Graficas extends State<GraficasAduanas> {
                 Tab(icon: Icon(Icons.auto_graph_sharp)),
                 Tab(icon: Icon(Icons.pie_chart)),
                 Tab(icon: Icon(Icons.add_task)),
-                Tab(icon: Icon(Icons.attach_money_rounded)),
               ],
             ),
             //systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -409,7 +392,7 @@ class Graficas extends State<GraficasAduanas> {
                     children: [
                       ListTile(
                         title: Text(
-                          'REGIMENES ADUANEROS MÁS USADOS',
+                          'PAISES MÁS EXPORTADORES',
                           style: TextStyle(
                             fontSize: 18.0,
                           ),
@@ -424,7 +407,7 @@ class Graficas extends State<GraficasAduanas> {
                         padding: EdgeInsets.all(
                             16.0), // Padding dentro de la tarjeta
                         child:
-                            GraficaRegimenes, // El contenido de la tarjeta, en este caso, el gráfico
+                            GraficaPaisesExportadores, // El contenido de la tarjeta, en este caso, el gráfico
                       ),
                     ],
                   ),
@@ -499,7 +482,7 @@ class Graficas extends State<GraficasAduanas> {
                       SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 145,
+                        height: 155,
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
@@ -526,7 +509,7 @@ class Graficas extends State<GraficasAduanas> {
                             Expanded(
                               flex: 2,
                               child: Padding(
-                                padding: const EdgeInsets.all(7.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Container(
                                   alignment: Alignment
                                       .center, // Centrar el contenido en la columna
@@ -535,7 +518,7 @@ class Graficas extends State<GraficasAduanas> {
                                         .center, // Centrar el texto horizontalmente
                                     children: [
                                       Text(
-                                        "IMPORTACIONES DEL ${DateTime.now().year}",
+                                        "IMPORTACIONES   DEL  ${DateTime.now().year}",
                                         textAlign: TextAlign
                                             .center, // Alinea el texto al centro
                                         style: TextStyle(
@@ -592,7 +575,7 @@ class Graficas extends State<GraficasAduanas> {
                       SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 145,
+                        height: 155,
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
@@ -681,7 +664,7 @@ class Graficas extends State<GraficasAduanas> {
                       SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 145,
+                        height: 155,
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
@@ -772,7 +755,6 @@ class Graficas extends State<GraficasAduanas> {
                   ),
                 ),
               ),
-              Card()
             ],
           ),
         ),
@@ -781,11 +763,12 @@ class Graficas extends State<GraficasAduanas> {
   }
 }
 
-class RegimenesAduaneros {
-  final String label;
+class PaisesExportados {
+  final String pais_Nombre;
   final int cantidad;
+  final String porcentaje;
 
-  RegimenesAduaneros(this.label, this.cantidad);
+  PaisesExportados(this.pais_Nombre, this.cantidad, this.porcentaje);
 }
 
 class AduanasIngresos {
