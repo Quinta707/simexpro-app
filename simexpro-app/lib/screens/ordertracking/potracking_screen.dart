@@ -264,6 +264,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                     height: 200,
                     child: GridView.count(
                       // shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.all(20),
                       crossAxisCount: 2,
                       crossAxisSpacing: 10.0,

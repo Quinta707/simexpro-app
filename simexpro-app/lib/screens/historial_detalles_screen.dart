@@ -271,6 +271,7 @@ class _Historial_detalles_ScreenState extends State<Historial_detalles_Screen> {
         SizedBox(
           height: 200,
           child: GridView.count(
+            physics: const NeverScrollableScrollPhysics(),
             // shrinkWrap: true,
             padding: const EdgeInsets.all(20),
             crossAxisCount: 2,
