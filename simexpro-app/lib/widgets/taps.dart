@@ -498,11 +498,11 @@ class TabBarDemo extends State<TapsProduccion> {
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
-                SizedBox(height: 10),
+                SizedBox(height: 50),
                 Image.network('https://i.ibb.co/HgdBM0r/slogan.png', height: 50),
                 SizedBox(height: 20),
                 CircleAvatar(
-                  radius: 100,
+                  radius: 80,
                   backgroundImage: NetworkImage(imagenperfil),
                 ),
                 SizedBox(height: 20),
