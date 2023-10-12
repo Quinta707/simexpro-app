@@ -13,6 +13,8 @@ import 'package:simexpro/widgets/taps_Aduana.dart';
 import '../screens/historial_screen_Aduana.dart';
 import '../screens/ordertracking/orders_screen.dart';
 import 'package:simexpro/screens/deva_screen.dart';
+import 'package:simexpro/screens/DEVA/devas_screen.dart';
+
 import 'package:simexpro/screens/DUCA/duca_screen.dart';
 
 enum MenuItem { item1, item2 }
@@ -228,7 +230,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
                           Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DevaScreen(),
+                            builder: (context) => Devascreen(),
                         ));
                       },
                     ),
