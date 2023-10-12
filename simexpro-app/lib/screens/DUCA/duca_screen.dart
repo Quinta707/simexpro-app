@@ -99,6 +99,7 @@ class _DucasScreenState extends State<DucasScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         title: const Image(
           height: 35,
