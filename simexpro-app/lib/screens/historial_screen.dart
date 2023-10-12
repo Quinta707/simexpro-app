@@ -28,7 +28,7 @@ class _historialScreenState extends State<historialScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Text(
-              "Historial",
+              "Historial de órdenes",
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w500,
@@ -65,7 +65,7 @@ class _historialScreenState extends State<historialScreen> {
                       child: Text(
                         "Pendientes",
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color:
                               _buttonIndex == 0 ? Colors.white : Colors.black38,
@@ -94,7 +94,7 @@ class _historialScreenState extends State<historialScreen> {
                       child: Text(
                         "En proceso",
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color:
                               _buttonIndex == 1 ? Colors.white : Colors.black38,
@@ -123,7 +123,7 @@ class _historialScreenState extends State<historialScreen> {
                       child: Text(
                         "Completadas",
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color:
                               _buttonIndex == 2 ? Colors.white : Colors.black38,

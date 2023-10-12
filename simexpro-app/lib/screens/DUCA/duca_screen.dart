@@ -4,6 +4,8 @@ import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simexpro/screens/DUCA/duca_found_screen.dart';
+import 'package:simexpro/screens/DUCA/ducaqrscanner_screen.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
@@ -17,11 +19,11 @@ import 'package:http/http.dart' as http;
 
 import '../../api.dart';
 
-class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({Key? key}) : super(key: key);
+class DucasScreen extends StatefulWidget {
+  const DucasScreen({Key? key}) : super(key: key);
 
   @override
-  _OrdersScreenState createState() => _OrdersScreenState();
+  _DucasScreenState createState() => _DucasScreenState();
 }
 
 Future<void> Imagen() async {
@@ -29,10 +31,9 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-Future<void> TraerDatos(String codigopo, context) async {
-  final response = await http.get(
-    Uri.parse(
-        '${apiUrl}OrdenCompra/LineaTiempoOrdenCompra?orco_Codigo=$codigopo'),
+Future<void> TraerDatos(String NoDuca, context) async {
+  final response = await http.post(
+    Uri.parse('${apiUrl}Duca/List_ByNoDuca?NoDuca=$NoDuca'),
     headers: {
       'XApiKey': apiKey,
       'Content-Type': 'application/json',
@@ -40,40 +41,42 @@ Future<void> TraerDatos(String codigopo, context) async {
   );
   final decodedJson = jsonDecode(response.body);
   final data = decodedJson["data"];
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var duca_Id = data[0]['duca_Id'];
+  prefs.setInt('duca_Id', duca_Id);
 
   if (data.length > 0) {
-    print('data after search $data');
-
-    final response2 = await http.get(
-      Uri.parse(
-          '${apiUrl}OrdenCompraDetalles/DibujarDetalles?orco_Codigo=$codigopo'
-      ),
-      headers: {
-        'XApiKey': apiKey,
-        'Content-Type': 'application/json',
-      },
-    );
-
-    final decodedJson2 = jsonDecode(response2.body);
-    final detalles = decodedJson2["data"];
-
-    print('data after search detalles $detalles');
-
     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => POTrackingScreen(data: data, detalles: detalles,),
-      )
-    );
-  } else{
+        context,
+        MaterialPageRoute(
+          builder: (context) => Duca_Found_Screen(data: data),
+        ));
+  } else {
     CherryToast.warning(
-        title: const Text('El código no es válido',
-            style: TextStyle(color: Colors.white)))
-    .show(context);
+            title: const Text('El código no es válido',
+                style: TextStyle(color: Colors.white)))
+        .show(context);
   }
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
+Future<void> TraerDatosById(int Id_Duca, context) async {
+  final response = await http.post(
+    Uri.parse('${apiUrl}Duca/Listar_ById?id=$Id_Duca'),
+    headers: {
+      'XApiKey': apiKey,
+      'Content-Type': 'application/json',
+    },
+  );
+  final decodedJson = jsonDecode(response.body);
+  final data = decodedJson["data"];
+  String NoDuca = data[0]['duca_No_Duca'];
+
+  if (data.length > 0) {
+    TraerDatos(NoDuca, context);
+  }
+}
+
+class _DucasScreenState extends State<DucasScreen> {
   int _selectedIndex = 0;
   final _screens = [
     TapsProduccion(),
@@ -86,18 +89,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
     Imagen();
   }
 
-    String searchValue = '';
+  String searchValue = '';
 
-    void updatedText (val){
-      setState((){
-        searchValue = val;
-      });
-    }
+  void updatedText(val) {
+    setState(() {
+      searchValue = val;
+    });
+  }
 
   Widget build(BuildContext context) {
-
     return Scaffold(
-      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         title: const Image(
           height: 35,
@@ -188,7 +189,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               child: Container(
                 alignment: Alignment.center,
                 child: Text(
-                  "Rastrear de la Orden de Compra",
+                  "Búsqueda de DUCA",
                   style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
@@ -207,7 +208,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      label: Text("Ingrese el código de P.O"),
+                      label: Text("Ingrese el Número de DUCA"),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -269,11 +270,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     ),
                     onPressed: () {
                       Navigator.push(
-                        context, 
-                        MaterialPageRoute(
-                          builder: (context) => const   QRScannerScreen(),
-                        )
-                      );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DucaQRScannerScreen(),
+                          ));
                     },
                     icon: Icon(Icons.qr_code),
                     label: Text(

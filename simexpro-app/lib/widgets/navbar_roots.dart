@@ -5,12 +5,15 @@ import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
+import 'package:simexpro/screens/rastreo_aduana.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:simexpro/widgets/taps_Aduana.dart';
 
 import '../screens/historial_screen_Aduana.dart';
 import '../screens/ordertracking/orders_screen.dart';
+import 'package:simexpro/screens/deva_screen.dart';
+import 'package:simexpro/screens/DUCA/duca_screen.dart';
 
 enum MenuItem { item1, item2 }
 
@@ -19,13 +22,12 @@ class NavBarRoots extends StatefulWidget {
   State<NavBarRoots> createState() => _NavBarRootsState();
 }
 
-
-
 class _NavBarRootsState extends State<NavBarRoots> {
-
+bool esAduana1 = false;
   int _selectedIndex = 0;
   List<Widget> _screens = [];
-
+  String imagenperfil = '';
+  String username = '';
   @override
   void initState() {
     super.initState();
@@ -33,17 +35,19 @@ class _NavBarRootsState extends State<NavBarRoots> {
   }
 
 
-  Future<void> Imagen() async {
+   Future<void> Imagen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     image = prefs.getString('image');
+    imagenperfil = image;
     bool esAduana = prefs.getBool('esAduana');
-
+    esAduana1 = esAduana;
+    username = prefs.getString('username');
     setState(() {
       if (esAduana) {
       _screens = [
         GraficasAduanas(), // Usa la pantalla relacionada con la aduana
         historialAduanaScreen(), // Modifica esta línea a la pantalla de historial relacionada con la aduana
-        TimelineScreen(),
+        TimelineAduanaScreen(),
         const OrdersScreen(),
       ];
     } else {
@@ -143,11 +147,6 @@ class _NavBarRootsState extends State<NavBarRoots> {
                   ],
                   backgroundColor: Color.fromRGBO(17, 24, 39, 1),
                   //elevation: 50.0,
-                  leading: IconButton(
-                    icon: const Icon(Icons.menu),
-                    tooltip: 'Menú',
-                    onPressed: () {},
-                  ),
                   //systemOverlayStyle: SystemUiOverlayStyle.light,
                 )
               : null,
@@ -180,6 +179,125 @@ class _NavBarRootsState extends State<NavBarRoots> {
               ],
             ),
           ),
+          drawer: Drawer(
+            backgroundColor: Color.fromRGBO(17, 24, 39, 1),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                // DrawerHeader(
+                //   child: Container(
+                //     padding: EdgeInsets.only(right: 30, left: 30), 
+                //     child: Image.network('https://i.ibb.co/HgdBM0r/slogan.png')
+                //   ),
+                //   decoration: BoxDecoration(
+                //     color: Color.fromRGBO(17, 24, 39, 1),
+                //   ),
+                // ),
+                SizedBox(height: 10),
+                Image.network('https://i.ibb.co/HgdBM0r/slogan.png', height: 50),
+                SizedBox(height: 20),
+                CircleAvatar(
+                  radius: 100,
+                  backgroundImage: NetworkImage(imagenperfil),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(username, style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w700)),
+                ),
+                SizedBox(height: 20),
+                // Ink.image(
+                //   image: NetworkImage(imagenperfil),
+                //   fit: BoxFit.cover,
+                //   width: 170,
+                //   height: 170,
+                // ),
+                Column(
+                  children: [
+                    ListTile(
+                       leading: Icon(Icons.person, color: Colors.white),
+                      title: Text(
+                        'Perfil',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                        ));
+                      },
+                    ),
+                  ],
+                ),
+                esAduana1
+                ? Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.document_scanner, color: Colors.white),
+                      title: Text(
+                        'Rastreo de declaraciones de valor',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DevaScreen(),
+                        ));
+                      },
+                    ),
+                    ListTile(
+                       leading: Icon(Icons.edit_document, color: Colors.white),
+                      title: Text(
+                        'Rastreo de ducas',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DucasScreen(),
+                        ));
+                      },
+                    )
+                  ],
+                )
+                : Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.precision_manufacturing_rounded, color: Colors.white),
+                      title: Text(
+                        'Rastreo de máquinas',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MaquinasScreen(),
+                        ));
+                      },
+                    ),
+                    ListTile(
+                       leading: Icon(Icons.shopping_bag_rounded, color: Colors.white),
+                      title: Text(
+                        'Rastreo de órdenes de compra',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OrdersScreen(),
+                        ));
+                      },
+                    )
+                  ],
+                ),
+              ],
+            ),
+          )
         ),
     );
   }

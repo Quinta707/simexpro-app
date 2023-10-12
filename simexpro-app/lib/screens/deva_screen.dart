@@ -17,11 +17,11 @@ import 'package:http/http.dart' as http;
 
 import '../../api.dart';
 
-class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({Key? key}) : super(key: key);
+class DevaScreen extends StatefulWidget {
+  const DevaScreen({Key? key}) : super(key: key);
 
   @override
-  _OrdersScreenState createState() => _OrdersScreenState();
+  _DevaScreenState createState() => _DevaScreenState();
 }
 
 Future<void> Imagen() async {
@@ -73,7 +73,7 @@ Future<void> TraerDatos(String codigopo, context) async {
   }
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
+class _DevaScreenState extends State<DevaScreen> {
   int _selectedIndex = 0;
   final _screens = [
     TapsProduccion(),
@@ -97,7 +97,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         title: const Image(
           height: 35,
@@ -188,7 +187,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               child: Container(
                 alignment: Alignment.center,
                 child: Text(
-                  "Rastrear de la Orden de Compra",
+                  "Rastrear la Declaración de Valor",
                   style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
@@ -207,7 +206,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      label: Text("Ingrese el código de P.O"),
+                      label: Text("Ingrese el código de la declaración de valor"),
                     ),
                   ),
                   SizedBox(height: 20),
