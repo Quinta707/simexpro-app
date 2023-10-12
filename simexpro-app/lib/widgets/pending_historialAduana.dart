@@ -142,6 +142,7 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
           ),
           SizedBox(height: 16),
           ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
             itemBuilder: (context, index) {
@@ -176,145 +177,117 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
     });
   }
 
-  Widget buildCard(OrderData order) {
-    return Container(
-        margin: EdgeInsets.only(bottom: 16.0),
-        padding: EdgeInsets.symmetric(vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 4,
-              spreadRadius: 2,
-            ),
-          ],
+Widget buildCard(OrderData order) {
+  return Container(
+    margin: EdgeInsets.only(bottom: 16.0),
+    padding: EdgeInsets.symmetric(vertical: 5),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 4,
+          spreadRadius: 2,
         ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
+      ],
+    ),
+    child: SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ListTile(
+            title: Text(
+              "Deva #${order.id}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Text(order.codigo),
+            trailing: SizedBox(
+              width: 100,
+              height: 25,
+              child: Image.network(
+                "https://i.ibb.co/9T4ST2V/pendiente.png",
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Divider(
+              thickness: 1,
+              height: 20,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ListTile(
-                title: Text(
-                  "Deva #${order.id}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(order.fechaEmision),
-                trailing: SizedBox(
-                  width: 100,
-                  height: 25,
-                  child: Image.network(
-                    "https://i.ibb.co/9T4ST2V/pendiente.png",
-                    fit: BoxFit
-                        .contain, // Ajusta la imagen para que cubra el espacio
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Divider(
-                  // color: Colors.black,
-                  thickness: 1,
-                  height: 20,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_month_outlined,
-                        color: Colors.black54,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        order.fechaEmision,
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_month,
-                        color: Colors.black54,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        order.fechaLimite,
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        "Pendiente",
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('ordercodigo', order.codigo);
-                      prefs.setString('orderid', order.id.toString());
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Historial_detallesAduana_Screen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 150,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(87, 69, 223, 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Ver detalles",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
+              buildInfoRow(Icons.battery_0_bar, order.codigo),
+              buildInfoRow(Icons.calendar_month, order.fechaLimite),
+              buildInfoRow(null, "Pendiente"),
             ],
           ),
-        ));
-  }
+          SizedBox(height: 15),
+          Center(
+            child: InkWell(
+              onTap: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString('ordercodigo', order.codigo);
+                prefs.setString('orderid', order.id.toString());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Historial_detallesAduana_Screen(),
+                  ),
+                );
+              },
+              child: Container(
+                width: 150,
+                padding: EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(87, 69, 223, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    "Ver detalles",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 15),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget buildInfoRow(IconData? icon, String text) {
+  return Row(
+    children: [
+      if (icon != null) ...[
+        Icon(
+          icon,
+          color: Colors.black54,
+        ),
+        SizedBox(width: 5),
+      ],
+      Text(
+        text,
+        style: TextStyle(
+          color: Colors.black54,
+        ),
+      ),
+    ],
+  );
+}
+
 }
