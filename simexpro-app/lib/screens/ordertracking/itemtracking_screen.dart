@@ -559,10 +559,11 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                                         // title: const Text("Random title"),
                                                         content: ConstrainedBox(
                                                           constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
-                                                          // child: Flexible(
-                                                            // height: double.maxFinite,
+                                                          
+                                                          child: SizedBox(
+                                                            width: double.maxFinite,
                                                             child: buildDetallesProcesos(true)
-                                                          // )
+                                                          )
                                                         ),
                                                         elevation: 24.0,
                                                         shape: const RoundedRectangleBorder(
