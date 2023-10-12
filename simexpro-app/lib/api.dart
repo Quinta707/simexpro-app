@@ -1,6 +1,7 @@
 
 //String apiUrl= 'https://practicaacademia.somee.com/api/';
 
+//String apiUrl= 'https://practicaacademia.somee.com/api/';
 // String apiUrl= 'https://localhost:44380/api/';
 String apiUrl= 'https://practicaacademia.somee.com/api/';
 
