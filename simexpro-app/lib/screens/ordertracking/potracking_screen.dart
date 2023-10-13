@@ -244,13 +244,10 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                         height: 20.0 / 2,
                         ),
                         const SizedBox(width: 7),
-                        Positioned(
-                          // right: 9.0,
-                          child: Text(
-                            elementos.text,
-                            style: const TextStyle(fontSize: 11),
-                          ),
-                        )
+                        Text(
+                          elementos.text,
+                          style: const TextStyle(fontSize: 11),
+                        ),
                       ],
                     ),
                   ),
