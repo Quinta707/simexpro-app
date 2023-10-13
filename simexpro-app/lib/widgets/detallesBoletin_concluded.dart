@@ -27,15 +27,16 @@ class DetalleData2 {
 }
 
 class Detalles {
-  final int boen_Id;
+  final int bode_Id;
   final String bode_Concepto;
-
-
-
+  final String bode_TipoObligacion;
+  final int bode_CuentaPA01;
 
   Detalles({
-    required this.boen_Id,
+    required this.bode_Id,
     required this.bode_Concepto,
+    required this.bode_TipoObligacion,
+    required this.bode_CuentaPA01,
 
 
    
@@ -43,8 +44,10 @@ class Detalles {
 
   factory Detalles.fromJson(Map<String, dynamic> json) {
     return Detalles(
-      boen_Id: json['boen_Id'],
+      bode_Id: json['bode_Id'],
       bode_Concepto: json['bode_Concepto'],
+      bode_TipoObligacion: json['bode_TipoObligacion'],
+      bode_CuentaPA01: json['bode_CuentaPA01'],
 
 
     );
@@ -52,8 +55,10 @@ class Detalles {
 
   Map<String, dynamic> toJson() {
     return {
-      'boen_Id': boen_Id,
+      'bode_Id': bode_Id,
       'bode_Concepto': bode_Concepto,
+      'bode_TipoObligacion': bode_TipoObligacion,
+      'bode_CuentaPA01': bode_CuentaPA01,
 
 
     };
@@ -95,13 +100,15 @@ Future<List<Detalles>> fetchData2() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
     var BoletinId = prefs.getString('BoletinId');
 
-  final response = await http.get(
-    Uri.parse('${apiUrl}Duca/DucaHistorial'),
+
+ final response = await http.get(
+    Uri.parse('${apiUrl}BoletinPago/ListarHistorial'),
     headers: {
       'XApiKey': apiKey,
       'Content-Type': 'application/json',
     },
   );
+
 
   if (response.statusCode == 200) {
     final decodedJson = jsonDecode(response.body);
@@ -109,7 +116,7 @@ Future<List<Detalles>> fetchData2() async {
 
     final orders = dataList.map((data) {
       return DetalleData2(
-        id: data['duca_Id'],
+        id: data['boen_Id'],
         detalles: data['detalles'],
       );
     }).toList();
@@ -131,6 +138,8 @@ Future<List<Detalles>> fetchData2() async {
           detalles = detallesList;
           filtereddetalles = detalles;
       });
+
+
    
     return detallesList;
   } else {
@@ -195,10 +204,10 @@ Future<List<Detalles>> fetchData2() async {
     setState(() {
       filtereddetalles = detalles
           .where((detalle) =>
-              detalle.boen_Id.toString()
+              detalle.bode_Id.toString()
                   .toLowerCase()
                   .contains(searchText.toLowerCase()) ||
-              detalle.boen_Id.toString()
+              detalle.bode_Concepto.toString()
                   .toLowerCase()
                   .contains(searchText.toLowerCase()))
           .toList();
@@ -217,12 +226,12 @@ Future<List<Detalles>> fetchData2() async {
           initiallyExpanded: false,
           title: ListTile(
             title: Text(
-              "Detalle #${detalles.boen_Id.toString()}",
+              "Detalle #${detalles.bode_Id.toString()}",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            subtitle: Text(detalles.bode_Concepto),
+            subtitle: Text( "Concepto: #${detalles.bode_Concepto.toString()}",),
             
           ),
           children: [
@@ -231,8 +240,8 @@ Future<List<Detalles>> fetchData2() async {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
-                  // _buildDataRow("Aduana Ingreso:",detalles.adua_IngresoNombre.toString()),
-                  // _buildDataRow("Aduana Despacho:", detalles.adua_DespachoNombre),
+                   _buildDataRow("Tipo Obligación:",detalles.bode_TipoObligacion.toString()),
+                   _buildDataRow("Cuenta Pa:", detalles.bode_CuentaPA01.toString()),
                   // _buildDataRow("Declaración Mercancias:", detalles.deva_DeclaracionMercancia.toString()),           
                   // _buildDataRow("Fecha Aceptación:", (detalles.deva_FechaAceptacion.substring(0, detalles.deva_FechaAceptacion.indexOf('T')))),
                   // _buildDataRow("Pago Efectuado:", (detalles.deva_PagoEfectuado == false ? "No" : "Si" )),
