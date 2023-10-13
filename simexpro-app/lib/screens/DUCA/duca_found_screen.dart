@@ -66,6 +66,7 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.16;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.70;
 
+  print(widget.data);
     return Scaffold(
         appBar: AppBar(
           title: const Image(
@@ -470,7 +471,7 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
                                         HeadersInfoWidget(
                                           title:
                                               "Número de dispositivo de seguridad:",
-                                          text: widget.data[0][
+                                           text: widget.data[0][
                                                       "tran_NumDispositivoSeguridad"]
                                                   .toString() ??
                                               "N/D",

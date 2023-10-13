@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simexpro/screens/DUCA/duca_screen.dart';
+import 'package:simexpro/screens/deva_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
+import 'package:simexpro/screens/maquinas_screen.dart';
+import 'package:simexpro/screens/ordertracking/orders_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 
 import 'package:http/http.dart' as http;
@@ -19,10 +23,7 @@ class TapsProduccion extends StatefulWidget {
   State<TapsProduccion> createState() => TabBarDemo();
 }
 
-Future<void> Imagen() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  imagen = prefs.getString('image');
-}
+
 
 // Función para generar un color aleatorio
 charts.Color getRandomColor() {
@@ -35,10 +36,10 @@ charts.Color getRandomColor() {
 
 class TabBarDemo extends State<TapsProduccion> {
   num Conteo = 0;
-  var ConteoMesPendiente = 0;
-  var ConteoMesFinalizado = 0;
-  var ConteoSemanaPendiente = 0;
-  var ConteoSemanaFinalizado = 0;
+  num ConteoMesPendiente = 0;
+  num ConteoMesFinalizado = 0;
+  num ConteoSemanaPendiente = 0;
+  num ConteoSemanaFinalizado = 0;
 
   num GananciasSemanales = 0;
   num GananciasMensuales = 0;
@@ -48,6 +49,18 @@ class TabBarDemo extends State<TapsProduccion> {
 
   List<BarChartData> data = [];
   List<Clientes> ClientesData = [];
+
+  bool esAduana1 = false;
+  String imagenperfil = '';
+  String username = '';
+
+  Future<void> Imagen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    imagen = prefs.getString('image');
+    imagenperfil = imagen;
+    esAduana1 = prefs.getBool('esAduana');
+    username = prefs.getString('username');
+  }
 
   //PETICION PARA OPTENER LOS DATOS DE LA GRAFICA (MODULOS MAS EFICIENTES)
   Future<void> fetchDataFromAPI() async {
@@ -134,7 +147,7 @@ class TabBarDemo extends State<TapsProduccion> {
   Future<void> OrdenesMes() async {
     try {
       final response = await http.get(
-        Uri.parse('${apiUrl}Graficas/OrdenenesEntregadasPendientes_Mensual'),
+        Uri.parse('${apiUrl}Graficas/ContadorOrdenesCompraPorEstado'),
         headers: {
           'XApiKey': apiKey,
         },
@@ -144,7 +157,7 @@ class TabBarDemo extends State<TapsProduccion> {
 
       for (var item in dataMes) {
         String avance = item['orco_Avance'];
-        int conteo = item['orco_Conteo'];
+        num conteo = item['orco_Conteo'];
 
         setState(() {
           if (avance == "Terminado") {
@@ -173,7 +186,7 @@ class TabBarDemo extends State<TapsProduccion> {
 
       for (var item in dataMes) {
         String avance = item['orco_Avance'];
-        int conteo = item['orco_Conteo'];
+        num conteo = item['orco_Conteo'];
 
         setState(() {
           if (avance == "Terminado") {
@@ -470,12 +483,6 @@ class TabBarDemo extends State<TapsProduccion> {
               )
             ],
             backgroundColor: Color.fromRGBO(17, 24, 39, 1),
-            //elevation: 50.0,
-            leading: IconButton(
-              icon: const Icon(Icons.menu),
-              tooltip: 'Menú',
-              onPressed: () {},
-            ),
             bottom: const TabBar(
               tabs: [
                 Tab(icon: Icon(Icons.auto_graph_sharp)),
@@ -485,6 +492,110 @@ class TabBarDemo extends State<TapsProduccion> {
               ],
             ),
             //systemOverlayStyle: SystemUiOverlayStyle.light,
+          ),
+          drawer: Drawer(
+            backgroundColor: Color.fromRGBO(17, 24, 39, 1),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                SizedBox(height: 50),
+                Image.network('https://i.ibb.co/HgdBM0r/slogan.png', height: 50),
+                SizedBox(height: 20),
+                CircleAvatar(
+                  radius: 80,
+                  backgroundImage: NetworkImage(imagenperfil),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(username, style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w700)),
+                ),
+                SizedBox(height: 20),
+                Column(
+                  children: [
+                    ListTile(
+                       leading: Icon(Icons.person, color: Colors.white),
+                      title: Text(
+                        'Perfil',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                        ));
+                      },
+                    ),
+                  ],
+                ),
+                esAduana1
+                ? Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.document_scanner, color: Colors.white),
+                      title: Text(
+                        'Rastreo de declaraciones de valor',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DevaScreen(),
+                        ));
+                      },
+                    ),
+                    ListTile(
+                       leading: Icon(Icons.edit_document, color: Colors.white),
+                      title: Text(
+                        'Rastreo de ducas',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DucasScreen(),
+                        ));
+                      },
+                    )
+                  ],
+                )
+                : Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.precision_manufacturing_rounded, color: Colors.white),
+                      title: Text(
+                        'Rastreo de máquinas',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MaquinasScreen(),
+                        ));
+                      },
+                    ),
+                    ListTile(
+                       leading: Icon(Icons.shopping_bag_rounded, color: Colors.white),
+                      title: Text(
+                        'Rastreo de órdenes de compra',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      onTap: () {
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OrdersScreen(),
+                        ));
+                      },
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
           body: TabBarView(
             children: [
@@ -582,10 +693,10 @@ class TabBarDemo extends State<TapsProduccion> {
                           ],
                         ),
                       ),
-                       SizedBox(height: 15),
+                      SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 111,
+                        height: 120,
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         padding: EdgeInsets.symmetric(vertical: 5),
                         decoration: BoxDecoration(
@@ -759,8 +870,8 @@ class TabBarDemo extends State<TapsProduccion> {
                                           children: [
                                             Text(
                                               ConteoMesPendiente == 1
-                                                  ? ' ${ConteoMesPendiente} Órden Pendiente'
-                                                  : '${ConteoMesPendiente} Órdenes Pendientes',
+                                                  ? ' ${ConteoMesPendiente} Órden '
+                                                  : '${ConteoMesPendiente} Órdenes ',
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 color: Color.fromARGB(
@@ -776,7 +887,7 @@ class TabBarDemo extends State<TapsProduccion> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 5),
                           Expanded(
                             child: Container(
                               width: 165,
@@ -834,8 +945,8 @@ class TabBarDemo extends State<TapsProduccion> {
                                           children: [
                                             Text(
                                               ConteoMesFinalizado == 1
-                                                  ? ' ${ConteoMesFinalizado} Órden Completada'
-                                                  : '${ConteoMesFinalizado} Órdenes Completadas',
+                                                  ? ' ${ConteoMesFinalizado} Órden '
+                                                  : '${ConteoMesFinalizado} Órdenes ',
                                               style: TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 255, 255, 255),
@@ -946,9 +1057,9 @@ class TabBarDemo extends State<TapsProduccion> {
                                         Row(
                                           children: [
                                             Text(
-                                              ConteoMesPendiente == 1
-                                                  ? ' ${ConteoSemanaPendiente} Órden Pendiente'
-                                                  : '${ConteoSemanaPendiente} Órdenes Pendientes',
+                                              ConteoSemanaPendiente == 1
+                                                  ? ' ${ConteoSemanaPendiente} Órden'
+                                                  : '${ConteoSemanaPendiente} Órdenes',
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 color: Color.fromARGB(
@@ -964,7 +1075,7 @@ class TabBarDemo extends State<TapsProduccion> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 5),
                           Expanded(
                             child: Container(
                               width: 167,
@@ -1021,9 +1132,9 @@ class TabBarDemo extends State<TapsProduccion> {
                                         Row(
                                           children: [
                                             Text(
-                                              ConteoMesFinalizado == 1
-                                                  ? ' ${ConteoSemanaFinalizado} Órden Completada'
-                                                  : '${ConteoSemanaFinalizado} Órdenes Completadas',
+                                              ConteoMesFinalizado == "1"
+                                                  ? ' ${ConteoSemanaFinalizado} Órden'
+                                                  : '${ConteoSemanaFinalizado} Órdenes',
                                               style: TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 255, 255, 255),
@@ -1087,7 +1198,7 @@ class TabBarDemo extends State<TapsProduccion> {
                       SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 145,
+                        height: 155,
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
@@ -1180,7 +1291,7 @@ class TabBarDemo extends State<TapsProduccion> {
                       SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 145,
+                        height: 155,
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
@@ -1215,7 +1326,7 @@ class TabBarDemo extends State<TapsProduccion> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "GANANCIAS DE ${MesActual.toUpperCase()}",
+                                        "GANANCIAS  DE \n ${MesActual.toUpperCase()}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 20,
@@ -1269,7 +1380,7 @@ class TabBarDemo extends State<TapsProduccion> {
                       SizedBox(height: 15),
                       Container(
                         width: 385,
-                        height: 145,
+                        height: 155,
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         padding: EdgeInsets.symmetric(vertical: 20),
                         decoration: BoxDecoration(
@@ -1304,7 +1415,7 @@ class TabBarDemo extends State<TapsProduccion> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       const Text(
-                                        "GANANCIA DE LA SEMANA",
+                                        "GANANCIA  DE  LA  SEMANA",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 20,

@@ -244,13 +244,10 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                         height: 20.0 / 2,
                         ),
                         const SizedBox(width: 7),
-                        Positioned(
-                          // right: 9.0,
-                          child: Text(
-                            elementos.text,
-                            style: const TextStyle(fontSize: 11),
-                          ),
-                        )
+                        Text(
+                          elementos.text,
+                          style: const TextStyle(fontSize: 11),
+                        ),
                       ],
                     ),
                   ),
@@ -264,6 +261,7 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
                     height: 200,
                     child: GridView.count(
                       // shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.all(20),
                       crossAxisCount: 2,
                       crossAxisSpacing: 10.0,
