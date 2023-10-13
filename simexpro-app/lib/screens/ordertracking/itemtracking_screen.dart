@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:open_file/open_file.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -107,15 +108,23 @@ Widget buildDetallesProcesos(isScrollable){
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        Text("Orden de proceso: #${mappedFoundDetalles[index]["ensa_Id"]}\n"
-            "Cantidad: ${mappedFoundDetalles[index]["ensa_Cantidad"]}\n"
-            "Empleado encargado: ${mappedFoundDetalles[index]["empl_NombreCompleto"]}\n"
-            "Fecha inicio: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaInicio"]) as DateTime)}\n"
-            "Fecha final: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaLimite"]) as DateTime)}\n"
-            "Módulo: ${mappedFoundDetalles[index]["modu_Nombre"]}",
-            style: const TextStyle(
-              height: 1.25
-            ),
+        // Text("Orden de proceso: #${mappedFoundDetalles[index]["ensa_Id"]}\n"
+        //     "Cantidad: ${mappedFoundDetalles[index]["ensa_Cantidad"]}\n"
+        //     "Empleado encargado: ${mappedFoundDetalles[index]["empl_NombreCompleto"]}\n"
+        //     "Fecha inicio: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaInicio"]) as DateTime)}\n"
+        //     "Fecha final: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaLimite"]) as DateTime)}\n"
+        //     "Módulo: ${mappedFoundDetalles[index]["modu_Nombre"]}",
+        //     style: const TextStyle(
+        //       height: 1.25
+        //     ),
+        // ),
+        Html(
+          data: "<span><b>Orden de proceso: </b>${mappedFoundDetalles[index]["ensa_Id"]}</span><br>"
+                "<span><b>Cantidad: </b>${mappedFoundDetalles[index]["ensa_Cantidad"]}</span><br>"
+                "<span><b>Empleado encargado: </b>${mappedFoundDetalles[index]["empl_NombreCompleto"]}</span><br>"
+                "<span><b>Fecha inicio: </b>${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaInicio"]) as DateTime)}</span><br>"
+                "<span><b>Fecha final: </b>${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaLimite"]) as DateTime)}</span><br>"
+                "<span><b>Módulo: </b>${mappedFoundDetalles[index]["modu_Nombre"]}</span>",
         ),
         if (index < foundDetalles.length - 1) const Divider(
           color: Colors.black,
