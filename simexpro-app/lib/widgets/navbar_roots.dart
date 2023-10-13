@@ -152,7 +152,8 @@ class _NavBarRootsState extends State<NavBarRoots> {
               : null,
           backgroundColor: Colors.white,
           body: _screens[_selectedIndex],
-          bottomNavigationBar: Container(
+          bottomNavigationBar: _selectedIndex != 0 ?
+          Container(
             height: 80,
             child: BottomNavigationBar(
               backgroundColor: Color.fromRGBO(17, 24, 39, 1),
@@ -178,7 +179,8 @@ class _NavBarRootsState extends State<NavBarRoots> {
                     icon: Icon(Icons.timelapse_outlined), label: "Rastreo"),
               ],
             ),
-          ),
+          )
+          : null,
           drawer: Drawer(
             backgroundColor: Color.fromRGBO(17, 24, 39, 1),
             child: ListView(
