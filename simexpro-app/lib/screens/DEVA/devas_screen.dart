@@ -30,42 +30,54 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-Future<void> TraerDatos(String codigoDEVA, context) async {
-  final response = await http.get(
-    Uri.parse('${apiUrl}Declaracion_Valor/Listar'),
-    headers: {
-      'XApiKey': apiKey,
-      'Content-Type': 'application/json',
-    },
-  );
-  final decodedJson = jsonDecode(response.body);
-
-  final data = decodedJson["data"];
-
-  final foundItem = data.firstWhere(
-    (item) => item['deva_Id'] == codigoDEVA,
-    orElse: () => null,
-  );
-
-  if (foundItem != null) {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var deva_Id = foundItem['deva_Id'];
-    prefs.setInt('deva_Id', deva_Id);
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Deva_Found_Screen(data: foundItem),
-      ),
+Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
+  try {
+    final response = await http.get(
+      Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDevaId?id=$codigoDEVA'),
+      headers: {
+        'XApiKey': apiKey,
+        'Content-Type': 'application/json',
+      },
     );
-  } else {
-    CherryToast.warning(
-      title: const Text('El código no es válido',
-        style: TextStyle(color: Colors.white),
-      ),
-    ).show(context);
+
+    if (response.statusCode == 200) {
+      final decodedJson = jsonDecode(response.body);
+      final data = decodedJson["data"];
+      
+      if (data.isNotEmpty) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var deva_Id = data[0]['deva_Id']; 
+        prefs.setInt('deva_Id', deva_Id);
+        
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Deva_Found_Screen(data: data),
+          ),
+        );
+      } else {
+        CherryToast.warning(
+          title: const Text('El código no es válido',
+            style: TextStyle(color: Colors.white),
+          ),
+        ).show(context);
+      }
+    } else {
+       CherryToast.error(
+          title: const Text('ha ocurrido un error de solicitud',
+            style: TextStyle(color: Colors.white),
+          ),
+        ).show(context);
+    }
+  } catch (error) {
+      CherryToast.warning(
+          title: const Text('ha ocurrido un error',
+            style: TextStyle(color: Colors.white),
+          ),
+        ).show(context);
   }
 }
+
 
 
 

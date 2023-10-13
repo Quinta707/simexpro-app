@@ -1,11 +1,10 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:simexpro/screens/profile_screen.dart';
-import 'package:simexpro/widgets/panel_widget.dart';
 import 'package:simexpro/widgets/panelduca_widget.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -42,6 +41,7 @@ class Elementos {
   Elementos();
 }
 
+// ignore: camel_case_types
 class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
     with SingleTickerProviderStateMixin {
   var elementos = Elementos();
@@ -185,7 +185,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                       BorderRadius.all(Radius.circular(18)),
                                 ),
                                 child: Text(
-                                  "DEVA: ${widget.data["deva_Id"]}",
+                                  "DEVA: ${widget.data[0]["deva_Id"]}",
                                 ),
                               ),
                               const SizedBox(height: 5),
@@ -199,99 +199,96 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                       crossAxisSpacing: 10.0,
                                       childAspectRatio: 3 / 1,
                                       children: [
-                                        HeadersInfoWidget(
-                                          title: "No° Correlativo:",
-                                          text: widget.data[
-                                                  "deva_Id"] ??
-                                              "N/D",
-                                        ),
+                                     HeadersInfoWidget(
+                                        title: "No° Correlativo:",
+                                        text: widget.data[0]["deva_Id"].toString() ?? "N/A",
+                                      ),
+
                                         HeadersInfoWidget(
                                           title: "Regimen Aduanero:",
-                                          text: widget.data
-                                                  ["deva_Id"] ??
-                                              "N/D",
+                                          text: widget.data[0]["deva_Id"].toString() ?? "N/A",
                                         ),
-                                        HeadersInfoWidget(
+                                       /* HeadersInfoWidget(
                                           title: "Fecha de Vencimiento:",
-                                          text: (widget.data[
+                                          text: (widget.data[0][
                                                       "deva_Id"] !=
                                                   null)
                                               ? format.format(DateTime.tryParse(
-                                                      widget.data[
+                                                      widget.data[0][
                                                           "deva_Id"])
                                                   as DateTime)
                                               : "N/D",
-                                        ),
-                                        HeadersInfoWidget(
+                                        ),*/
+                                       /* HeadersInfoWidget(
                                           title: "Fecha de Aceptación:",
-                                          text: (widget.data[
+                                          text: (widget.data[0][
                                                       "deva_Id"] !=
                                                   null)
                                               ? format.format(DateTime.tryParse(
-                                                      widget.data[
+                                                      widget.data[0][
                                                           "deva_Id"])
                                                   as DateTime)
                                               : "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Pais de Procedencia:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Pais de Destino:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Lugar Embarque:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Lugar Desembarque:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Aduana de Registro:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Aduana de Salida:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Aduana de Ingreso:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Aduana de Destino:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Manifiesto:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Titulo:",
-                                          text: widget.data["deva_Id"] ??
+                                          text: widget.data[0]["deva_Id"] ??
                                               "N/D",
-                                        ),
+                                        ),*/
                                       ],
                                     ),
                                   ),
@@ -317,7 +314,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                       BorderRadius.all(Radius.circular(18)),
                                 ),
                                 child: Text(
-                                  "DUCA: ${widget.data["deva_Id"]}",
+                                  "DUCA: ${widget.data[0]["deva_Id"].toString() ?? "N/A"}",
                                 ),
                               ),
                               const SizedBox(height: 20),
@@ -340,23 +337,21 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                       children: [
                                         HeadersInfoWidget(
                                           title: "Código Declarante",
-                                          text: widget.data
-                                                  ["deva_Id"] ??
-                                              "N/D",
+                                         text: widget.data[0]["deva_Id"].toString() ?? "N/A",
                                         ),
-                                        HeadersInfoWidget(
+                                       /* HeadersInfoWidget(
                                           title:
                                               "Cliente o Razón Social Declarante:",
-                                          text: widget.data[
+                                          text: widget.data[0][
                                                   "deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Dpminio Fiscal",
-                                          text: widget.data[
+                                          text: widget.data[0][
                                                   "deva_Id"] ??
                                               "N/D",
-                                        ),
+                                        ),*/
                                       ],
                                     ),
                                   ),
@@ -376,28 +371,26 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                       children: [
                                         HeadersInfoWidget(
                                           title: "No° Idenficación Proveedor",
-                                          text: widget.data[
-                                                  "deva_Id"] ??
-                                              "N/D",
+                                        text: widget.data[0]["deva_Id"].toString() ?? "N/A",
                                         ),
-                                        HeadersInfoWidget(
+                                       /* HeadersInfoWidget(
                                           title: "Razón Social Proveedor:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "No° de Registro Importador",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Razón Social Importador",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
-                                        ),
+                                        ),*/
                                       ],
                                     ),
                                   ),
@@ -423,7 +416,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                       BorderRadius.all(Radius.circular(18)),
                                 ),
                                 child: Text(
-                                  "DUCA: ${widget.data["deva_Id"]}",
+                                  "DEVA: ${widget.data[0]["deva_Id"].toString() ?? "N/A"}",
                                 ),
                               ),
                               const SizedBox(height: 20),
@@ -439,61 +432,59 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                       children: [
                                         HeadersInfoWidget(
                                           title: "País de Transporte",
-                                          text: widget.data
-                                                  ["deva_Id"] ??
-                                              "N/D",
+                                         text: widget.data[0]["deva_Id"].toString() ?? "N/A",
                                         ),
-                                        HeadersInfoWidget(
+                                       /* HeadersInfoWidget(
                                           title: "Marca Vehiculo:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Chasis Vehiculo",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Remolque del vehículo",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Cantidad de carga:",
-                                          text: widget.data["deva_Id"]
+                                          text: widget.data[0]["deva_Id"]
                                                   .toString() ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title:
                                               "Número de dispositivo de seguridad:",
-                                          text: widget.data[
+                                          text: widget.data[0][
                                                       "deva_Id"]
                                                   .toString() ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Equipamiento del vehículo:",
-                                          text: widget.data
+                                          text: widget.data[0]
                                                   ["deva_Id"] ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Tamaño del equipamiento:",
-                                          text: widget.data[
+                                          text: widget.data[0][
                                                       "deva_Id"]
                                                   .toString() ??
                                               "N/D",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Tipo de carga",
-                                          text: widget.data["deva_Id"]
+                                          text: widget.data[0]["deva_Id"]
                                                   .toString() ??
                                               "N/D",
-                                        ),
+                                        ),*/
                                       ],
                                     ),
                                   ),
