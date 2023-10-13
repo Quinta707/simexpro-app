@@ -30,7 +30,9 @@ Future<void> fetchData(
       print(response);
       final decodedJson = jsonDecode(response.body);
       final data = decodedJson["data"];
+      print(data);
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('usua_Id', data['usua_Id']);
       prefs.setString('username', data['usua_Nombre']);
       prefs.setString('email', data['empl_CorreoElectronico']);
       prefs.setString('userfullname', data['emplNombreCompleto']);
