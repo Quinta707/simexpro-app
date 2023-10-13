@@ -221,12 +221,58 @@ Widget buildCard(OrderData order) {
               height: 20,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              buildInfoRow(Icons.battery_0_bar, order.codigo),
-              buildInfoRow(Icons.calendar_month, order.fechaLimite),
-              buildInfoRow(null, "Pendiente"),
+               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.battery_0_bar,
+                        color: Colors.black54,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        order.codigo,
+                        style: TextStyle(
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_month,
+                        color: Colors.black54,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        order.fechaLimite,
+                        style: TextStyle(
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                   Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 255, 59, 75),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        "Pendiente",
+                        style: TextStyle(
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+               
             ],
           ),
           SizedBox(height: 15),
