@@ -556,10 +556,9 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                                     showDialog(
                                                       context: context,
                                                       builder: (context) => AlertDialog(
-                                                        // title: const Text("Random title"),
+                                                        title: const Center(child: Text("ÓRDENES DE PROCESO")),
                                                         content: ConstrainedBox(
-                                                          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
-                                                          
+                                                          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.57),
                                                           child: SizedBox(
                                                             width: double.maxFinite,
                                                             child: buildDetallesProcesos(true)
