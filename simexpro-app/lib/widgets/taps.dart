@@ -217,7 +217,7 @@ class TabBarDemo extends State<TapsProduccion> {
         int conteo = item['totalIngresos'];
 
         setState(() {
-          GananciasAnio = conteo;
+          GananciasAnio = conteo + GananciasAnio;
         });
       }
     } catch (error) {
