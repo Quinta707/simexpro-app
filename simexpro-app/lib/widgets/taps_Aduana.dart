@@ -626,7 +626,8 @@ class Graficas extends State<GraficasAduanas> {
               ],
             ),
           ),
-          body: TabBarView(
+          body: _selectedIndex != 0 ?  _screens[_selectedIndex] 
+          : TabBarView(
             children: [
               Card(
                 margin: EdgeInsets.all(10.0), // Margen de la tarjeta
