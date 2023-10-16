@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, prefer_const_literals_to_create_immutables, sort_child_properties_last
+// ignore_for_file: prefer_typing_uninitialized_variables, prefer_const_literals_to_create_immutables, sort_child_properties_last, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -161,7 +161,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
               children: [
                 TabBar(
                   tabs: [
-                    Tab(text: "Declaración de valor"),
+                    Tab(text: "General"),
                     Tab(text: "Más"),
                     Tab(text: "Facturas"),
                   ],
@@ -191,6 +191,14 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                               const SizedBox(height: 5),
                               Column(
                                 children: [
+                                    Text(
+                                    "Información de Adunas",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+
                                   SizedBox(
                                     height: 380,
                                     child: GridView.count(
@@ -198,97 +206,107 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                       crossAxisCount: 2,
                                       crossAxisSpacing: 10.0,
                                       childAspectRatio: 3 / 1,
+
                                       children: [
+                                         HeadersInfoWidget(
+                                        title: "Régimen Aduanero:",
+                                        text: widget.data[0]["regi_Descripcion"] != null
+                                         ? widget.data[0]["regi_Descripcion"].toString() : "N/A",
+                                      ),
+                         
                                      HeadersInfoWidget(
-                                        title: "No° Correlativo:",
-                                        text: widget.data[0]["deva_Id"].toString() ?? "N/A",
+                                        title: "Nombre de Aduana de Ingreso:",
+                                        text: widget.data[0]["adua_IngresoNombre"] != null
+                                        ? widget.data[0]["adua_IngresoNombre"].toString() : "N/A",
+                                      ),
+
+                                      HeadersInfoWidget(
+                                        title: "Código de Aduana de Ingreso:",
+                                        text: widget.data[0]["adua_IngresoCodigo"] != null
+                                        ? widget.data[0]["adua_IngresoCodigo"].toString() : "N/A",
                                       ),
 
                                         HeadersInfoWidget(
-                                          title: "Regimen Aduanero:",
-                                          text: widget.data[0]["deva_Id"].toString() ?? "N/A",
+                                          title: "Nombre de Aduana de despacho:",
+                                          text: widget.data[0]["adua_DespachoNombre"] != null
+                                          ? widget.data[0]["adua_DespachoNombre"].toString() : "N/A",
                                         ),
-                                       /* HeadersInfoWidget(
-                                          title: "Fecha de Vencimiento:",
-                                          text: (widget.data[0][
-                                                      "deva_Id"] !=
-                                                  null)
-                                              ? format.format(DateTime.tryParse(
-                                                      widget.data[0][
-                                                          "deva_Id"])
-                                                  as DateTime)
-                                              : "N/D",
-                                        ),*/
-                                       /* HeadersInfoWidget(
+                                        HeadersInfoWidget(
+                                          title: "Código de Aduana de despacho:",
+                                          text: widget.data[0]["adua_DespachoCodigo"] != null
+                                          ? widget.data[0]["adua_DespachoCodigo"].toString() : "N/A",
+                                        ),
+                                        HeadersInfoWidget(
                                           title: "Fecha de Aceptación:",
                                           text: (widget.data[0][
-                                                      "deva_Id"] !=
+                                                      "deva_FechaAceptacion"] !=
                                                   null)
                                               ? format.format(DateTime.tryParse(
                                                       widget.data[0][
-                                                          "deva_Id"])
+                                                          "deva_FechaAceptacion"])
                                                   as DateTime)
                                               : "N/D",
                                         ),
-                                        HeadersInfoWidget(
-                                          title: "Pais de Procedencia:",
-                                          text: widget.data[0]
-                                                  ["deva_Id"] ??
-                                              "N/D",
+                                          Text(
+                                          "Información del Importador",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
                                         ),
                                         HeadersInfoWidget(
-                                          title: "Pais de Destino:",
-                                          text: widget.data[0]
-                                                  ["deva_Id"] ??
-                                              "N/D",
+                                          title: "Nombre del importador:",
+                                          text: widget.data[0]["impo_Nombre_Raso"] != null
+                                          ? widget.data[0]["impo_Nombre_Raso"].toString() : "N/A",
                                         ),
                                         HeadersInfoWidget(
-                                          title: "Lugar Embarque:",
-                                          text: widget.data[0]
-                                                  ["deva_Id"] ??
-                                              "N/D",
+                                          title: "RTN del Importador:",
+                                          text: widget.data[0]["adua_DespachoCodigo"] != null
+                                           ? widget.data[0]["adua_DespachoCodigo"].toString() : "N/A",
                                         ),
                                         HeadersInfoWidget(
-                                          title: "Lugar Desembarque:",
-                                          text: widget.data[0]
-                                                  ["deva_Id"] ??
-                                              "N/D",
+                                          title: "DNI del Importador :",
+                                          text: widget.data[0]["impo_NumRegistro"] != null
+                                          ? widget.data[0]["impo_NumRegistro"].toString() : "N/A",
                                         ),
                                         HeadersInfoWidget(
-                                          title: "Aduana de Registro:",
-                                          text: widget.data[0]
-                                                  ["deva_Id"] ??
-                                              "N/D",
+                                          title: "Teléfono del Importador :",
+                                          text: widget.data[0]["impo_Telefono"] != null
+                                          ? widget.data[0]["impo_Telefono"].toString() : "N/A",
                                         ),
                                         HeadersInfoWidget(
-                                          title: "Aduana de Salida:",
-                                          text: widget.data[0]
-                                                  ["deva_Id"] ??
-                                              "N/D",
+                                          title: "Correo del Importador :",
+                                          text: widget.data[0]["impo_Correo_Electronico"] != null
+                                          ? widget.data[0]["impo_Correo_Electronico"].toString() : "N/A",
+                                        ),
+                                       HeadersInfoWidget(
+                                          title: "País del Importador :",
+                                          text: widget.data[0]["impo_PaisNombre"] != null
+                                          ? widget.data[0]["impo_PaisNombre"].toString() : "N/A",
+                                        ),
+                                          Text(
+                                          "Información del Intermediario",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                       HeadersInfoWidget(
+                                          title: "Nombre del Intermediario :",
+                                          text: widget.data[0]["int flutter run --no-sound-null-safetye_Nombre_Raso"] != null
+                                          ? widget.data[0]["int flutter run --no-sound-null-safetye_Nombre_Raso"].toString() : "N/A",
                                         ),
                                         HeadersInfoWidget(
-                                          title: "Aduana de Ingreso:",
-                                          text: widget.data[0]
-                                                  ["deva_Id"] ??
-                                              "N/D",
+                                          title: "Correo del Intermediario :",
+                                          text: widget.data[0]["inte_Correo_Electronico"] != null
+                                              ? widget.data[0]["inte_Correo_Electronico"].toString() : "N/A",
                                         ),
-                                        HeadersInfoWidget(
-                                          title: "Aduana de Destino:",
-                                          text: widget.data[0]
-                                                  ["deva_Id"] ??
-                                              "N/D",
-                                        ),
-                                        HeadersInfoWidget(
-                                          title: "Manifiesto:",
-                                          text: widget.data[0]
-                                                  ["deva_Id"] ??
-                                              "N/D",
-                                        ),
-                                        HeadersInfoWidget(
-                                          title: "Titulo:",
-                                          text: widget.data[0]["deva_Id"] ??
-                                              "N/D",
-                                        ),*/
+                                     HeadersInfoWidget(
+                                          title: "Número de Teléfono del intermediario :",
+                                          text: widget.data[0]["inte_Telefono"] != null
+                                              ? widget.data[0]["inte_Telefono"].toString()
+                                              : "N/A",
+                                        ),       
                                       ],
                                     ),
                                   ),
@@ -321,7 +339,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                               Column(
                                 children: [
                                   Text(
-                                    "Cliente o Razón Social",
+                                    "Información del Proveedor",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 12,
@@ -334,11 +352,25 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                       crossAxisCount: 2,
                                       crossAxisSpacing: 10.0,
                                       childAspectRatio: 3 / 1,
-                                      children: [
-                                        HeadersInfoWidget(
-                                          title: "Código Declarante",
-                                         text: widget.data[0]["deva_Id"].toString() ?? "N/A",
+                                      children: [ 
+                                          HeadersInfoWidget(
+                                         title: "Nombre del Proveedor",
+                                          text: widget.data[0]["prov_Nombre_Raso"] != null
+                                              ? widget.data[0]["prov_Nombre_Raso"].toString()
+                                              : "N/A",
+                                        ),   
+                                          HeadersInfoWidget(
+                                         title: "Número de identidad del Proveedor",
+                                          text: widget.data[0]["prov_NumeroIdentificacion"] != null
+                                              ? widget.data[0]["prov_NumeroIdentificacion"].toString()
+                                              : "N/A",
                                         ),
+                                          HeadersInfoWidget(
+                                         title: "Número de identidad del Proveedor",
+                                          text: widget.data[0]["prov_NumeroIdentificacion"] != null
+                                              ? widget.data[0]["prov_NumeroIdentificacion"].toString()
+                                              : "N/A",
+                                        ),    
                                        /* HeadersInfoWidget(
                                           title:
                                               "Cliente o Razón Social Declarante:",
