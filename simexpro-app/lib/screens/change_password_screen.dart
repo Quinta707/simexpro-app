@@ -36,7 +36,7 @@ Future<void> delayFunction(BuildContext context) async {
 
 Future<void> ValidarClaves(BuildContext context, String newpassword) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  final username =  prefs.getString('username');
+  final username =  prefs.getString('usuariotemp');
   final tarea = {
     'usua_Nombre':      username, 
     'usua_Contrasenia': newpassword 
