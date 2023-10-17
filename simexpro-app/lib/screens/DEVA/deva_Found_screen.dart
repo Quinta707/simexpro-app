@@ -534,6 +534,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                       //Tab 3
 
                       SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
                         child: Column(
                           children: [
                             const SizedBox(height: 20),
@@ -554,7 +555,6 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                 // ... Otros widgets que desees mostrar
 
                                 ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: widget.factura.length,
                                   itemBuilder: (context, index) {
@@ -566,7 +566,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                       children: [
 
                                         SizedBox(
-                                          height: 1000,
+                                          height: 70,
                                           child: GridView.count(
                                             padding: const EdgeInsets.all(20),
                                             crossAxisCount: 2,
@@ -590,8 +590,12 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                                         as DateTime)
                                                     : "N/A",
                                               ),
-
-                                             DataTable(
+                                      ],
+                                    ),
+                                   ),
+                                   SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: DataTable(
                                           dataRowHeight: 50, // Altura fija para cada fila
                                           columns: <DataColumn>[
                                             DataColumn(label: Text('Id Item')),
@@ -640,9 +644,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                                 ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                   )
    
                                   ],
                                      ), );
