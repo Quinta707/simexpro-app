@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/DUCA/duca_screen.dart';
 import 'package:simexpro/screens/deva_screen.dart';
-import 'package:simexpro/screens/DEVA/devas_screen.dart';
-
+import 'package:simexpro/screens/historial_screen.dart';
+import 'package:simexpro/screens/historial_screen_Aduana.dart';
 import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/ordertracking/orders_screen.dart';
@@ -17,6 +17,10 @@ import 'dart:convert';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'dart:math';
+
+import 'package:simexpro/screens/rastreo_aduana.dart';
+import 'package:simexpro/screens/timeline_screen.dart';
+import 'package:simexpro/widgets/taps.dart';
 
 String imagen = '';
 
@@ -52,6 +56,8 @@ class Graficas extends State<GraficasAduanas> {
   bool esAduana1 = false;
   String imagenperfil = '';
   String username = '';
+  int _selectedIndex = 0;
+  List<Widget> _screens = [];
 
   Future<void> Imagen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,6 +65,23 @@ class Graficas extends State<GraficasAduanas> {
     imagenperfil = imagen;
     esAduana1 = prefs.getBool('esAduana');
     username = prefs.getString('username');
+    setState(() {
+      if (esAduana1) {
+      _screens = [
+        GraficasAduanas(), // Usa la pantalla relacionada con la aduana
+        historialAduanaScreen(), // Modifica esta línea a la pantalla de historial relacionada con la aduana
+        TimelineAduanaScreen(),
+        const OrdersScreen(),
+      ];
+    } else {
+      _screens = [
+        TapsProduccion(),
+        historialScreen(), // Usa la pantalla de historial existente
+        TimelineScreen(),
+        const OrdersScreen(),
+      ];
+    }
+    });
   }
 
   //PETICION PARA OPTENER LOS DATOS DE LA GRAFICA (REGIMENES ADUANEROS MAS UTILIZADOS)
@@ -306,7 +329,87 @@ class Graficas extends State<GraficasAduanas> {
       home: DefaultTabController(
         length: 3,
         child: Scaffold(
-          appBar: AppBar(
+          appBar: _selectedIndex != 0 
+          ? AppBar(
+                  title: const Image(
+                    height: 35,
+                    image: NetworkImage('https://i.ibb.co/HgdBM0r/slogan.png'),
+                  ),
+                  centerTitle: true,
+                  actions: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(imagen),
+                        child: PopupMenuButton<MenuItem>(
+                          //padding: EdgeInsets.all(10),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.network(
+                              imagen,
+                              width: 50,
+                            ),
+                          ),
+                          onSelected: (value) {
+                            if (value == MenuItem.item1) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfileScreen(),
+                                  ));
+                            }
+                            if (value == MenuItem.item2) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => loginScreen(),
+                                  ));
+                            }
+                          },
+                          itemBuilder: (context) => [
+                            PopupMenuItem<MenuItem>(
+                              value: MenuItem.item1,
+                              child: Row(
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.only(right: 8.0),
+                                      child: Icon(
+                                        Icons.person_2_outlined,
+                                        color: Color.fromRGBO(87, 69, 223, 1),
+                                      )),
+                                  const Text(
+                                    'Mi Perfil',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem<MenuItem>(
+                              value: MenuItem.item2,
+                              child: Row(
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.only(right: 8.0),
+                                      child: Icon(
+                                        Icons.logout,
+                                        color: Color.fromRGBO(87, 69, 223, 1),
+                                      )),
+                                  const Text(
+                                    'Cerrar Sesión',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                  backgroundColor: Color.fromRGBO(17, 24, 39, 1),
+                )
+          : AppBar(
             title: const Image(
                 height: 35,
                 image: NetworkImage('https://i.ibb.co/HgdBM0r/slogan.png')),
@@ -392,16 +495,43 @@ class Graficas extends State<GraficasAduanas> {
             ),
             //systemOverlayStyle: SystemUiOverlayStyle.light,
           ),
+          bottomNavigationBar: Container(
+            height: 80,
+            child: BottomNavigationBar(
+              backgroundColor: Color.fromRGBO(17, 24, 39, 1),
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: Color.fromRGBO(87, 69, 223, 1),
+              unselectedItemColor: Colors.white,
+              selectedLabelStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
+              currentIndex: _selectedIndex,
+              onTap: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home_filled), label: "Inicio"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.calendar_month_outlined), label: "Historial"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.timelapse_outlined), label: "Rastreo"),
+              ],
+            ),
+          ),
           drawer: Drawer(
             backgroundColor: Color.fromRGBO(17, 24, 39, 1),
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
-                SizedBox(height: 10),
+                SizedBox(height: 50),
                 Image.network('https://i.ibb.co/HgdBM0r/slogan.png', height: 50),
                 SizedBox(height: 20),
                 CircleAvatar(
-                  radius: 100,
+                  radius: 80,
                   backgroundImage: NetworkImage(imagenperfil),
                 ),
                 SizedBox(height: 20),
@@ -441,7 +571,7 @@ class Graficas extends State<GraficasAduanas> {
                           Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Devascreen(),
+                            builder: (context) => DevaScreen(),
                         ));
                       },
                     ),
@@ -496,7 +626,8 @@ class Graficas extends State<GraficasAduanas> {
               ],
             ),
           ),
-          body: TabBarView(
+          body: _selectedIndex !=0 ? _screens[_selectedIndex]
+          : TabBarView(
             children: [
               Card(
                 margin: EdgeInsets.all(10.0), // Margen de la tarjeta
