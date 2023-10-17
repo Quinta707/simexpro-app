@@ -270,7 +270,7 @@ class _DevaScreenState extends State<DevaScreen> {
                       Navigator.push(
                         context, 
                         MaterialPageRoute(
-                          builder: (context) => QRScannerScreen(),
+                          builder: (context) => const   QRScannerScreen(),
                         )
                       );
                     },

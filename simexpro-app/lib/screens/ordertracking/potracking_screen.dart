@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
@@ -14,8 +13,6 @@ import '../../widgets/headersinfo_widget.dart';
 import '../../widgets/navbar_roots.dart';
 import '../home_screen.dart';
 import '../login_screen.dart';
-
-import 'qrscanner_screen.dart';
 
 // ignore: must_be_immutable
 class POTrackingScreen extends StatefulWidget {
@@ -84,12 +81,6 @@ class _POTrackingScreenState extends State<POTrackingScreen> {
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.70;
 
     visualizarEstado();
-    // Create an instance of QRScannerScreen
-    QRScannerScreen qrScannerScreen = QRScannerScreen();
-
-    // Access the barcode variable through the instance
-    qrScannerScreen.barcode = null;
-
     return Scaffold (
       appBar: AppBar(
         title: const Image(
