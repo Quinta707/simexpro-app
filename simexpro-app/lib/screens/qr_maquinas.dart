@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:simexpro/screens/maquinas_screen.dart';
 
-class QRScannerScreen extends StatefulWidget {
-  const QRScannerScreen({Key? key}) : super(key: key);
+class QRScannerScreenMaquinas extends StatefulWidget {
+  const QRScannerScreenMaquinas({Key? key}) : super(key: key);
 
   @override
-  _QRScannerScreenState createState() => _QRScannerScreenState();
+  _QRScannerScreenMaquinasState createState() => _QRScannerScreenMaquinasState();
 }
 
-class _QRScannerScreenState extends State<QRScannerScreen> {
+class _QRScannerScreenMaquinasState extends State<QRScannerScreenMaquinas> {
   final qrKey = GlobalKey(debugLabel: 'QR');
 
   Barcode? barcode;
@@ -81,10 +81,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
     controller.scannedDataStream.listen((barcode) => {
           if (barcode.code != this.barcode?.code)
-            {TraerDatos(context, barcode.code.toString()),
-            print(barcode.code),
-            Navigator.pop(context),
-            },
+            {TraerDatos(context, barcode.code.toString())},
           this.barcode = barcode,
         });
   }

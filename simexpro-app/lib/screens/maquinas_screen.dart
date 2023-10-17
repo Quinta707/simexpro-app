@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
-import 'package:simexpro/screens/ordertracking/qrscanner_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
@@ -17,6 +16,7 @@ import 'package:timeline_list/timeline.dart';
 import 'package:timeline_list/timeline_model.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:intl/intl.dart';
+import 'package:simexpro/screens/qr_maquinas.dart';
 
 List datamaquina = [];
 List datamaquina2 = [];
@@ -99,19 +99,15 @@ Future<void> TraerDatos(BuildContext context, String numserie) async {
         valor = 0;
     } 
     else{ 
-      // CherryToast.success(
-      //   title: Text('ayer tuve un amor que hoy me abandonó porque no me quería, fue tanta mi ilusión por hacerla feliz pero todo fue en vano', 
-      //     style: TextStyle(color: Colors.white), 
-      //     textAlign: TextAlign.justify),
-      //   borderRadius: 5,
-      // ).show(context);
+      setState(){
+        
+      }
       datamaquina = filteredlist;
       datamaquina2 = data2;
       valor = 1;
     }
   }
 }
-
 
 class _MaquinasScreenState extends State<MaquinasScreen> {
   String searchValue = '';
@@ -334,7 +330,7 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                         Navigator.push(
                           context, 
                           MaterialPageRoute(
-                            builder: (context) => const   QRScannerScreen(),
+                            builder: (context) => const   QRScannerScreenMaquinas(),
                           )
                         );
                       },
