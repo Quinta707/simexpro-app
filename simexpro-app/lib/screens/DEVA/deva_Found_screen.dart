@@ -561,11 +561,12 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                     final factura = widget.factura[index];
                                     final fact_Id = factura["fact_Id"];
 
-                                    return Column(
+                                    return SingleChildScrollView ( child:
+                                    Column(
                                       children: [
 
                                         SizedBox(
-                                          height: 200,
+                                          height: 1000,
                                           child: GridView.count(
                                             padding: const EdgeInsets.all(20),
                                             crossAxisCount: 2,
@@ -590,9 +591,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                                     : "N/A",
                                               ),
 
-                                               Container(
-                                        constraints: BoxConstraints(maxHeight: 200), // Altura máxima de la tabla
-                                        child: DataTable(
+                                             DataTable(
                                           dataRowHeight: 50, // Altura fija para cada fila
                                           columns: <DataColumn>[
                                             DataColumn(label: Text('Id Item')),
@@ -641,13 +640,12 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                                 ),
                                           ],
                                         ),
-                                        )
                                       ],
                                     ),
                                   ),
    
                                   ],
-                                    );
+                                     ), );
                                   },
                                 ),
                               ],
@@ -655,6 +653,9 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                           ],
                         ),
                       )
+
+
+                      
                     ],
                     controller: _tabController,
                   ),
