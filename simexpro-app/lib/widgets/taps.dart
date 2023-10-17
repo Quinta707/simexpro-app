@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simexpro/screens/DUCA/duca_screen.dart';
@@ -10,6 +8,7 @@ import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/screens/maquinas_screen.dart';
 import 'package:simexpro/screens/ordertracking/orders_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
+import 'package:simexpro/screens/DEVA/devas_screen.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
@@ -678,7 +677,7 @@ class TabBarDemo extends State<TapsProduccion> {
                           Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DevaScreen(),
+                            builder: (context) => Devascreen(),
                         ));
                       },
                     ),
