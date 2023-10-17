@@ -563,7 +563,6 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
 
                                     return Column(
                                       children: [
-                                        // ... Otros widgets que desees mostrar
 
                                         SizedBox(
                                           height: 200,
@@ -607,23 +606,47 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                               if (item['fact_Id'] == fact_Id)
                                                 DataRow(
                                                   cells: <DataCell>[
-                                                    DataCell(Text(item['item_Id'] != null ? item['item_Id'].toString() : "N/A" )),
-                                                    DataCell(Text(item['item_Cantidad'] != null ? item['item_Cantidad'].toString() : "N/A" )),
-                                                    DataCell(Text(item['item_ValorUnitario'] != null ? item['item_ValorUnitario'].toString() : "N/A" )),
-                                                    DataCell(Text(item['unme_Descripcion'] != null ? item['unme_Descripcion'].toString() : "N/A" )),
-                                                    DataCell(Text(item['item_IdentificacionComercialMercancias'] != null ? item['item_IdentificacionComercialMercancias'].toString() : "N/A" )),
+                                                   DataCell(
+                                                      ConstrainedBox(constraints: BoxConstraints
+                                                      (maxWidth: 60),
+                                                      child: Text(item['item_Id'] != null ? item['item_Id'].toString() : "N/A", 
+                                                      overflow: TextOverflow.ellipsis, ))
+                                                      ),
+
+                                                    DataCell(
+                                                      ConstrainedBox(constraints: BoxConstraints
+                                                      (maxWidth: 60),
+                                                      child: Text(item['item_Cantidad'] != null ? item['item_Cantidad'].toString() : "N/A", 
+                                                      overflow: TextOverflow.ellipsis, ))
+                                                      ),
+                                                     DataCell(
+                                                      ConstrainedBox(constraints: BoxConstraints
+                                                      (maxWidth: 60),
+                                                      child: Text(item['item_ValorUnitario'] != null ? item['item_ValorUnitario'].toString() : "N/A", 
+                                                      overflow: TextOverflow.ellipsis, ))
+                                                      ),
+                                                     DataCell(
+                                                      ConstrainedBox(constraints: BoxConstraints
+                                                      (maxWidth: 60),
+                                                      child: Text(item['unme_Descripcion'] != null ? item['unme_Descripcion'].toString() : "N/A", 
+                                                      overflow: TextOverflow.ellipsis, ))
+                                                      ),
+                                                      DataCell(
+                                                      ConstrainedBox(constraints: BoxConstraints
+                                                      (maxWidth: 60),
+                                                      child: Text(item['item_IdentificacionComercialMercancias'] != null ? item['item_IdentificacionComercialMercancias'].toString() : "N/A", 
+                                                      overflow: TextOverflow.ellipsis, ))
+                                                      ),
                                                   ],
                                                 ),
                                           ],
                                         ),
-                                      )
-                                            ],
-                                          ),
-                                        ),
-
-                                       
-
+                                        )
                                       ],
+                                    ),
+                                  ),
+   
+                                  ],
                                     );
                                   },
                                 ),
