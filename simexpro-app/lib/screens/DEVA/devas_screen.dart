@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,14 +48,24 @@ Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
       },
     );
 
+
+
     if (response.statusCode == 200) {
       final decodedJson = jsonDecode(response.body);
       final data = decodedJson["data"];
 
-      
       final decodedJson2 = jsonDecode(response2.body);
       final factura = decodedJson2["data"];
-      
+
+      final response3 = await http.get(
+      Uri.parse('${apiUrl}Items/ListarItemsByFactId?fact_Id=$codigoDEVA'),
+      headers: {
+        'XApiKey': apiKey,
+        'Content-Type': 'application/json',
+      },
+      );
+      final decodedJson3 = jsonDecode(response3.body);
+      final items = decodedJson3["data"];
       
       if (data.isNotEmpty) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -64,7 +75,7 @@ Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Deva_Found_Screen(data: data, factura: factura,),
+            builder: (context) => Deva_Found_Screen(data: data, factura: factura,items: items),
           ),
         );
       } else {
