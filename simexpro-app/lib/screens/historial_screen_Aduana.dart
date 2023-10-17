@@ -28,14 +28,15 @@ class _historialAduanaScreenState extends State<historialAduanaScreen> {
       padding: const EdgeInsets.only(top: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+       children: [
+          Container(
+            alignment: Alignment.center,
             child: Text(
-              "Historial",
+              "Historial Aduanero",
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 30,
                 fontWeight: FontWeight.w500,
+                color: Color.fromRGBO(99, 74, 158, 1)
               ),
             ),
           ),
@@ -67,7 +68,7 @@ class _historialAduanaScreenState extends State<historialAduanaScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        "Pendientes",
+                        "DEVAS",
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
@@ -96,7 +97,7 @@ class _historialAduanaScreenState extends State<historialAduanaScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        "En proceso",
+                        "DUCAS",
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
@@ -125,7 +126,7 @@ class _historialAduanaScreenState extends State<historialAduanaScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        "Completadas",
+                        "BOLETINES",
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
