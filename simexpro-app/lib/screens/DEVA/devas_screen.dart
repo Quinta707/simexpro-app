@@ -39,10 +39,22 @@ Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
         'Content-Type': 'application/json',
       },
     );
+     final response2 = await http.get(
+      Uri.parse('${apiUrl}Declaracion_Valor/ListarFacturasByDeva?deva_Id=$codigoDEVA'),
+      headers: {
+        'XApiKey': apiKey,
+        'Content-Type': 'application/json',
+      },
+    );
 
     if (response.statusCode == 200) {
       final decodedJson = jsonDecode(response.body);
       final data = decodedJson["data"];
+
+      
+      final decodedJson2 = jsonDecode(response2.body);
+      final factura = decodedJson2["data"];
+      
       
       if (data.isNotEmpty) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -52,7 +64,7 @@ Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Deva_Found_Screen(data: data),
+            builder: (context) => Deva_Found_Screen(data: data, factura: factura,),
           ),
         );
       } else {
