@@ -334,7 +334,7 @@ class _MaquinasScreenState extends State<MaquinasScreen> {
                         Navigator.push(
                           context, 
                           MaterialPageRoute(
-                            builder: (context) => const   QRScannerScreen(),
+                            builder: (context) => QRScannerScreen(),
                           )
                         );
                       },

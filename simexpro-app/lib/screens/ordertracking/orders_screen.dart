@@ -42,7 +42,7 @@ Future<void> TraerDatos(String codigopo, context) async {
   final data = decodedJson["data"];
 
   if (data.length > 0) {
-    print('data after search $data');
+    // print('data after search $data');
 
     final response2 = await http.get(
       Uri.parse(
@@ -57,7 +57,7 @@ Future<void> TraerDatos(String codigopo, context) async {
     final decodedJson2 = jsonDecode(response2.body);
     final detalles = decodedJson2["data"];
 
-    print('data after search detalles $detalles');
+    // print('data after search detalles $detalles');
 
     Navigator.push(
       context,
@@ -271,7 +271,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       Navigator.push(
                         context, 
                         MaterialPageRoute(
-                          builder: (context) => const   QRScannerScreen(),
+                          builder: (context) => QRScannerScreen(),
                         )
                       );
                     },

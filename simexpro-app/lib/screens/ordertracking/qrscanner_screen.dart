@@ -8,7 +8,9 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'orders_screen.dart';
 
 class QRScannerScreen extends StatefulWidget {
-  const QRScannerScreen({Key? key}) : super(key: key);
+  QRScannerScreen({Key? key}) : super(key: key);
+
+  Barcode? barcode;
 
   @override
   _QRScannerScreenState createState() => _QRScannerScreenState();
@@ -16,8 +18,6 @@ class QRScannerScreen extends StatefulWidget {
 
 class _QRScannerScreenState extends State<QRScannerScreen> {
   final qrKey = GlobalKey(debugLabel: 'QR');
-
-  Barcode? barcode;
   QRViewController? controller;
 
   @override
@@ -63,7 +63,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8), color: Colors.white24),
       child: Text(
-        barcode != null ? 'Código: ${barcode!.code}' : 'Escanee el código',
+        widget.barcode != null ? 'Código: ${widget.barcode!.code}' : 'Escanee el código',
         maxLines: 3,
         style: TextStyle(color: Colors.white),
       ));
@@ -84,9 +84,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     setState(() => this.controller = controller);
 
     controller.scannedDataStream.listen((barcode) => {
-          if (barcode.code != this.barcode?.code)
+          if (barcode.code != widget.barcode?.code)
             {TraerDatos(barcode.code.toString(), context)},
-          this.barcode = barcode,
+          widget.barcode = barcode,
         });
   }
 }
