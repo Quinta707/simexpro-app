@@ -13,8 +13,6 @@ import 'package:simexpro/widgets/taps_Aduana.dart';
 import '../screens/historial_screen_Aduana.dart';
 import '../screens/ordertracking/orders_screen.dart';
 import 'package:simexpro/screens/deva_screen.dart';
-import 'package:simexpro/screens/DEVA/devas_screen.dart';
-
 import 'package:simexpro/screens/DUCA/duca_screen.dart';
 
 enum MenuItem { item1, item2 }
@@ -154,7 +152,8 @@ class _NavBarRootsState extends State<NavBarRoots> {
               : null,
           backgroundColor: Colors.white,
           body: _screens[_selectedIndex],
-          bottomNavigationBar: Container(
+          bottomNavigationBar: _selectedIndex != 0 ?
+          Container(
             height: 80,
             child: BottomNavigationBar(
               backgroundColor: Color.fromRGBO(17, 24, 39, 1),
@@ -180,17 +179,18 @@ class _NavBarRootsState extends State<NavBarRoots> {
                     icon: Icon(Icons.timelapse_outlined), label: "Rastreo"),
               ],
             ),
-          ),
+          )
+          : null,
           drawer: Drawer(
             backgroundColor: Color.fromRGBO(17, 24, 39, 1),
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
-                SizedBox(height: 10),
+                SizedBox(height: 50),
                 Image.network('https://i.ibb.co/HgdBM0r/slogan.png', height: 50),
                 SizedBox(height: 20),
                 CircleAvatar(
-                  radius: 100,
+                  radius: 80,
                   backgroundImage: NetworkImage(imagenperfil),
                 ),
                 SizedBox(height: 20),
@@ -230,7 +230,7 @@ class _NavBarRootsState extends State<NavBarRoots> {
                           Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Devascreen(),
+                            builder: (context) => DevaScreen(),
                         ));
                       },
                     ),
