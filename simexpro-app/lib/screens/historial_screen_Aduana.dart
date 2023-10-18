@@ -70,7 +70,7 @@ class _historialAduanaScreenState extends State<historialAduanaScreen> {
                       child: Text(
                         "DEVAS",
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color:
                               _buttonIndex == 0 ? Colors.white : Colors.black38,
@@ -99,7 +99,7 @@ class _historialAduanaScreenState extends State<historialAduanaScreen> {
                       child: Text(
                         "DUCAS",
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color:
                               _buttonIndex == 1 ? Colors.white : Colors.black38,
@@ -128,7 +128,7 @@ class _historialAduanaScreenState extends State<historialAduanaScreen> {
                       child: Text(
                         "BOLETINES",
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color:
                               _buttonIndex == 2 ? Colors.white : Colors.black38,

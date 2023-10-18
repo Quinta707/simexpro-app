@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:simexpro/api.dart';
+import 'package:simexpro/screens/DEVA/devas_screen.dart';
 import 'package:simexpro/screens/DUCA/duca_screen.dart';
 import 'package:simexpro/screens/historial_detalles_screen.dart';
 import 'package:simexpro/widgets/upcoming_historial.dart';
@@ -29,7 +30,6 @@ class DevaData {
   final String orco_DireccionEntrega;
   final String deva_NumeroContrato;
 
-
   DevaData({
     required this.deva_Id,
     required this.adua_IngresoNombre,
@@ -50,7 +50,6 @@ class DevaData {
     required this.prov_Telefono,
     required this.orco_DireccionEntrega,
     required this.deva_NumeroContrato,
-
   });
 
   Map<String, dynamic> toJson() {
@@ -73,7 +72,6 @@ class DevaData {
       'prov_Correo_Electronico': prov_Correo_Electronico,
       'prov_Telefono': prov_Telefono,
       'deva_NumeroContrato': deva_NumeroContrato,
-
     };
   }
 }
@@ -98,10 +96,9 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
         filteredDevas = devas;
       });
     });
-  }    
+  }
 
   Future<List<DevaData>> fetchData() async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var duca_Id = prefs.getInt('duca_Id');
 
@@ -117,8 +114,7 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
       final decodedJson = jsonDecode(response.body);
       final dataList = decodedJson["data"] as List<dynamic>;
 
-      final devas = dataList
-          .map((data) {
+      final devas = dataList.map((data) {
         String deva_FechaAceptacion = data['deva_FechaAceptacion'];
 
         int indexOfT1 = deva_FechaAceptacion.indexOf('T');
@@ -147,7 +143,6 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
           prov_Correo_Electronico: data['prov_Correo_Electronico'],
           prov_Telefono: data['prov_Telefono'],
           deva_NumeroContrato: data['deva_NumeroContrato'],
-
         );
       }).toList();
 
@@ -193,18 +188,37 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
               if (filteredDevas.isNotEmpty) {
                 return buildCard(filteredDevas[index]);
               } else {
-                return Text(
-                  'No se encontraron Devas',
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),
-                );
+                return Container(
+                    margin: EdgeInsets.only(bottom: 16.0),
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(children: [
+                          Text(
+                            'No se encontraron Devas',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                            ),
+                          )
+                        ])));
               }
             },
           )
         ],
       ),
-    );  
+    );
   }
 
   void onSearchTextChanged(String searchText) {
@@ -212,8 +226,10 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
       filteredDevas = devas
           .where((order) =>
               order.deva_NumeroContrato
-                  .toLowerCase().contains(searchText.toLowerCase()) ||
-              order.deva_Id.toString()
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase()) ||
+              order.deva_Id
+                  .toString()
                   .toLowerCase()
                   .contains(searchText.toLowerCase()))
           .toList();
@@ -246,8 +262,7 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Text(deva.deva_NumeroContrato),
-                
+                subtitle: Text("No° de Contrato: ${deva.deva_NumeroContrato}"),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -263,12 +278,12 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
                   Row(
                     children: [
                       Icon(
-                        Icons.calendar_month_outlined,
+                        Icons.arrow_forward,
                         color: Colors.black54,
                       ),
                       SizedBox(width: 5),
                       Text(
-                        deva.deva_NumeroContrato,
+                        "Importador:",
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -278,12 +293,30 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
                   Row(
                     children: [
                       Icon(
-                        Icons.calendar_month,
+                        Icons.local_shipping,
                         color: Colors.black54,
                       ),
                       SizedBox(width: 5),
                       Text(
-                        deva.deva_NumeroContrato,
+                        "Proveedor: ",
+                        style: TextStyle(
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Row(
+                    children: [
+                   
+                      SizedBox(width: 5),
+                      Text(
+                        "${deva.impo_Nombre_Raso}",
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -292,16 +325,10 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
                   ),
                   Row(
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
+                
                       SizedBox(width: 5),
                       Text(
-                        "Pendiente",
+                        "${deva.prov_Nombre_Raso}",
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -316,7 +343,7 @@ class _PanelDucaWidgetState extends State<PanelDucaWidget> {
                 children: [
                   InkWell(
                     onTap: () async {
-                     
+                      TraerDatosDeva( deva.deva_Id.toString() ,context);
                     },
                     child: Container(
                       width: 150,
