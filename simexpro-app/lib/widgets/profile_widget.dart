@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -93,8 +94,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           image = imageUrl;
           prefs.setString('image', imageUrl);
         });
-        print(
-            'Error al cambiar la imagen de perfil. Código de respuesta: ${response.body}');
+        print('Código de respuesta: ${response.body}');
       }
     } catch (e) {
       print('Error al enviar la solicitud para cambiar la imagen: $e');
@@ -225,18 +225,92 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         });
   }
 
+  void Imagen(BuildContext context) {
+    final imagen = NetworkImage(image);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(500.0), // Ajusta según sea necesario
+            ),
+            contentPadding: EdgeInsets.all(0),
+            content: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(500.0), // Ajusta según sea necesario
+                image: DecorationImage(
+                  image: imagen,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    bottom: 0,
+                    left: (300 - 50) / 2,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Image.asset(
+                        'images/SIMEXPRO-V3-PNG.png',
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget buildImage(context) {
     final imagen = NetworkImage(image);
 
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: Ink.image(
-          image: imagen,
-          fit: BoxFit.cover,
-          width: 170,
-          height: 170,
-          child: InkWell(onTap: () {}),
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Container(
+                width: 300, // Ajusta el ancho según tus necesidades
+                height: 300, // Ajusta la altura según tus necesidades
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imagen,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+      child: ClipOval(
+        child: Material(
+          color: Colors.transparent,
+          child: Ink.image(
+            image: imagen,
+            fit: BoxFit.cover,
+            width: 170,
+            height: 170,
+            child: InkWell(onTap: () {
+              Imagen(context);
+            }),
+          ),
         ),
       ),
     );
