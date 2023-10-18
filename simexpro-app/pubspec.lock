@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: ca12e6c9ac022f33fd89128e7007fb5e97ab6e814d4fa05dd8d4f2db1e3c69cb
+      sha256: "7e0d52067d05f2e0324268097ba723b71cb41ac8a6a2b24d1edf9c536b987b03"
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.5"
+    version: "3.4.6"
   args:
     dependency: transitive
     description:
@@ -105,6 +105,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      sha256: c5f80c0361d95655647094aad231fd6efe2ef0f1ee85db4e0d1d99db4d789229
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.16.2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -178,10 +186,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_hooks
-      sha256: "4618087243264d5f745b2a719a9fc610768f723da570efc2d0eaefe1efcbae70"
+      sha256: "7c8db779c2d1010aa7f9ea3fbefe8f86524fcb87b69e8b0af31e1a4b55422dec"
       url: "https://pub.dev"
     source: hosted
-    version: "0.20.2"
+    version: "0.20.3"
+  flutter_html:
+    dependency: "direct main"
+    description:
+      name: flutter_html
+      sha256: "2f9b0cbe6064321fba32751a0466ed855d9be9b7e807eba55aec298b5b037a94"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.11.1"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -232,6 +248,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  html:
+    dependency: transitive
+    description:
+      name: html
+      sha256: "49f0f00a6f85ecab782e641ad79377bfd4b4aea463178ac19cbf45ea8419c380"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.14.0+4"
   http:
     dependency: "direct dev"
     description:

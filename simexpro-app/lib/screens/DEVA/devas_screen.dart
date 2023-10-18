@@ -1,11 +1,10 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simexpro/screens/DUCA/duca_found_screen.dart';
-import 'package:simexpro/screens/DUCA/ducaqrscanner_screen.dart';
 import 'package:simexpro/screens/historial_screen.dart';
 import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
@@ -16,14 +15,15 @@ import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
 import 'package:simexpro/widgets/taps.dart';
 import 'package:http/http.dart' as http;
+import 'package:simexpro/screens/DEVA/deva_Found_screen.dart';
 
 import '../../api.dart';
 
-class DucasScreen extends StatefulWidget {
-  const DucasScreen({Key? key}) : super(key: key);
+class Devascreen extends StatefulWidget {
+  const Devascreen({Key? key}) : super(key: key);
 
   @override
-  _DucasScreenState createState() => _DucasScreenState();
+  _DevaScreenState createState() => _DevaScreenState();
 }
 
 Future<void> Imagen() async {
@@ -31,52 +31,80 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-Future<void> TraerDatos(String NoDuca, context) async {
-  final response = await http.post(
-    Uri.parse('${apiUrl}Duca/List_ByNoDuca?NoDuca=$NoDuca'),
-    headers: {
-      'XApiKey': apiKey,
-      'Content-Type': 'application/json',
-    },
-  );
-  final decodedJson = jsonDecode(response.body);
-  final data = decodedJson["data"];
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var duca_Id = data[0]['duca_Id'];
-  prefs.setInt('duca_Id', duca_Id);
+Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
+  try {
+    final response = await http.get(
+      Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDevaId?id=$codigoDEVA'),
+      headers: {
+        'XApiKey': apiKey,
+        'Content-Type': 'application/json',
+      },
+    );
+     final response2 = await http.get(
+      Uri.parse('${apiUrl}Declaracion_Valor/ListarFacturasByDeva?deva_Id=$codigoDEVA'),
+      headers: {
+        'XApiKey': apiKey,
+        'Content-Type': 'application/json',
+      },
+    );
 
-  if (data.length > 0) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Duca_Found_Screen(data: data),
-        ));
-  } else {
-    CherryToast.warning(
-            title: const Text('El código no es válido',
-                style: TextStyle(color: Colors.white)))
-        .show(context);
+
+
+    if (response.statusCode == 200) {
+      final decodedJson = jsonDecode(response.body);
+      final data = decodedJson["data"];
+
+      final decodedJson2 = jsonDecode(response2.body);
+      final factura = decodedJson2["data"];
+
+      final response3 = await http.get(
+      Uri.parse('${apiUrl}Items/ListarItemsByFactId?fact_Id=$codigoDEVA'),
+      headers: {
+        'XApiKey': apiKey,
+        'Content-Type': 'application/json',
+      },
+      );
+      final decodedJson3 = jsonDecode(response3.body);
+      final items = decodedJson3["data"];
+      
+      if (data.isNotEmpty) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var deva_Id = data[0]['deva_Id']; 
+        prefs.setInt('deva_Id', deva_Id);
+        
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Deva_Found_Screen(data: data, factura: factura,items: items),
+          ),
+        );
+      } else {
+        CherryToast.warning(
+          title: const Text('El código no es válido',
+            style: TextStyle(color: Colors.white),
+          ),
+        ).show(context);
+      }
+    } else {
+       CherryToast.error(
+          title: const Text('ha ocurrido un error de solicitud',
+            style: TextStyle(color: Colors.white),
+          ),
+        ).show(context);
+    }
+  } catch (error) {
+      CherryToast.warning(
+          title: const Text('ha ocurrido un error',
+            style: TextStyle(color: Colors.white),
+          ),
+        ).show(context);
   }
 }
 
-Future<void> TraerDatosById(int Id_Duca, context) async {
-  final response = await http.post(
-    Uri.parse('${apiUrl}Duca/Listar_ById?id=$Id_Duca'),
-    headers: {
-      'XApiKey': apiKey,
-      'Content-Type': 'application/json',
-    },
-  );
-  final decodedJson = jsonDecode(response.body);
-  final data = decodedJson["data"];
-  String NoDuca = data[0]['duca_No_Duca'];
 
-  if (data.length > 0) {
-    TraerDatos(NoDuca, context);
-  }
-}
 
-class _DucasScreenState extends State<DucasScreen> {
+
+class _DevaScreenState extends State<Devascreen> {
   int _selectedIndex = 0;
   final _screens = [
     TapsProduccion(),
@@ -89,17 +117,17 @@ class _DucasScreenState extends State<DucasScreen> {
     Imagen();
   }
 
-  String searchValue = '';
+    String searchValue = '';
 
-  void updatedText(val) {
-    setState(() {
-      searchValue = val;
-    });
-  }
+    void updatedText (val){
+      setState((){
+        searchValue = val;
+      });
+    }
 
   Widget build(BuildContext context) {
+
     return Scaffold(
-      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         title: const Image(
           height: 35,
@@ -190,7 +218,7 @@ class _DucasScreenState extends State<DucasScreen> {
               child: Container(
                 alignment: Alignment.center,
                 child: Text(
-                  "Búsqueda de DUCA",
+                  "Rastrear la Declaración de Valor",
                   style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
@@ -200,7 +228,7 @@ class _DucasScreenState extends State<DucasScreen> {
             ),
             //SizedBox(height: 15),
             Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
                   TextField(
@@ -209,7 +237,7 @@ class _DucasScreenState extends State<DucasScreen> {
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      label: Text("Ingrese el Número de DUCA"),
+                      label: Text("Ingrese el Id de la declaración de valor"),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -239,7 +267,7 @@ class _DucasScreenState extends State<DucasScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 35),
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -271,10 +299,11 @@ class _DucasScreenState extends State<DucasScreen> {
                     ),
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const DucaQRScannerScreen(),
-                          ));
+                        context, 
+                        MaterialPageRoute(
+                          builder: (context) => const   QRScannerScreen(),
+                        )
+                      );
                     },
                     icon: Icon(Icons.qr_code),
                     label: Text(

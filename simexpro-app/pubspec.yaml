@@ -57,6 +57,7 @@ dependencies:
   path_provider: ^1.6.28
   dio: ^5.3.3
   open_file: ^3.2.1
+  flutter_html: ^0.11.1
 
 
 dev_dependencies:
@@ -72,6 +73,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   http: ^0.13.6
+
 
 
 flutter_icons: 

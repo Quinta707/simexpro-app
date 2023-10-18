@@ -212,6 +212,7 @@ print(filteredOrders);
           ),
           SizedBox(height: 16),
           ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount:
                 filtereddetalles.isNotEmpty ? filtereddetalles.length : 1,
@@ -298,15 +299,35 @@ print(filteredOrders);
   }
 
   Widget _buildDataRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(value),
-        ],
-      ),
-    );
-  }
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.4,  // Ajusta el ancho según sea necesario
+          child: Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(width: 20),  // Espacio entre la columna de etiqueta y el valor
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(
+              color: Colors.black,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 }

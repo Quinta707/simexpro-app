@@ -122,6 +122,7 @@ class _UpcominghistorialAduanaState extends State<UpcominghistorialAduana> {
           ),
           SizedBox(height: 16),
           ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
             itemBuilder: (context, index) {
@@ -203,63 +204,78 @@ class _UpcominghistorialAduanaState extends State<UpcominghistorialAduana> {
                   height: 20,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.add_location_alt,
-                        color: Colors.black54,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        order.nombre_Aduana_Registro,
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.add_location_alt,
-                        color: Colors.black54,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        order.nombre_Aduana_Destino ?? 'No Asignado',
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
+             Row(
+  mainAxisAlignment: MainAxisAlignment.spaceAround,
+  children: [
+    Expanded(
+      flex: 1,
+      child: Row(
+        children: [
+          Icon(
+            Icons.add_location_alt,
+            color: Colors.black54,
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              order.nombre_Aduana_Registro,
+              style: TextStyle(
+                color: Colors.black54,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    ),
+    Expanded(
+      flex: 1,
+      child: Row(
+        children: [
+          Icon(
+            Icons.add_location_alt,
+            color: Colors.black54,
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              order.nombre_Aduana_Destino ?? 'No Asignado',
+              style: TextStyle(
+                color: Colors.black54,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    ),
+    Expanded(
+      flex: 1,
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.yellow,
+              shape: BoxShape.circle,
+            ),
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              "En Curso",
+              style: TextStyle(
+                color: Colors.black54,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    ),
+  ],
+),
 
-                   Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.yellow,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        "En Curso",
-                       
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                 
-                ],
-                
-              ),  
               
               SizedBox(height: 15),
               Row(

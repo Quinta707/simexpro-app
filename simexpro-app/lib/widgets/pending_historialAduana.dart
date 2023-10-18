@@ -142,6 +142,7 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
           ),
           SizedBox(height: 16),
           ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: filteredOrders.isNotEmpty ? filteredOrders.length : 1,
             itemBuilder: (context, index) {
@@ -176,63 +177,62 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
     });
   }
 
-  Widget buildCard(OrderData order) {
-    return Container(
-        margin: EdgeInsets.only(bottom: 16.0),
-        padding: EdgeInsets.symmetric(vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 4,
-              spreadRadius: 2,
-            ),
-          ],
+Widget buildCard(OrderData order) {
+  return Container(
+    margin: EdgeInsets.only(bottom: 16.0),
+    padding: EdgeInsets.symmetric(vertical: 5),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 4,
+          spreadRadius: 2,
         ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            children: [
-              ListTile(
-                title: Text(
-                  "Deva #${order.id}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(order.fechaEmision),
-                trailing: SizedBox(
-                  width: 100,
-                  height: 25,
-                  child: Image.network(
-                    "https://i.ibb.co/9T4ST2V/pendiente.png",
-                    fit: BoxFit
-                        .contain, // Ajusta la imagen para que cubra el espacio
-                  ),
-                ),
+      ],
+    ),
+    child: SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ListTile(
+            title: Text(
+              "Deva #${order.id}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Divider(
-                  // color: Colors.black,
-                  thickness: 1,
-                  height: 20,
-                ),
+            ),
+            subtitle: Text(order.codigo),
+            trailing: SizedBox(
+              width: 100,
+              height: 25,
+              child: Image.network(
+                "https://i.ibb.co/9T4ST2V/pendiente.png",
+                fit: BoxFit.contain,
               ),
-              Row(
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Divider(
+              thickness: 1,
+              height: 20,
+            ),
+          ),
+               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Row(
                     children: [
                       Icon(
-                        Icons.calendar_month_outlined,
+                        Icons.battery_0_bar,
                         color: Colors.black54,
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.fechaEmision,
+                        order.codigo,
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -254,12 +254,12 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
                       ),
                     ],
                   ),
-                  Row(
+                   Row(
                     children: [
                       Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: Color.fromARGB(255, 255, 59, 75),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -272,49 +272,68 @@ class _PendinghistorialAduanaState extends State<PendinghistorialAduana> {
                       ),
                     ],
                   ),
-                ],
-              ),
-              SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('ordercodigo', order.codigo);
-                      prefs.setString('orderid', order.id.toString());
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Historial_detallesAduana_Screen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 150,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(87, 69, 223, 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Ver detalles",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
+               
             ],
           ),
-        ));
-  }
+          SizedBox(height: 15),
+          Center(
+            child: InkWell(
+              onTap: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString('ordercodigo', order.codigo);
+                prefs.setString('orderid', order.id.toString());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Historial_detallesAduana_Screen(),
+                  ),
+                );
+              },
+              child: Container(
+                width: 150,
+                padding: EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(87, 69, 223, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    "Ver detalles",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 15),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget buildInfoRow(IconData? icon, String text) {
+  return Row(
+    children: [
+      if (icon != null) ...[
+        Icon(
+          icon,
+          color: Colors.black54,
+        ),
+        SizedBox(width: 5),
+      ],
+      Text(
+        text,
+        style: TextStyle(
+          color: Colors.black54,
+        ),
+      ),
+    ],
+  );
+}
+
 }
