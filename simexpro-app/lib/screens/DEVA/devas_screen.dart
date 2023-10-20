@@ -122,7 +122,7 @@ class _DevaScreenState extends State<Devascreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-       resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         title: const Image(
           height: 35,

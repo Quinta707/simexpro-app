@@ -131,137 +131,136 @@ class _PanelWidgetState extends State<PanelWidget>{
         ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: displayDetalles.length,
           itemBuilder: (BuildContext context, int index){
             //Items
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    height: 135,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
+            return Column(
+              children: [
+                Container(
+                  height: 135,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.deepPurple.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                  ),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(15),
+                    child: InkWell(
+                      splashColor: Colors.grey,
                       borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.deepPurple.withOpacity(0.5),
-                          spreadRadius: 3,
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
-                        )
-                      ],
-                    ),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(15),
-                      child: InkWell(
-                        splashColor: Colors.grey,
-                        borderRadius: BorderRadius.circular(15),
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ItemTrackingScreen(item: displayDetalles[index]),
-                            )
-                          );
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ItemTrackingScreen(item: displayDetalles[index]),
+                          )
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                        Row(
                           children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.53, // 60% of the width
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.53, // 60% of the width
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15, top: 23),
+                                child: Text(
+                                  "Código de ítem: ${displayDetalles[index]["code_Id"]}",
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  softWrap: false,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.centerRight,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 15, top: 23),
-                                  child: Text(
-                                    "Código de ítem: ${displayDetalles[index]["code_Id"]}",
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
-                                    softWrap: false,
+                                  padding: const EdgeInsets.only(right: 18, top: 26),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: displayDetalles[index]["proc_IdActual"] == 0 ? 
+                                                 Colors.redAccent : displayDetalles[index]["proc_IdActual"] > 0 ? 
+                                                                      HexColor(displayDetalles[index]["proc_CodigoHtml"]) : Colors.greenAccent,
+                                        ),
+                                        width: 20.0 / 2,
+                                        height: 20.0 / 2,
+                                      ),
+                                      //Dot and text separator
+                                      const SizedBox(width: 6),
+                                      Flexible(
+                                        child: Text(
+                                          displayDetalles[index]["proc_IdActual"] == 0 ? 
+                                                 "PENDIENTE" : displayDetalles[index]["proc_IdActual"] > 0 ? 
+                                                                      displayDetalles[index]["proc_Descripcion"].toUpperCase() 
+                                                                      : "TERMINADO",
+                                          style: const TextStyle(fontSize: 11),
+                                          textAlign: TextAlign.end,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.fade,
+                                          softWrap: false,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 18, top: 26),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: displayDetalles[index]["proc_IdActual"] == 0 ? 
-                                                   Colors.redAccent : displayDetalles[index]["proc_IdActual"] > 0 ? 
-                                                                        HexColor(displayDetalles[index]["proc_CodigoHtml"]) : Colors.greenAccent,
-                                          ),
-                                          width: 20.0 / 2,
-                                          height: 20.0 / 2,
-                                        ),
-                                        //Dot and text separator
-                                        const SizedBox(width: 6),
-                                        Flexible(
-                                          child: Text(
-                                            displayDetalles[index]["proc_IdActual"] == 0 ? 
-                                                   "PENDIENTE" : displayDetalles[index]["proc_IdActual"] > 0 ? 
-                                                                        displayDetalles[index]["proc_Descripcion"].toUpperCase() 
-                                                                        : "TERMINADO",
-                                            style: const TextStyle(fontSize: 11),
-                                            textAlign: TextAlign.end,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.fade,
-                                            softWrap: false,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                      
-                      
-                      
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15, top: 16, right: 18),
-                              child: Text(
-                                // softWrap: false,
-                                "ESTILO: ${displayDetalles[index]["esti_Descripcion"]}, TALLA: ${displayDetalles[index]["tall_Nombre"]}",
-                                // overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                softWrap: false,
-                                style: const TextStyle(fontSize: 13),
-                              ),
                             ),
-                      
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15, top: 6, right: 18),
-                              child: Text(
-                                "COLOR: ${displayDetalles[index]["colr_Nombre"]}, CANTIDAD: ${displayDetalles[index]["code_CantidadPrenda"]}",
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                softWrap: false,
-                                style: const TextStyle(fontSize: 13),
-                              ),
-                            ),
-                      
                           ],
                         ),
+                    
+                    
+                    
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, top: 16, right: 18),
+                            child: Text(
+                              // softWrap: false,
+                              "ESTILO: ${displayDetalles[index]["esti_Descripcion"]}, TALLA: ${displayDetalles[index]["tall_Nombre"]}",
+                              // overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                          ),
+                    
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, top: 6, right: 18),
+                            child: Text(
+                              "COLOR: ${displayDetalles[index]["colr_Nombre"]}, CANTIDAD: ${displayDetalles[index]["code_CantidadPrenda"]}",
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                          ),
+                    
+                        ],
                       ),
                     ),
                   ),
-                
-                    const SizedBox(height: 27),
-                ],
-              ),
+                ),
+              
+                  const SizedBox(height: 27),
+              ],
             );
           },
         ),
