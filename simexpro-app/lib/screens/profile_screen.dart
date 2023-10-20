@@ -220,7 +220,6 @@ class PerfilUsuario extends State<ProfileScreen> {
         children: [
           const SizedBox(height: 30),
           ProfileWidget(
-            imagePath: image,
             onClicked: () async {},
           ),
           const SizedBox(height: 10),

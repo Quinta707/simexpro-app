@@ -31,7 +31,8 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
+Future<void> TraerDatos(String codigoDEVA, context) async {
+
   try {
     final response = await http.get(
       Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDevaId?id=$codigoDEVA'),
@@ -199,6 +200,16 @@ class _DevaScreenState extends State<Devascreen> {
             ),
           )
         ],
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back),
+          //   onPressed: () {
+          //         Navigator.push(
+          //                 context,
+          //                 MaterialPageRoute(
+          //                   builder: (context) => TimelineAduanaScreen(),
+          //                 ));
+          //   },
+          // ),
         backgroundColor: Color.fromRGBO(17, 24, 39, 1),
         //elevation: 50.0
         //systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -249,7 +260,7 @@ class _DevaScreenState extends State<Devascreen> {
                       //         title: Text('Trae los datoss',
                       //             style: TextStyle(color: Colors.white)))
                       //     .show(context);
-                      TraerDatos('$searchValue', context);
+                      TraerDatosDeva('$searchValue', context);
                     },
                     icon: Icon(Icons.search),
                     label: Text(
