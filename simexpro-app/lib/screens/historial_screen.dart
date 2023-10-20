@@ -25,13 +25,14 @@ class _historialScreenState extends State<historialScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+          Container(
+            alignment: Alignment.center,
             child: Text(
-              "Historial de órdenes",
+              "Historial de Ordenes",
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 30,
                 fontWeight: FontWeight.w500,
+                color: Color.fromRGBO(99, 74, 158, 1)
               ),
             ),
           ),
