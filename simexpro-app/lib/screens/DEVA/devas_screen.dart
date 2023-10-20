@@ -31,7 +31,7 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-Future<void> TraerDatos(String codigoDEVA, context) async {
+Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
   try {
     final response = await http.get(
       Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDevaId?id=$codigoDEVA'),
