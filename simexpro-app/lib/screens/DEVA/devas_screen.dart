@@ -10,7 +10,7 @@ import 'package:simexpro/screens/home_screen.dart';
 import 'package:simexpro/screens/login_screen.dart';
 import 'package:simexpro/screens/ordertracking/potracking_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
-import 'package:simexpro/screens/ordertracking/qrscanner_screen.dart';
+import 'package:simexpro/screens/DEVA/deva_qr_screen.dart';
 import 'package:simexpro/screens/timeline_screen.dart';
 import 'package:simexpro/toastconfig/toastconfig.dart';
 import 'package:simexpro/widgets/taps.dart';
@@ -31,7 +31,7 @@ Future<void> Imagen() async {
   image = prefs.getString('image');
 }
 
-Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
+Future<void> TraerDatos(String codigoDEVA, context) async {
   try {
     final response = await http.get(
       Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDevaId?id=$codigoDEVA'),
@@ -48,9 +48,6 @@ Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
       },
     );
 
-
-
-    if (response.statusCode == 200) {
       final decodedJson = jsonDecode(response.body);
       final data = decodedJson["data"];
 
@@ -85,19 +82,15 @@ Future<void> TraerDatos(String codigoDEVA, BuildContext context) async {
           ),
         ).show(context);
       }
-    } else {
-       CherryToast.error(
-          title: const Text('ha ocurrido un error de solicitud',
-            style: TextStyle(color: Colors.white),
-          ),
-        ).show(context);
-    }
+  
   } catch (error) {
-      CherryToast.warning(
-          title: const Text('ha ocurrido un error',
+
+    CherryToast.error(
+          title: const Text('ha ocurrido un error de... ',
             style: TextStyle(color: Colors.white),
           ),
         ).show(context);
+
   }
 }
 
@@ -128,6 +121,7 @@ class _DevaScreenState extends State<Devascreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+       resizeToAvoidBottomInset : false,
       appBar: AppBar(
         title: const Image(
           height: 35,
