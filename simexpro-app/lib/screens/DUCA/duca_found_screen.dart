@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:simexpro/screens/DUCA/duca_screen.dart';
 import 'package:simexpro/screens/profile_screen.dart';
 import 'package:simexpro/widgets/panel_widget.dart';
 import 'package:simexpro/widgets/panelduca_widget.dart';
@@ -66,7 +67,7 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.16;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.70;
 
-  print(widget.data);
+    print(widget.data);
     return Scaffold(
         appBar: AppBar(
           title: const Image(
@@ -144,6 +145,16 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
               ),
             )
           ],
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back),
+          //   onPressed: () {
+          //         Navigator.push(
+          //                 context,
+          //                 MaterialPageRoute(
+          //                   builder: (context) => DucasScreen(),
+          //                 ));
+          //   },
+          // ),
           backgroundColor: const Color.fromRGBO(17, 24, 39, 1),
         ),
         body: SlidingUpPanel(
@@ -152,9 +163,7 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
           controller: panelController,
           maxHeight: panelHeightOpen,
           minHeight: panelHeightClosed,
-          panelBuilder: (controller) => PanelDucaWidget(
-          
-          ),
+          panelBuilder: (controller) => PanelDucaWidget(),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
           body: DefaultTabController(
             length: 3,
@@ -204,13 +213,13 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
                                           title: "No° Correlativo:",
                                           text: widget.data[0][
                                                   "duca_No_Correlativo_Referencia"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Regimen Aduanero:",
                                           text: widget.data[0]
                                                   ["duca_RegimenAduanero"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Fecha de Vencimiento:",
@@ -221,7 +230,7 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
                                                       widget.data[0][
                                                           "duca_FechaVencimiento"])
                                                   as DateTime)
-                                              : "N/D",
+                                              : "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Fecha de Aceptación:",
@@ -232,66 +241,66 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
                                                       widget.data[0][
                                                           "deva_FechaAceptacion"])
                                                   as DateTime)
-                                              : "N/D",
+                                              : "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Pais de Procedencia:",
                                           text: widget.data[0]
                                                   ["duca_PaisProcedencia"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Pais de Destino:",
                                           text: widget.data[0]
                                                   ["duca_PaisDestino"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Lugar Embarque:",
                                           text: widget.data[0]
                                                   ["duca_Lugar_Embarque"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Lugar Desembarque:",
                                           text: widget.data[0]
                                                   ["duca_Lugar_Desembarque"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Aduana de Registro:",
                                           text: widget.data[0]
                                                   ["duca_AduanaRegistro"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Aduana de Salida:",
                                           text: widget.data[0]
                                                   ["adua_SalidaNombre"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Aduana de Ingreso:",
                                           text: widget.data[0]
                                                   ["adua_IngresoNombre"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Aduana de Destino:",
                                           text: widget.data[0]
                                                   ["duca_AduanaDestino"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Manifiesto:",
                                           text: widget.data[0]
                                                   ["duca_Manifiesto"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Titulo:",
                                           text: widget.data[0]["duca_Titulo"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                       ],
                                     ),
@@ -343,20 +352,20 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
                                           title: "Código Declarante",
                                           text: widget.data[0]
                                                   ["duca_Codigo_Declarante"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title:
                                               "Cliente o Razón Social Declarante:",
                                           text: widget.data[0][
                                                   "duca_NombreSocial_Declarante"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Dpminio Fiscal",
                                           text: widget.data[0][
                                                   "duca_DomicilioFiscal_Declarante"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                       ],
                                     ),
@@ -379,25 +388,25 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
                                           title: "No° Idenficación Proveedor",
                                           text: widget.data[0][
                                                   "prov_NumeroIdentificacion"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Razón Social Proveedor:",
                                           text: widget.data[0]
                                                   ["prov_Nombre_Raso"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "No° de Registro Importador",
                                           text: widget.data[0]
                                                   ["impo_NumRegistro"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Razón Social Importador",
                                           text: widget.data[0]
                                                   ["impo_Nombre_Raso"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                       ],
                                     ),
@@ -442,58 +451,74 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
                                           title: "País de Transporte",
                                           text: widget.data[0]
                                                   ["pais_Transporte"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Marca Vehiculo:",
                                           text: widget.data[0]
                                                   ["marc_Descripcion"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Chasis Vehiculo",
                                           text: widget.data[0]
                                                   ["tran_Chasisv"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Remolque del vehículo",
                                           text: widget.data[0]
                                                   ["tran_Remolque"] ??
-                                              "N/D",
+                                              "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Cantidad de carga:",
-                                          text: widget.data[0]["tran_CantCarga"]
-                                                  .toString() ??
-                                              "N/D",
+                                          text: widget.data[0]
+                                                      ["tran_CantCarga"] !=
+                                                  null
+                                              ? widget.data[0]["tran_CantCarga"]
+                                                  .toString()
+                                              : "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title:
                                               "Número de dispositivo de seguridad:",
-                                           text: widget.data[0][
-                                                      "tran_NumDispositivoSeguridad"]
-                                                  .toString() ??
-                                              "N/D",
+                                          text: widget.data[0]
+                                                      ["tran_Equipamiento"] !=
+                                                  null
+                                              ? widget.data[0]
+                                                      ["tran_Equipamiento"]
+                                                  .toString()
+                                              : "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Equipamiento del vehículo:",
                                           text: widget.data[0]
-                                                  ["tran_Equipamiento"] ??
-                                              "N/D",
+                                                      ["tran_Equipamiento"] !=
+                                                  null
+                                              ? widget.data[0]
+                                                      ["tran_Equipamiento"]
+                                                  .toString()
+                                              : "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Tamaño del equipamiento:",
                                           text: widget.data[0][
+                                                      "tran_TamanioEquipamiento"] !=
+                                                  null
+                                              ? widget.data[0][
                                                       "tran_TamanioEquipamiento"]
-                                                  .toString() ??
-                                              "N/D",
+                                                  .toString()
+                                              : "N/A",
                                         ),
                                         HeadersInfoWidget(
                                           title: "Tipo de carga",
-                                          text: widget.data[0]["tran_TipoCarga"]
-                                                  .toString() ??
-                                              "N/D",
+                                          text: widget.data[0]
+                                                      ["tran_TipoCarga"] !=
+                                                  null
+                                              ? widget.data[0]["tran_TipoCarga"]
+                                                  .toString()
+                                              : "N/A",
                                         ),
                                       ],
                                     ),
@@ -512,7 +537,6 @@ class _Duca_Found_ScreenState extends State<Duca_Found_Screen>
               ],
             ),
           ),
-        )
-     );
+        ));
   }
 }

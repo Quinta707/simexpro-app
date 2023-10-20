@@ -87,15 +87,19 @@ Future<void> infoAcordeon(int codigopodetalle) async {
 tieneDetalles (procesosdetalles, idProceso) {
   if(procesosdetalles != null){
     final decodedDetalles = jsonDecode(procesosdetalles);
+    print("$procesosdetalles procesosdetalles $idProceso idProceso");
     foundDetalles = decodedDetalles.where((item) => 
           item["proc_Id"] == idProceso
     );
+    print("$foundDetalles foundDetalles");
   }
 
 }
 
-Widget buildDetallesProcesos(isScrollable){
-
+Widget buildDetallesProcesos(isScrollable, [procId, item]){
+  if(procId != null){
+    tieneDetalles(item["detallesprocesos"], procId);
+  }
 // return Text("Hola");
   final mappedFoundDetalles = foundDetalles.toList();
 
@@ -108,16 +112,6 @@ Widget buildDetallesProcesos(isScrollable){
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        // Text("Orden de proceso: #${mappedFoundDetalles[index]["ensa_Id"]}\n"
-        //     "Cantidad: ${mappedFoundDetalles[index]["ensa_Cantidad"]}\n"
-        //     "Empleado encargado: ${mappedFoundDetalles[index]["empl_NombreCompleto"]}\n"
-        //     "Fecha inicio: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaInicio"]) as DateTime)}\n"
-        //     "Fecha final: ${format.format(DateTime.tryParse(mappedFoundDetalles[index]["ensa_FechaLimite"]) as DateTime)}\n"
-        //     "Módulo: ${mappedFoundDetalles[index]["modu_Nombre"]}",
-        //     style: const TextStyle(
-        //       height: 1.25
-        //     ),
-        // ),
         Html(
           data: "<span><b>Orden de proceso: </b>${mappedFoundDetalles[index]["ensa_Id"]}</span><br>"
                 "<span><b>Cantidad: </b>${mappedFoundDetalles[index]["ensa_Cantidad"]}</span><br>"
@@ -170,7 +164,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
     print("DETALLES PROCESOS ${widget.item["detallesprocesos"]}");
     // dibujarProcesos(widget.detalles[0]["orco_Codigo"].toString(), context);
     infoAcordeon(widget.item["code_Id"]);
-    print(widget.item);
+    print(" widget.item ${widget.item}");
     return WillPopScope(
       onWillPop: (() async {
         _items[0].titleBorderRadius = const BorderRadius.all(Radius.circular(15));
@@ -570,7 +564,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                                           constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.57),
                                                           child: SizedBox(
                                                             width: double.maxFinite,
-                                                            child: buildDetallesProcesos(true)
+                                                            child: buildDetallesProcesos(true,  procesos[index]["proc_Id"], widget.item)
                                                           )
                                                         ),
                                                         elevation: 24.0,
@@ -581,7 +575,7 @@ class _ItemTrackingScreenState extends State<ItemTrackingScreen> with TickerProv
                                                     )
                                                   },
                                                   child: SizedBox(
-                                                    height: 40,
+                                                    height: 50,
                                                     child: buildDetallesProcesos(false),
                                                   ),
                                                 ),
