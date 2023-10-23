@@ -577,43 +577,46 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                   ],
                 ),
               ),
-              Divider(),
-              // Aquí puedes mostrar los detalles de la factura
-              for (var item in (widget.items ?? []))
-                if (item['fact_Id'] == factura["fact_Id"])
-                  Column(
-                    children: [
-                      HeadersInfoWidget(
-                        title: "Id del Item",
-                        text: item['item_Id'] != null ? item['item_Id'].toString() : "N/A",
-                      ),
-                      HeadersInfoWidget(
-                        title: "Cantidad:",
-                        text: item['item_Cantidad'] != null ? item['item_Cantidad'].toString() : "N/A",
-                      ),
-                      HeadersInfoWidget(
-                        title: "Precio Unitario:",
-                        text: item['item_ValorUnitario'] != null ? item['item_ValorUnitario'].toString() : "N/A",
-                      ),
-                      HeadersInfoWidget(
-                        title: "Unidad de Medida:",
-                        text: item['unme_Descripcion'] != null ? item['unme_Descripcion'].toString() : "N/A",
-                      ),
-                      HeadersInfoWidget(
-                        title: "Identificación comercial:",
-                        text: item['item_IdentificacionComercialMercancias'] != null ? item['item_IdentificacionComercialMercancias'].toString() : "N/A",
-                      ),
-                      Divider(),
+            Divider(),
+          // Aquí puedes mostrar los detalles de la factura
+                  for (var item in (widget.items ?? []))
+                  if (item['fact_Id'] == factura["fact_Id"])
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center, // Alinea los elementos verticalmente al centro.
+                      crossAxisAlignment: CrossAxisAlignment.center, // Alinea los elementos horizontalmente al centro.
+                      children: [
+                        HeadersInfoWidget(
+                          title: "Id del Item",
+                          text: item['item_Id'] != null ? item['item_Id'].toString() : "N/A",
+                        ),
+                        HeadersInfoWidget(
+                          title: "Cantidad:",
+                          text: item['item_Cantidad'] != null ? item['item_Cantidad'].toString() : "N/A",
+                        ),
+                        HeadersInfoWidget(
+                          title: "Precio Unitario:",
+                          text: item['item_ValorUnitario'] != null ? item['item_ValorUnitario'].toString() : "N/A",
+                        ),
+                        HeadersInfoWidget(
+                          title: "Unidad de Medida:",
+                          text: item['unme_Descripcion'] != null ? item['unme_Descripcion'].toString() : "N/A",
+                        ),
+                        HeadersInfoWidget(
+                          title: "Identificación comercial:",
+                          text: item['item_IdentificacionComercialMercancias'] != null ? item['item_IdentificacionComercialMercancias'].toString() : "N/A",
+                        ),
+                        Divider(),
+                      ],
+                    ),
+                  ),    
                     ],
-                  ),
-              // Aquí termina la sección de detalles de la factura
-            ],
-          );
-        },
-      ),
-    ],
-  ),
-)
+                          );
+                        },
+                      ),
+                        ],
+                      ),
+                    )
 
           
                     ],
