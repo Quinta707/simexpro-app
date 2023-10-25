@@ -199,20 +199,8 @@ class _DevaScreenState extends State<Devascreen> {
               ),
             ),
           )
-        ],
-          // leading: IconButton(
-          //   icon: Icon(Icons.arrow_back),
-          //   onPressed: () {
-          //         Navigator.push(
-          //                 context,
-          //                 MaterialPageRoute(
-          //                   builder: (context) => TimelineAduanaScreen(),
-          //                 ));
-          //   },
-          // ),
+        ],    
         backgroundColor: Color.fromRGBO(17, 24, 39, 1),
-        //elevation: 50.0
-        //systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: Center(
         child: Column(

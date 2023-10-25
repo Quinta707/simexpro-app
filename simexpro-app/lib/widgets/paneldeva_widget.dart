@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, dead_code
+
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,68 +13,47 @@ import 'package:simexpro/widgets/upcoming_historial.dart';
 class DevaData {
   final int deva_Id;
   final String adua_IngresoNombre;
-  final String deva_DeclaracionMercancia;
-  final String deva_FechaAceptacion;
-  final String regi_Codigo;
-  final String regi_Descripcion;
-  final String impo_NumRegistro;
-  final String nico_Descripcion;
-  final String impo_NivelComercial_Otro;
-  final String impo_Nombre_Raso;
-  final String impo_Direccion_Exacta;
-  final String impo_Correo_Electronico;
-  final String impo_Telefono;
-  final String prov_Nombre_Raso;
-  final String prov_Direccion_Exacta;
-  final String prov_Correo_Electronico;
-  final String prov_Telefono;
-  final String orco_DireccionEntrega;
-  final String deva_NumeroContrato;
+  final String adua_IngresoCodigo;
+  
 
 
   DevaData({
     required this.deva_Id,
     required this.adua_IngresoNombre,
-    required this.deva_DeclaracionMercancia,
-    required this.deva_FechaAceptacion,
-    required this.regi_Codigo,
-    required this.regi_Descripcion,
-    required this.impo_NumRegistro,
-    required this.nico_Descripcion,
-    required this.impo_NivelComercial_Otro,
-    required this.impo_Nombre_Raso,
-    required this.impo_Direccion_Exacta,
-    required this.impo_Correo_Electronico,
-    required this.impo_Telefono,
-    required this.prov_Nombre_Raso,
-    required this.prov_Direccion_Exacta,
-    required this.prov_Correo_Electronico,
-    required this.prov_Telefono,
-    required this.orco_DireccionEntrega,
-    required this.deva_NumeroContrato,
-
+    required this.adua_IngresoCodigo,
+   
   });
 
   Map<String, dynamic> toJson() {
     return {
       'deva_Id': deva_Id,
       'adua_IngresoNombre': adua_IngresoNombre,
-      'deva_DeclaracionMercancia': deva_DeclaracionMercancia,
-      'deva_FechaAceptacion': deva_FechaAceptacion,
-      'regi_Codigo': regi_Codigo,
-      'regi_Descripcion': regi_Descripcion,
-      'impo_NumRegistro': impo_NumRegistro,
-      'nico_Descripcion': nico_Descripcion,
-      'impo_NivelComercial_Otro': impo_NivelComercial_Otro,
-      'impo_Nombre_Raso': impo_Nombre_Raso,
-      'impo_Direccion_Exacta': impo_Direccion_Exacta,
-      'impo_Correo_Electronico': impo_Correo_Electronico,
-      'impo_Telefono': impo_Telefono,
-      'prov_Nombre_Raso': prov_Nombre_Raso,
-      'prov_Direccion_Exacta': prov_Direccion_Exacta,
-      'prov_Correo_Electronico': prov_Correo_Electronico,
-      'prov_Telefono': prov_Telefono,
-      'deva_NumeroContrato': deva_NumeroContrato,
+      'adua_IngresoCodigo': adua_IngresoCodigo,
+      
+
+    };
+  }
+}
+
+class AduaData {
+  final int deva_Id;
+  final String adua_DespachoNombre;
+  final String adua_DespachoCodigo;
+  
+
+
+  AduaData({
+    required this.deva_Id,
+    required this.adua_DespachoNombre,
+    required this.adua_DespachoCodigo,
+   
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'deva_Id': deva_Id,
+      'adua_DespachoNombre': adua_DespachoNombre,
+      'adua_DespachoCodigo': adua_DespachoCodigo,      
 
     };
   }
@@ -84,8 +65,11 @@ class PanelDevaWidget extends StatefulWidget {
 }
 
 class _PanelDevaWidgetState extends State<PanelDevaWidget> {
-  List<DevaData> devas = [];
-  List<DevaData> filteredDevas = [];
+  List<DevaData> aduas = [];
+  List<DevaData> filtrerAduas = [];
+
+  List<AduaData> aduas2 = [];
+  List<AduaData> filtrerAduas2 = [];
 
   TextEditingController searchController = TextEditingController();
 
@@ -94,19 +78,31 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
     super.initState();
     fetchData().then((result) {
       setState(() {
-        devas = result;
-        filteredDevas = devas;
+        aduas = result;
+        filtrerAduas = aduas;
       });
     });
   }    
 
+  @override
+  void initState2() {
+    super.initState();
+    fetchData2().then((result2) {
+      setState(() {
+        aduas2 = result2;
+        filtrerAduas2 = aduas2;
+      });
+    });
+  } 
+
+
   Future<List<DevaData>> fetchData() async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var duca_Id = prefs.getInt('duca_Id');
+    var deva_Id = prefs.getInt('deva_Id');
 
     final response = await http.get(
-      Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDucaId?id=${duca_Id}'),
+      Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDevaId?id=${deva_Id}'),
       headers: {
         'XApiKey': apiKey,
         'Content-Type': 'application/json',
@@ -117,45 +113,59 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
       final decodedJson = jsonDecode(response.body);
       final dataList = decodedJson["data"] as List<dynamic>;
 
-      final devas = dataList
+      final aduas = dataList
           .map((data) {
-        String deva_FechaAceptacion = data['deva_FechaAceptacion'];
-
-        int indexOfT1 = deva_FechaAceptacion.indexOf('T');
-
-        if (indexOfT1 >= 0) {
-          deva_FechaAceptacion = deva_FechaAceptacion.substring(0, indexOfT1);
-        }
+ 
 
         return DevaData(
           deva_Id: data['deva_Id'],
           adua_IngresoNombre: data['adua_IngresoNombre'],
-          deva_FechaAceptacion: deva_FechaAceptacion,
-          deva_DeclaracionMercancia: data['deva_DeclaracionMercancia'],
-          regi_Codigo: data['regi_Codigo'],
-          regi_Descripcion: data['regi_Descripcion'],
-          impo_NumRegistro: data['impo_NumRegistro'],
-          nico_Descripcion: data['nico_Descripcion'],
-          impo_NivelComercial_Otro: data['impo_NivelComercial_Otro'],
-          impo_Nombre_Raso: data['impo_Nombre_Raso'],
-          impo_Direccion_Exacta: data['impo_Direccion_Exacta'],
-          impo_Correo_Electronico: data['impo_Correo_Electronico'],
-          orco_DireccionEntrega: data['orco_DireccionEntrega'],
-          impo_Telefono: data['impo_Telefono'],
-          prov_Nombre_Raso: data['prov_Nombre_Raso'],
-          prov_Direccion_Exacta: data['prov_Direccion_Exacta'],
-          prov_Correo_Electronico: data['prov_Correo_Electronico'],
-          prov_Telefono: data['prov_Telefono'],
-          deva_NumeroContrato: data['deva_NumeroContrato'],
-
-        );
+          adua_IngresoCodigo: data['adua_IngresoCodigo'], );
       }).toList();
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('userData',
-          jsonEncode(devas.map((order) => order.toJson()).toList()));
+          jsonEncode(aduas.map((order) => order.toJson()).toList()));
 
-      return devas;
+      return aduas;
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+
+ Future<List<AduaData>> fetchData2() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var deva_Id = prefs.getInt('deva_Id');
+
+    final response = await http.get(
+      Uri.parse('${apiUrl}Declaracion_Valor/Listar_ByDevaId?id=${deva_Id}'),
+      headers: {
+        'XApiKey': apiKey,
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final decodedJson = jsonDecode(response.body);
+      final dataList = decodedJson["data"] as List<dynamic>;
+
+      final aduas2 = dataList
+          .map((data) {
+ 
+
+        return AduaData(
+          deva_Id: data['deva_Id'],
+          adua_DespachoNombre: data['adua_DespachoNombre'],
+          adua_DespachoCodigo: data['adua_DespachoCodigo'], );
+      }).toList();
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('userData',
+          jsonEncode(aduas2.map((order) => order.toJson()).toList()));
+      print(aduas2);
+      return aduas2;
     } else {
       throw Exception('Failed to load data');
     }
@@ -188,10 +198,10 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
           SizedBox(height: 16),
           ListView.builder(
             shrinkWrap: true,
-            itemCount: filteredDevas.isNotEmpty ? filteredDevas.length : 1,
+            itemCount: filtrerAduas.isNotEmpty ? filtrerAduas.length : 1,
             itemBuilder: (context, index) {
-              if (filteredDevas.isNotEmpty) {
-                return buildCard(filteredDevas[index]);
+             if (filtrerAduas.isNotEmpty ) {
+                return buildCard(filtrerAduas[index]);
               } else {
                 return Text(
                   'No se encontraron Aduanas',
@@ -200,6 +210,24 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
                   ),
                 );
               }
+            },       
+          ),
+
+            ListView.builder(
+            shrinkWrap: true,
+            itemCount: filtrerAduas2.isNotEmpty ? filtrerAduas2.length : 1,
+            itemBuilder: (context, index) {
+             if (filtrerAduas2.isNotEmpty ) {
+                return buildCard2(filtrerAduas2[index]);
+              } else {
+                return Text(
+                  'No se encontraron Aduanas de salida',
+                  style: TextStyle(
+                    color: Colors.black54,
+                  ),
+                );
+              }
+
             },
           )
         ],
@@ -209,11 +237,15 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
 
   void onSearchTextChanged(String searchText) {
     setState(() {
-      filteredDevas = devas
+      filtrerAduas = aduas
           .where((order) =>
-              order.deva_NumeroContrato
-                  .toLowerCase().contains(searchText.toLowerCase()) ||
               order.deva_Id.toString()
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase()))
+          .toList();
+      filtrerAduas2 = aduas2
+          .where((adu) =>
+              adu.deva_Id.toString()
                   .toLowerCase()
                   .contains(searchText.toLowerCase()))
           .toList();
@@ -241,12 +273,12 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
             children: [
               ListTile(
                 title: Text(
-                  "DEVA #${deva.deva_Id}",
+                  "Aduana-código #${deva.adua_IngresoCodigo}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Text(deva.deva_NumeroContrato),
+                subtitle: Text(deva.adua_IngresoNombre.toString()),
                 
               ),
               Padding(
@@ -268,22 +300,7 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        deva.deva_NumeroContrato,
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_month,
-                        color: Colors.black54,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        deva.deva_NumeroContrato,
+                        deva.adua_IngresoCodigo,
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -295,13 +312,13 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
                       Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: Color.fromARGB(255, 14, 137, 25),
                           shape: BoxShape.circle,
                         ),
                       ),
                       SizedBox(width: 5),
                       Text(
-                        "Pendiente",
+                        "Aduana de Ingreso",
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -342,6 +359,135 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
               SizedBox(height: 15),
             ],
           ),
-        ));
+        )
+        );
+  }
+
+
+   Widget buildCard2( AduaData adua) {
+    return 
+        Container(
+        margin: EdgeInsets.only(bottom: 16.0),
+        padding: EdgeInsets.symmetric(vertical: 5),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(
+                  "Aduana-código #${adua.adua_DespachoCodigo}",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(adua.adua_DespachoNombre.toString()),
+                
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Divider(
+                  // color: Colors.black,
+                  thickness: 1,
+                  height: 20,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_month_outlined,
+                        color: Colors.black54,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        adua.adua_DespachoCodigo,
+                        style: TextStyle(
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_month,
+                        color: Colors.black54,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        adua.adua_DespachoCodigo,
+                        style: TextStyle(
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 26, 87, 178),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        "Aduana de Salida",
+                        style: TextStyle(
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                     
+                    },
+                    child: Container(
+                      width: 150,
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(87, 69, 223, 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Ver detalles",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+            ],
+          ),
+        )
+        );
   }
 }
