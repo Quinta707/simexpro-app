@@ -254,7 +254,7 @@ Future<List<OrderData>> fetchData() async {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.esbo_Descripcion,
+                        order.esbo_Descripcion != null ? order.esbo_Descripcion : "Nada",
                         style: TextStyle(
                           color: Colors.black54,
                         ),
@@ -269,7 +269,7 @@ Future<List<OrderData>> fetchData() async {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        order.copa_Descripcion,
+                        order.copa_Descripcion != null ?  order.copa_Descripcion : "Nada",
                         style: TextStyle(
                           color: Colors.black54,
                         ),
