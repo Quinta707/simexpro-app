@@ -42,10 +42,10 @@ Future<void> TraerDatos(String NoDuca, context) async {
   final decodedJson = jsonDecode(response.body);
   final data = decodedJson["data"];
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var duca_Id = data[0]['duca_Id'];
-  prefs.setInt('duca_Id', duca_Id);
 
   if (data.length > 0) {
+  var duca_Id = data[0]['duca_Id'];
+  prefs.setInt('duca_Id', duca_Id);
     Navigator.push(
         context,
         MaterialPageRoute(
