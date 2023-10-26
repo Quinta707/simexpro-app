@@ -104,9 +104,19 @@ Future<List<OrderData>> fetchData() async {
     final dataList = decodedJson["data"] as List<dynamic>;
 
     final orders = dataList.map((data) {
+
+       String fechaEmision = data['boen_FechaEmision'];
+
+          int indexOfT1 = fechaEmision.indexOf('T');
+
+           if (indexOfT1 >= 0) {
+          fechaEmision = fechaEmision.substring(0, indexOfT1);
+        }
+
+
       return OrderData(
         id: data['boen_Id'],
-        boen_FechaEmision: data['boen_FechaEmision'],
+        boen_FechaEmision: fechaEmision,
 
         duca_No_Duca: data['duca_No_Duca'],
         tipl_Descripcion: data['tipl_Descripcion'],
@@ -224,7 +234,7 @@ Future<List<OrderData>> fetchData() async {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: Text((order.boen_FechaEmision.substring(0, order.boen_FechaEmision.indexOf('T')))),
+                subtitle: Text(order.boen_FechaEmision),
                 trailing: SizedBox(
                   width: 100,
                   height: 25,
@@ -246,21 +256,6 @@ Future<List<OrderData>> fetchData() async {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_month_outlined,
-                        color: Colors.black54,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        order.esbo_Descripcion != null ? order.esbo_Descripcion : "Nada",
-                        style: TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
                   Row(
                     children: [
                       Icon(
