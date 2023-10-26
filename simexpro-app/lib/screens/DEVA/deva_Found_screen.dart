@@ -536,115 +536,118 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                     // tab numero 3
                  // Tab número 3
                     SingleChildScrollView(
-                         scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: const BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.all(Radius.circular(18)),
+  scrollDirection: Axis.vertical,
+  child: Column(
+    children: [
+      const SizedBox(height: 20),
+      Container(
+        padding: const EdgeInsets.all(12),
+        decoration: const BoxDecoration(
+          color: Colors.black12,
+          borderRadius: BorderRadius.all(Radius.circular(18)),
+        ),
+        child: Text(
+          "DEVA: ${widget.data[0]["deva_Id"].toString() ?? "N/A"}",
+        ),
+      ),
+      const SizedBox(height: 20),
+      for (var i = 0; i < widget.factura.length; i++)
+        Column(
+          children: [
+            SizedBox(
+              height: 50,
+              child: GridView.count(
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(20),
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 1,
+                children: [
+                  HeadersInfoWidget(
+                    title: "N° de Factura",
+                    text: widget.factura[i]["fact_Numero"] != null
+                        ? widget.factura[i]["fact_Numero"].toString()
+                        : "N/A",
+                  ),
+                  HeadersInfoWidget(
+                    title: "Fecha:",
+                    text: widget.factura[i]["fact_Fecha"] != null
+                        ? format.format(DateTime.tryParse(widget.factura[i]["fact_Fecha"]) as DateTime)
+                        : "N/A",
+                  ),
+                ],
+              ),
+            ),
+            DataTable(
+              columnSpacing: 10,
+              columns: [
+                DataColumn(
+                  label: Flexible(
+                    child: Text('Nombre Mercancía'),
+                  ),
+                ),
+                DataColumn(
+                  label: Flexible(
+                    child: Text('Cantidad'),
+                  ),
+                ),
+                DataColumn(
+                  label: Flexible(
+                    child: Text('Precio Unitario'),
+                  ),
+                ),
+              ],
+              rows: [
+                for (var item in (widget.items ?? []))
+                  if (item['fact_Id'] == widget.factura[i]["fact_Id"])
+                    DataRow(
+                      cells: [
+                        DataCell(
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: 150, // Ancho máximo de la celda
+                              maxHeight: 30, // Altura máxima de la celda
                             ),
                             child: Text(
-                              "DEVA: ${widget.data[0]["deva_Id"].toString() ?? "N/A"}",
+                              item['item_IdentificacionComercialMercancias'].toString() ?? "N/A",
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const SizedBox(height: 20),
-
-                          for (var factura in widget.factura)
-                         
-
-                        SingleChildScrollView(
-                             scrollDirection: Axis.vertical,
-                          child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 50,
-                                  child: GridView.count(
-                                    padding: const EdgeInsets.all(20),
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 3 / 1,
-                                    children: [
-                                      HeadersInfoWidget(
-                                        title: "N° de Factura",
-                                        text: factura["fact_Numero"] != null
-                                            ? factura["fact_Numero"].toString()
-                                            : "N/A",
-                                      ),
-                                      HeadersInfoWidget(
-                                        title: "Fecha:",
-                                        text: factura["fact_Fecha"] != null
-                                            ? format.format(DateTime.tryParse(factura["fact_Fecha"]) as DateTime)
-                                            : "N/A",
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                 SingleChildScrollView(
-                                
-                                  child: DataTable(
-                                    columnSpacing: 10,
-                                    columns: [
-                                      DataColumn(
-                                        label: Flexible(
-                                          child: Text('Nombre Mercancía'),
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Flexible(
-                                          child: Text('Cantidad'),
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Flexible(
-                                          child: Text('Precio Unitario'),
-                                        ),
-                                      ),
-                                    ],
-                                    rows: [
-                                      for (var item in (widget.items ?? []))
-                                        if (item['fact_Id'] == factura["fact_Id"])
-                                          DataRow(
-                                            cells: [
-                                              DataCell(
-                                                ConstrainedBox(
-                                                  constraints: const BoxConstraints(maxWidth: 150),
-                                                  child: Text(
-                                                    item['item_IdentificacionComercialMercancias'].toString() ?? "N/A",
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              ),
-                                              DataCell(
-                                                ConstrainedBox(
-                                                  constraints: const BoxConstraints(maxWidth: 100),
-                                                  child: Text(
-                                                    item['item_Cantidad'].toString() ?? "N/A",
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              ),
-                                              DataCell(
-                                                ConstrainedBox(
-                                                  constraints: const BoxConstraints(maxWidth: 100),
-                                                  child: Text(
-                                                    item['item_ValorUnitario'].toString() ?? "N/A",
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                        ),
+                        DataCell(
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: 100, // Ancho máximo de la celda
+                              maxHeight: 30, // Altura máxima de la celda
                             ),
-                      ),
-                        ],
-                      ),
-                    )
+                            child: Text(
+                              item['item_Cantidad'].toString() ?? "N/A",
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: 100, // Ancho máximo de la celda
+                              maxHeight: 30, // Altura máxima de la celda
+                            ),
+                            child: Text(
+                              item['item_ValorUnitario'].toString() ?? "N/A",
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+              ],
+            ),
+            if (i < widget.factura.length - 1) Divider(), // Agregar Divider entre las facturas
+          ],
+        ),
+    ],
+  ),
+)
+
 
                     ],
                     controller: _tabController,

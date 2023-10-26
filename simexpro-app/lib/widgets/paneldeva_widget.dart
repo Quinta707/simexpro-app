@@ -239,15 +239,24 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
     setState(() {
       filtrerAduas = aduas
           .where((order) =>
-              order.deva_Id.toString()
+              order.adua_IngresoCodigo.toString()
                   .toLowerCase()
-                  .contains(searchText.toLowerCase()))
+                  .contains(searchText.toLowerCase())
+                  ||
+                order.adua_IngresoNombre.toString()
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase())    
+                  )
           .toList();
       filtrerAduas2 = aduas2
           .where((adu) =>
-              adu.deva_Id.toString()
+              adu.adua_DespachoCodigo.toString()
                   .toLowerCase()
-                  .contains(searchText.toLowerCase()))
+                  .contains(searchText.toLowerCase())||
+              adu.adua_DespachoNombre.toString()
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase())
+                  )
           .toList();
     });
   }
