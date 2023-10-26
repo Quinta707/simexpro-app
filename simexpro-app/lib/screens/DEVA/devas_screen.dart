@@ -230,7 +230,7 @@ class _DevaScreenState extends State<Devascreen> {
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      label: Text("Ingrese el Id de la declaración de valor"),
+                      label: Text("Ingrese el código de la declaración de valor"),
                     ),
                   ),
                   SizedBox(height: 20),

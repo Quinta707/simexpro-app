@@ -239,15 +239,24 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
     setState(() {
       filtrerAduas = aduas
           .where((order) =>
-              order.deva_Id.toString()
+              order.adua_IngresoCodigo.toString()
                   .toLowerCase()
-                  .contains(searchText.toLowerCase()))
+                  .contains(searchText.toLowerCase())
+                  ||
+                order.adua_IngresoNombre.toString()
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase())    
+                  )
           .toList();
       filtrerAduas2 = aduas2
           .where((adu) =>
-              adu.deva_Id.toString()
+              adu.adua_DespachoCodigo.toString()
                   .toLowerCase()
-                  .contains(searchText.toLowerCase()))
+                  .contains(searchText.toLowerCase())||
+              adu.adua_DespachoNombre.toString()
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase())
+                  )
           .toList();
     });
   }
@@ -328,35 +337,7 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
                 ],
               ),
               SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                     
-                    },
-                    child: Container(
-                      width: 150,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(87, 69, 223, 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Ver detalles",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
+            
             ],
           ),
         )
@@ -456,35 +437,7 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
                 ],
               ),
               SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                     
-                    },
-                    child: Container(
-                      width: 150,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(87, 69, 223, 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Ver detalles",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
+             
             ],
           ),
         )
