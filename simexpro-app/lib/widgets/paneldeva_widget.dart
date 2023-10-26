@@ -221,7 +221,7 @@ class _PanelDevaWidgetState extends State<PanelDevaWidget> {
                 return buildCard2(filtrerAduas2[index]);
               } else {
                 return Text(
-                  'No se encontraron Aduanas de salida',
+                  '',
                   style: TextStyle(
                     color: Colors.black54,
                   ),
