@@ -562,7 +562,6 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                 SizedBox(
                                   height: 50,
                                   child: GridView.count(
-                                    physics: NeverScrollableScrollPhysics(),
                                     padding: const EdgeInsets.all(20),
                                     crossAxisCount: 2,
                                     childAspectRatio: 3 / 1,
@@ -582,8 +581,8 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                     ],
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 10),
+                                 SingleChildScrollView(
+                                
                                   child: DataTable(
                                     columnSpacing: 10,
                                     columns: [
