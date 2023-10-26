@@ -179,6 +179,8 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                     children: [
                       // Contenido del tab 1
                       SingleChildScrollView(
+                                  
+
                         child: Center(
                           child: Column(
                             children: [
@@ -534,6 +536,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                     // tab numero 3
                  // Tab número 3
                     SingleChildScrollView(
+                         scrollDirection: Axis.vertical,
                       child: Column(
                         children: [
                           const SizedBox(height: 20),
@@ -548,8 +551,13 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                             ),
                           ),
                           const SizedBox(height: 20),
+
                           for (var factura in widget.factura)
-                            Column(
+                         
+
+                        SingleChildScrollView(
+                             scrollDirection: Axis.vertical,
+                          child: Column(
                               children: [
                                 SizedBox(
                                   height: 50,
@@ -634,6 +642,7 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                                 ),
                               ],
                             ),
+                      ),
                         ],
                       ),
                     )
