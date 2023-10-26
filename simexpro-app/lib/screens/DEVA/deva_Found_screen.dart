@@ -531,94 +531,113 @@ class _Deva_Found_ScreenState extends State<Deva_Found_Screen>
                         ),
                       ),
 
-                  SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.all(Radius.circular(18)),
-            ),
-            child: Text(
-              "DEVA: ${widget.data[0]["deva_Id"].toString() ?? "N/A"}",
-            ),
-          ),
-          const SizedBox(height: 20),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: widget.factura.length,
-            itemBuilder: (context, index) {
-              final factura = widget.factura[index];
-              return Column(
-                children: [
-                  SizedBox(
-                    height: 50,
-                    child: GridView.count(
-                      physics: NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(20),
-                      crossAxisCount: 2,
-                      childAspectRatio: 3 / 1,
-                      children: [
-                        HeadersInfoWidget(
-                          title: "N° de Factura",
-                          text: factura["fact_Numero"] != null
-                              ? factura["fact_Numero"].toString()
-                              : "N/A",
-                        ),
-                        HeadersInfoWidget(
-                          title: "Fecha:",
-                          text: factura["fact_Fecha"] != null
-                              ? format.format(DateTime.tryParse(factura["fact_Fecha"]) as DateTime)
-                              : "N/A",
-                        ),
-                      ],
-                    ),
-                  ),
-            Divider(),
-          // Aquí puedes mostrar los detalles de la factura
-                  for (var item in (widget.items ?? []))
-                  if (item['fact_Id'] == factura["fact_Id"])
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center, // Alinea los elementos verticalmente al centro.
-                      crossAxisAlignment: CrossAxisAlignment.center, // Alinea los elementos horizontalmente al centro.
-                      children: [
-                        HeadersInfoWidget(
-                          title: "Id del Item",
-                          text: item['item_Id'] != null ? item['item_Id'].toString() : "N/A",
-                        ),
-                        HeadersInfoWidget(
-                          title: "Cantidad:",
-                          text: item['item_Cantidad'] != null ? item['item_Cantidad'].toString() : "N/A",
-                        ),
-                        HeadersInfoWidget(
-                          title: "Precio Unitario:",
-                          text: item['item_ValorUnitario'] != null ? item['item_ValorUnitario'].toString() : "N/A",
-                        ),
-                        HeadersInfoWidget(
-                          title: "Unidad de Medida:",
-                          text: item['unme_Descripcion'] != null ? item['unme_Descripcion'].toString() : "N/A",
-                        ),
-                        HeadersInfoWidget(
-                          title: "Identificación comercial:",
-                          text: item['item_IdentificacionComercialMercancias'] != null ? item['item_IdentificacionComercialMercancias'].toString() : "N/A",
-                        ),
-                        Divider(),
-                      ],
-                    ),
-                  ),    
-                    ],
-                          );
-                        },
-                      ),
+                    // tab numero 3
+                 // Tab número 3
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: const BoxDecoration(
+                              color: Colors.black12,
+                              borderRadius: BorderRadius.all(Radius.circular(18)),
+                            ),
+                            child: Text(
+                              "DEVA: ${widget.data[0]["deva_Id"].toString() ?? "N/A"}",
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          for (var factura in widget.factura)
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height: 50,
+                                  child: GridView.count(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.all(20),
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 3 / 1,
+                                    children: [
+                                      HeadersInfoWidget(
+                                        title: "N° de Factura",
+                                        text: factura["fact_Numero"] != null
+                                            ? factura["fact_Numero"].toString()
+                                            : "N/A",
+                                      ),
+                                      HeadersInfoWidget(
+                                        title: "Fecha:",
+                                        text: factura["fact_Fecha"] != null
+                                            ? format.format(DateTime.tryParse(factura["fact_Fecha"]) as DateTime)
+                                            : "N/A",
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: DataTable(
+                                    columnSpacing: 10,
+                                    columns: [
+                                      DataColumn(
+                                        label: Flexible(
+                                          child: Text('Nombre Mercancía'),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Flexible(
+                                          child: Text('Cantidad'),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Flexible(
+                                          child: Text('Precio Unitario'),
+                                        ),
+                                      ),
+                                    ],
+                                    rows: [
+                                      for (var item in (widget.items ?? []))
+                                        if (item['fact_Id'] == factura["fact_Id"])
+                                          DataRow(
+                                            cells: [
+                                              DataCell(
+                                                ConstrainedBox(
+                                                  constraints: const BoxConstraints(maxWidth: 150),
+                                                  child: Text(
+                                                    item['item_IdentificacionComercialMercancias'].toString() ?? "N/A",
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ),
+                                              DataCell(
+                                                ConstrainedBox(
+                                                  constraints: const BoxConstraints(maxWidth: 100),
+                                                  child: Text(
+                                                    item['item_Cantidad'].toString() ?? "N/A",
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ),
+                                              DataCell(
+                                                ConstrainedBox(
+                                                  constraints: const BoxConstraints(maxWidth: 100),
+                                                  child: Text(
+                                                    item['item_ValorUnitario'].toString() ?? "N/A",
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     )
 
-          
                     ],
                     controller: _tabController,
                   ),
