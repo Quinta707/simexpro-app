@@ -75,6 +75,7 @@ class _historialAduanaScreenState extends State<historialAduanaScreen> {
                           color:
                               _buttonIndex == 0 ? Colors.white : Colors.black38,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
@@ -104,35 +105,7 @@ class _historialAduanaScreenState extends State<historialAduanaScreen> {
                           color:
                               _buttonIndex == 1 ? Colors.white : Colors.black38,
                         ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        _buttonIndex = 2;
-                      });
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 25),
-                      decoration: BoxDecoration(
-                        color: _buttonIndex == 2
-                            ? Color.fromRGBO(87, 69, 223, 1)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        "BOLETINES",
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                          color:
-                              _buttonIndex == 2 ? Colors.white : Colors.black38,
-                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),

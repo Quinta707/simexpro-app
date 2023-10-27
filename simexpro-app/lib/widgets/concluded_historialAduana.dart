@@ -224,7 +224,6 @@ Future<List<OrderData>> fetchData() async {
           ],
         ),
         child: SizedBox(
-          width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
               ListTile(
